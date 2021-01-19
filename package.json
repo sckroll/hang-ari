@@ -1,0 +1,32 @@
+{
+  "name": "hang-ari",
+  "version": "1.0.0",
+  "description": "A community website for college clubs created as a personal project",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node -r esm -r dotenv/config",
+    "dev": "nodemon --watch . -r esm -r dotenv/config",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sckroll/hang-ari.git"
+  },
+  "author": "Sckroll",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sckroll/hang-ari/issues"
+  },
+  "homepage": "https://github.com/sckroll/hang-ari#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-history-api-fallback": "^1.6.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7"
+  }
+}
