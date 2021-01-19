@@ -10,7 +10,6 @@ import http from 'http'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-import history from 'connect-history-api-fallback'
 import handlebars from 'express-handlebars'
 import api from './api'
 
@@ -28,22 +27,26 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(morgan('short'))
 
-// 라우트 연결
-const router = express.Router()
-router.use('/', api.routes())
-
-// HTML5 pushState 기반 라우팅 미들웨어 설정
-// (라우트 연결 이후에 설정할 것)
-app.use(history())
-
 // 정적 파일을 저장할 디렉토리 설정
 app.use(express.static(path.join(__dirname, 'public')))
 
-// 템플릿 엔진 설정
-app.engine('handlebars', handlebars())
-app.set('view engine', 'handlebars')
+// 뷰 파일 위치 설정
+app.set('views', path.join(__dirname, '/views'))
 
-app.use(router.route())
+// 템플릿 엔진 설정
+app.engine(
+  'hbs',
+  handlebars({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    layoutsDir: __dirname + '/views/layouts',
+    partialsDir: __dirname + '/views/partials',
+  }),
+)
+app.set('view engine', 'hbs')
+
+// 라우트 연결
+app.use('/', api)
 
 // 에러 핸들러
 app.use((err, req, res, next) => {
