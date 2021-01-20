@@ -83,9 +83,11 @@ server.on('error', err => {
     case 'EACCES':
       console.error('[Server] ' + port + ' requires elevated privileges')
       process.exit(1)
+      break
     case 'EADDRINUSE':
       console.error('[Server] ' + port + ' is already in use')
       process.exit(1)
+      break
     default:
       throw err
   }
