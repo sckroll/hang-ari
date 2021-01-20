@@ -12,6 +12,7 @@ import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import history from 'connect-history-api-fallback'
+import mongoose from 'mongoose'
 import api from './api'
 
 // Express 객체 생성
@@ -57,6 +58,18 @@ const server = http.createServer(app)
 // 서버 시작
 server.listen(port, () => {
   console.log('[Server] Server listening on ' + port)
+
+  // 데이터베이스 연결
+  const mongooseOptions = {
+    dbName: process.env.DB_NAME,
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  }
+  mongoose.connect(process.env.DB_URI, mongooseOptions)
+
+  console.log('[Server] Database connected: ' + process.env.DB_NAME)
 })
 
 // 서버 에러 이벤트 리스너 추가
@@ -87,7 +100,7 @@ process.on('SIGTERM', () => {
 // Express 서버 객체 종료와 함꼐 데이터베이스 연결 해제
 app.on('close', function () {
   console.log('[Server] Disconnecting database')
-  // if (database.db) {
-  //   database.db.close()
-  // }
+
+  // 데이터베이스 연결 해제
+  mongoose.disconnect()
 })
