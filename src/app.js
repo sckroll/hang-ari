@@ -36,15 +36,15 @@ app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(morgan('short'))
 
+// 라우트 연결
+app.use('/api', api)
+
 // HTML5 pushState 기반 라우팅 미들웨어 설정
 // (라우트 연결 이후에 설정해야 정상적으로 동작함)
 app.use(history())
 
 // 정적 파일을 저장할 디렉토리 설정
 app.use(express.static(path.join(__dirname, 'public')))
-
-// 라우트 연결
-app.use('/api', api)
 
 // 에러 핸들러
 app.use((err, req, res, next) => {
