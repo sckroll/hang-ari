@@ -10,7 +10,8 @@ import http from 'http'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-import handlebars from 'express-handlebars'
+import cors from 'cors'
+import history from 'connect-history-api-fallback'
 import api from './api'
 
 // Express 객체 생성
@@ -22,28 +23,24 @@ dotenv.config()
 // 환경변수로부터 서버 포트 설정
 const port = process.env.PORT || 3000
 
+// CORS 옵션
+const corsOptions = {
+  origin: 'http://localhost:8080',
+}
+
 // 미들웨어 설정
 app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 app.use(cookieParser())
+app.use(cors(corsOptions))
 app.use(morgan('short'))
+
+// HTML5 pushState 기반 라우팅 미들웨어 설정
+// (라우트 연결 이후에 설정해야 정상적으로 동작함)
+app.use(history())
 
 // 정적 파일을 저장할 디렉토리 설정
 app.use(express.static(path.join(__dirname, 'public')))
-
-// 뷰 파일 위치 설정
-app.set('views', path.join(__dirname, '/views'))
-
-// 템플릿 엔진 설정
-app.engine(
-  'hbs',
-  handlebars({
-    extname: 'hbs',
-    defaultLayout: 'main',
-    layoutsDir: __dirname + '/views/layouts',
-    partialsDir: __dirname + '/views/partials',
-  }),
-)
-app.set('view engine', 'hbs')
 
 // 라우트 연결
 app.use('/', api)
