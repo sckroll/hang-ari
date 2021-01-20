@@ -44,7 +44,7 @@ app.use(history())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // 라우트 연결
-app.use('/', api)
+app.use('/api', api)
 
 // 에러 핸들러
 app.use((err, req, res, next) => {
