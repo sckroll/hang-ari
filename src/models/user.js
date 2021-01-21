@@ -1,9 +1,15 @@
+/**
+ * 사용자 스키마
+ *
+ * @author Sckroll
+ */
+
 import { Schema, model } from 'mongoose'
 
 const UserSchema = new Schema(
   {
     // 사용자 이름
-    name: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
 
     // 사용자 이메일
     email: { type: String, required: true, unique: true },
