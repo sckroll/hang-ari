@@ -5,6 +5,8 @@
  */
 
 import { Schema, model } from 'mongoose'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 const UserSchema = new Schema(
   {
@@ -15,7 +17,7 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
 
     // 사용자 비밀번호 (암호화)
-    password: { type: String, required: true },
+    hashedPassword: { type: String, required: true },
 
     // 사용자 학번
     studentId: { type: String, required: true },
@@ -36,5 +38,43 @@ const UserSchema = new Schema(
     timestamps: true,
   },
 )
+
+/**
+ * 비밀번호 암호화
+ */
+UserSchema.methods.setPassword = async function (password) {
+  const hash = await bcrypt.hash(password, 10)
+  this.hashedPassword = hash
+}
+
+/**
+ * 비밀번호 검증
+ */
+UserSchema.methods.checkPassword = async function (password) {
+  const result = await bcrypt.compare(password, this.hashedPassword)
+  return result
+}
+
+/**
+ * Response body에서 암호화된 비밀번호 필드 제거
+ */
+UserSchema.methods.serialize = function () {
+  const data = this.toJSON()
+  delete data.hashedPassword
+  return data
+}
+
+/**
+ * JWT 토큰 발급
+ */
+UserSchema.methods.generateToken = function () {
+  const body = { ...this }
+  delete body._id
+
+  const secret = process.env.JWT_SECRET
+  const expiresIn = { expiresIn: process.env.JWT_EXPIRE }
+  const token = jwt.sign(body, secret, expiresIn)
+  return token
+}
 
 export default model('Users', UserSchema)
