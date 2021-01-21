@@ -60,7 +60,7 @@ UserSchema.methods.checkPassword = async function (password) {
  */
 UserSchema.methods.serialize = function () {
   const data = this.toJSON()
-  delete data.hashedPassword
+  data.hashedPassword = undefined
   return data
 }
 
@@ -69,7 +69,7 @@ UserSchema.methods.serialize = function () {
  */
 UserSchema.methods.generateToken = function () {
   const body = { ...this }
-  delete body._id
+  body._id = undefined
 
   const secret = process.env.JWT_SECRET
   const expiresIn = { expiresIn: process.env.JWT_EXPIRE }
@@ -77,4 +77,4 @@ UserSchema.methods.generateToken = function () {
   return token
 }
 
-export default model('Users', UserSchema)
+export default model('User', UserSchema)
