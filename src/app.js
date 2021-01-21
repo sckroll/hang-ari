@@ -50,6 +50,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use((err, req, res, next) => {
   console.error(err)
   res.status(err.status ? err.status : 500)
+  res.json({ message: err.message })
 })
 
 // 서버 생성
