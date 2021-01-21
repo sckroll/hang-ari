@@ -1,3 +1,9 @@
+/**
+ * 동아리 스키마
+ *
+ * @author Sckroll
+ */
+
 import { Schema, model, Types } from 'mongoose'
 
 const ClubSchema = new Schema(

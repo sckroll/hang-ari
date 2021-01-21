@@ -1,3 +1,9 @@
+/**
+ * 포스트 게시글 스키마
+ *
+ * @author Sckroll
+ */
+
 import { Schema, Types, model } from 'mongoose'
 
 const PostSchema = new Schema(
