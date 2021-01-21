@@ -1,141 +1,100 @@
 /**
- * 사용자(user) 라우트에서 수행하는 함수 정의
+ * 사용자 및 인증 관련(auth) 라우트의 비즈니스 로직 처리
  *
  * @author Sckroll
  */
 
 import Joi from 'joi'
-import Users from '../../models/user'
+import User from '../../models/user'
 
 /**
- * 모든 사용자 정보 조회 API
- *
- * GET /api/auth
+ * 사용자의 정보를 조회하는 함수
  */
-export const getUsers = async (req, res, next) => {
-  try {
-    const result = await Users.find()
-    res.send(result)
-  } catch (e) {
-    next(e)
-  }
+export const getUsers = async () => {
+  const users = await User.find()
+  return users
 }
 
 /**
- * 특정 사용자 정보 조회 API
- *
- * GET /api/auth/:email
+ * 특정 사용자의 정보를 조회하는 함수
  */
-export const getUser = async (req, res, next) => {
-  try {
-    const email = req.params.email
-    const result = await Users.findOne({ email })
-    res.send(result)
-  } catch (e) {
-    next(e)
-  }
+export const getUser = async email => {
+  const user = await User.findOne({ email })
+  return user
 }
 
 /**
- * 회원가입 API
- *
- * POST /api/auth/register
+ * 회원가입 양식의 유효성을 검사하는 함수
  */
-export const register = async (req, res, next) => {
-  try {
-    // 필드 유효성 검사
-    const schema = Joi.object().keys({
-      username: Joi.string().required(),
-      email: Joi.string().required(),
-      password: Joi.string().required(),
-      studentId: Joi.string().required(),
-      grade: Joi.number().required(),
-      department: Joi.string().required(),
-      phoneNumber: Joi.string(),
-      thumbnail: Joi.string(),
-    })
-    const result = schema.validate(req.body)
-    if (result.error) {
-      // 유효하지 않을 경우
-      res.status = 400
-      res.body = result.error
-      return
-    }
-
-    // 이미 가입한 이메일인지 확인
-    const exists = await Users.exists({ email: req.body.email })
-    if (exists) {
-      res.status = 409
-      return
-    }
-
-    const newUser = new Users({
-      username: req.body.username,
-      email: req.body.email,
-      studentId: req.body.studentId,
-      grade: req.body.grade,
-      department: req.body.department,
-      phoneNumber: req.body.phoneNumber,
-      thumbnail: req.body.thumbnail,
-    })
-    await newUser.setPassword(req.body.password)
-    await newUser.save()
-
-    // Response body에서 암호화된 비밀번호 제거
-    res.body = newUser.serialize()
-  } catch (e) {
-    next(e)
-  }
+export const validateRegForm = form => {
+  const schema = Joi.object().keys({
+    username: Joi.string().required(),
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    studentId: Joi.string().required(),
+    grade: Joi.number().required(),
+    department: Joi.string().required(),
+    phoneNumber: Joi.string(),
+    thumbnail: Joi.string(),
+  })
+  const result = schema.validate(form)
+  return result.error
 }
 
 /**
- * 로그인 API
- *
- * POST /api/auth/login
+ * 이메일의 중복을 검사하는 함수
  */
-export const login = async (req, res, next) => {
-  try {
-    res.body = {}
-  } catch (e) {
-    next(e)
-  }
+export const checkEmail = async email => {
+  const exists = await User.exists({ email })
+  return exists
 }
 
 /**
- * 로그아웃 API
- *
- * POST /api/auth/logout
+ * 새로운 사용자를 생성하는 함수
  */
-export const logout = async (req, res, next) => {
-  try {
-    res.body = {}
-  } catch (e) {
-    next(e)
-  }
+export const register = async form => {
+  // Request body에서 비밀번호 속성 분리
+  const verifiedForm = { ...form }
+  verifiedForm.password = undefined
+
+  const user = new User(verifiedForm)
+
+  // 비밀번호 암호화 후 저장
+  await user.setPassword(form.password)
+  await user.save()
+
+  // Response body에서 암호화된 비밀번호 제거
+  return user.serialize()
 }
 
 /**
- * 사용자 정보를 수정
- *
- * PATCH /api/auth/:email
+ * 로그인 양식의 유효성을 검사하는 함수
  */
-export const modify = async (req, res, next) => {
-  try {
-    res.body = {}
-  } catch (e) {
-    next(e)
-  }
+export const validateLoginForm = form => {
+  const schema = Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+  })
+  const result = schema.validate(form)
+  return result
 }
 
 /**
- * 사용자 정보 삭제 (회원탈퇴)
- *
- * DELETE /api/auth/:email
+ * 이메일과 비밀번호를 검증 후 해당 사용자를 반환하는 함수
  */
-export const remove = async (req, res, next) => {
-  try {
-    res.body = {}
-  } catch (e) {
-    next(e)
+export const validateUser = async form => {
+  // 해당 이메일의 사용자 조회
+  const user = await User.findOne(form)
+  if (!user) {
+    return { isError: true }
   }
+
+  // 비밀번호 검증
+  const isValid = await user.checkPassword(form.password)
+  if (!isValid) {
+    return { isError: true }
+  }
+
+  // 암호화된 비밀번호 필드 제거 후 리턴
+  return user.serialize()
 }
