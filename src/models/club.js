@@ -46,4 +46,4 @@ const ClubSchema = new Schema(
   },
 )
 
-export default model('Clubs', ClubSchema)
+export default model('Club', ClubSchema)
