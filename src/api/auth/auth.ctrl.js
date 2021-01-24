@@ -100,9 +100,19 @@ export const validateUser = async form => {
 }
 
 /**
+ * 해당 이메일의 사용자 정보를 갱신하는 함수
+ */
+export const updateUser = async (email, updatedFields) => {
+  const updated = await User.findOneAndUpdate({ email }, updatedFields, {
+    new: true,
+  })
+  return updated
+}
+
+/**
  * DB에서 해당 이메일의 사용자를 삭제하는 함수
  */
 export const removeUser = async email => {
-  const result = await User.findOneAndRemove({ email })
-  return result
+  const removed = await User.findOneAndRemove({ email })
+  return removed
 }

@@ -103,21 +103,30 @@ authRouter.post('/logout', (req, res) => {
   res.status(204).end()
 })
 
-// // 사용자 정보 수정
-// // PATCH /api/auth/:email
-// authRouter.patch('/:email', async (req, res, next) => {
-//   try {
-//   } catch (e) {
-//     next(e)
-//   }
-// })
+// 사용자 정보 수정
+// PATCH /api/auth/:email
+authRouter.patch('/:email', async (req, res, next) => {
+  try {
+    const updated = await authCtrl.updateUser(
+      req.body.email,
+      req.body.updatedFields,
+    )
+    if (!updated) {
+      res.status(404)
+      next()
+    }
+    res.send(updated)
+  } catch (e) {
+    next(e)
+  }
+})
 
 // 사용자 정보 삭제
 // DELETE /api/auth/:email
 authRouter.delete('/:email', async (req, res, next) => {
   try {
-    const result = await authCtrl.removeUser(req.body.email)
-    if (!result) {
+    const deleted = await authCtrl.removeUser(req.body.email)
+    if (!deleted) {
       res.status(404)
       next()
     }
