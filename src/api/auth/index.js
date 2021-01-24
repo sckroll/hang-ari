@@ -112,13 +112,19 @@ authRouter.post('/logout', (req, res) => {
 //   }
 // })
 
-// // 사용자 정보 삭제
-// // DELETE /api/auth/:email
-// authRouter.delete('/:email', async (req, res, next) => {
-//   try {
-//   } catch (e) {
-//     next(e)
-//   }
-// })
+// 사용자 정보 삭제
+// DELETE /api/auth/:email
+authRouter.delete('/:email', async (req, res, next) => {
+  try {
+    const result = await authCtrl.removeUser(req.body.email)
+    if (!result) {
+      res.status(404)
+      next()
+    }
+    res.status(204).end()
+  } catch (e) {
+    next(e)
+  }
+})
 
 export default authRouter

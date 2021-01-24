@@ -98,3 +98,11 @@ export const validateUser = async form => {
   // 암호화된 비밀번호 필드 제거 후 리턴
   return user.serialize()
 }
+
+/**
+ * DB에서 해당 이메일의 사용자를 삭제하는 함수
+ */
+export const removeUser = async email => {
+  const result = await User.findOneAndRemove({ email })
+  return result
+}
