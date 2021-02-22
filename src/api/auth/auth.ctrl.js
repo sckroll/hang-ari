@@ -61,7 +61,9 @@ export const getUser = async email => {
  */
 export const checkEmail = async email => {
   const exists = await User.exists({ email })
-  return exists
+  if (exists) {
+    throw new DuplicateError('duplicated email address')
+  }
 }
 
 /**

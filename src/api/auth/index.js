@@ -6,7 +6,6 @@
 
 import { Router } from 'express'
 import * as authCtrl from './auth.ctrl'
-import { DuplicateError } from '../../lib/errors'
 
 // 토큰 유효 기간 (ms)
 const maxAge = 1000 * 60 * 60 * 24 // 1일
@@ -46,10 +45,7 @@ authRouter.post('/register', async (req, res, next) => {
     await authCtrl.validateRegForm(form)
 
     // 이미 가입한 이메일인지 확인
-    const exists = await authCtrl.checkEmail(form.email)
-    if (exists) {
-      throw new DuplicateError('duplicated email address')
-    }
+    await authCtrl.checkEmail(form.email)
 
     // 새로운 사용자 생성
     const user = await authCtrl.register(form)
@@ -70,11 +66,12 @@ authRouter.post('/login', async (req, res, next) => {
 
     // 해당 사용자가 가입되어 있으면 사용자와 토큰 반환
     const { user, token } = await authCtrl.validateUser(form)
+
+    // 쿠키에 토큰 저장 후 사용자 정보 반환
     res.cookie('access_token', token, {
       maxAge,
       httpOnly: true,
     })
-
     res.send(user)
   } catch (e) {
     next(e)
