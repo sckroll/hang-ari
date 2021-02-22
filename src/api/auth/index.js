@@ -48,7 +48,7 @@ authRouter.post('/register', async (req, res, next) => {
     // 이미 가입한 이메일인지 확인
     const exists = await authCtrl.checkEmail(form.email)
     if (exists) {
-      throw new DuplicateError('duplicated email')
+      throw new DuplicateError('duplicated email address')
     }
 
     // 새로운 사용자 생성
@@ -66,21 +66,10 @@ authRouter.post('/login', async (req, res, next) => {
     const form = req.body
 
     // 로그인 양식 유효성 검사
-    const error = authCtrl.validateLoginForm(form)
-    if (error) {
-      res.status(401)
-      next(error)
-    }
+    await authCtrl.validateLoginForm(form)
 
-    // DB에 해당 사용자가 존재하는지 검사
-    const user = await authCtrl.validateUser(form)
-    if (user.isError) {
-      res.status(401)
-      next()
-    }
-
-    // 사용자 토큰을 쿠키에 담아서 사용
-    const token = user.generateToken()
+    // 해당 사용자가 가입되어 있으면 사용자와 토큰 반환
+    const { user, token } = await authCtrl.validateUser(form)
     res.cookie('access_token', token, {
       maxAge,
       httpOnly: true,

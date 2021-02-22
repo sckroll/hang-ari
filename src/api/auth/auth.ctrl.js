@@ -6,21 +6,21 @@
 
 import Joi from 'joi'
 import User from '../../models/user'
+import {
+  DuplicateError,
+  InvalidEmailError,
+  InvalidPasswordError,
+} from '../../lib/errors'
 
 /**
- * 사용자의 정보를 조회하는 함수
+ * 로그인 양식의 유효성을 검사하는 함수
  */
-export const getUsers = async () => {
-  const users = await User.find()
-  return users
-}
-
-/**
- * 특정 사용자의 정보를 조회하는 함수
- */
-export const getUser = async email => {
-  const user = await User.findOne({ email })
-  return user
+export const validateLoginForm = async form => {
+  const schema = Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+  })
+  await schema.validateAsync(form)
 }
 
 /**
@@ -38,6 +38,22 @@ export const validateRegForm = async form => {
     thumbnail: Joi.string(),
   })
   await schema.validateAsync(form)
+}
+
+/**
+ * 사용자의 정보를 조회하는 함수
+ */
+export const getUsers = async () => {
+  const users = await User.find()
+  return users
+}
+
+/**
+ * 특정 사용자의 정보를 조회하는 함수
+ */
+export const getUser = async email => {
+  const user = await User.findOne({ email })
+  return user
 }
 
 /**
@@ -67,34 +83,28 @@ export const register = async form => {
 }
 
 /**
- * 로그인 양식의 유효성을 검사하는 함수
- */
-export const validateLoginForm = async form => {
-  const schema = Joi.object().keys({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-  })
-  await schema.validateAsync(form)
-}
-
-/**
- * 이메일과 비밀번호를 검증 후 해당 사용자를 반환하는 함수
+ * 이메일과 비밀번호를 검증 후 해당 사용자와 토큰을 반환하는 함수
  */
 export const validateUser = async form => {
   // 해당 이메일의 사용자 조회
-  const user = await User.findOne(form)
+  let user = await getUser(form.email)
   if (!user) {
-    return { isError: true }
+    throw new InvalidEmailError('invalid email address')
   }
 
   // 비밀번호 검증
   const isValid = await user.checkPassword(form.password)
   if (!isValid) {
-    return { isError: true }
+    throw new InvalidPasswordError('invalid password')
   }
 
-  // 암호화된 비밀번호 필드 제거 후 리턴
-  return user.serialize()
+  // 사용자 토큰 생성
+  const token = user.generateToken()
+
+  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
+  user = user.serialize()
+
+  return { user, token }
 }
 
 /**
