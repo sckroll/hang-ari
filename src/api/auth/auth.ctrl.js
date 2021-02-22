@@ -26,7 +26,7 @@ export const getUser = async email => {
 /**
  * 회원가입 양식의 유효성을 검사하는 함수
  */
-export const validateRegForm = form => {
+export const validateRegForm = async form => {
   const schema = Joi.object().keys({
     username: Joi.string().required(),
     email: Joi.string().required(),
@@ -37,8 +37,7 @@ export const validateRegForm = form => {
     phoneNumber: Joi.string(),
     thumbnail: Joi.string(),
   })
-  const result = schema.validate(form)
-  return result.error
+  await schema.validateAsync(form)
 }
 
 /**
@@ -70,13 +69,12 @@ export const register = async form => {
 /**
  * 로그인 양식의 유효성을 검사하는 함수
  */
-export const validateLoginForm = form => {
+export const validateLoginForm = async form => {
   const schema = Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required(),
   })
-  const result = schema.validate(form)
-  return result
+  await schema.validateAsync(form)
 }
 
 /**
