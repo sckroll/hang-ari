@@ -56,11 +56,11 @@ UserSchema.methods.checkPassword = async function (password) {
 }
 
 /**
- * Response body에서 암호화된 비밀번호 필드 제거
+ * Response body에서 ID 및 암호화된 비밀번호 필드 제거
  */
 UserSchema.methods.serialize = function () {
   const data = this.toJSON()
-  data.hashedPassword = undefined
+  data._id = data.hashedPassword = undefined
   return data
 }
 
@@ -69,7 +69,6 @@ UserSchema.methods.serialize = function () {
  */
 UserSchema.methods.generateToken = function () {
   const body = { ...this }
-  body._id = undefined
 
   const secret = process.env.JWT_SECRET
   const expiresIn = { expiresIn: process.env.JWT_EXPIRE }
