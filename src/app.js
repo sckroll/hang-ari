@@ -48,9 +48,20 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // 에러 핸들러
 app.use((err, req, res, next) => {
-  console.error(err)
-  res.status(err.status ? err.status : 500)
-  res.json({ message: err.message })
+  switch (err.name) {
+    case 'ValidationError':
+      err.status = 400
+      break
+    case 'DuplicateError':
+      err.status = 409
+      break
+    default:
+      break
+  }
+  res.status(err.status || 500)
+
+  console.error(`${err.name}: ${err.message}`)
+  res.json({ ...err, message: err.message })
 })
 
 // 서버 생성
