@@ -62,7 +62,9 @@ export const validateUpdateForm = async form => {
  */
 export const getUsers = async () => {
   const users = await User.find()
-  return users
+
+  // 각 사용자의 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
+  return users.map(user => user.serialize())
 }
 
 /**
@@ -70,11 +72,12 @@ export const getUsers = async () => {
  */
 export const getUser = async email => {
   const user = await User.findOne({ email })
-
   if (!user) {
     throw new InvalidUserError('user not found')
   }
-  return user
+
+  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
+  return user.serialize()
 }
 
 /**
