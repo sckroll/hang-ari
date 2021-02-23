@@ -14,6 +14,7 @@ import cors from 'cors'
 import history from 'connect-history-api-fallback'
 import mongoose from 'mongoose'
 import api from './api'
+import jwtUpdate from './lib/jwtUpdate'
 
 // Express 객체 생성
 const app = express()
@@ -36,6 +37,9 @@ app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(morgan('short'))
 
+// 로그인 상태에서 JWT 토큰을 자동으로 갱신하는 미들웨어
+app.use(jwtUpdate)
+
 // 라우트 연결
 app.use('/api', api)
 
@@ -53,6 +57,9 @@ app.use((err, req, res, next) => {
       err.status = 400
       break
     case 'AuthError':
+      err.status = 401
+      break
+    case 'JsonWebTokenError':
       err.status = 401
       break
     case 'InvalidEmailError':

@@ -81,7 +81,7 @@ authRouter.post('/login', async (req, res, next) => {
 // 로그아웃
 // POST /api/auth/logout
 authRouter.post('/logout', authCheck, (req, res) => {
-  res.cookie('hangari_token')
+  res.clearCookie('hangari_token')
   res.status(204).end()
 })
 
