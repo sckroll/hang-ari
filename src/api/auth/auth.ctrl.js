@@ -10,6 +10,7 @@ import {
   DuplicateError,
   InvalidEmailError,
   InvalidPasswordError,
+  InvalidUserError,
 } from '../../lib/errors'
 
 /**
@@ -69,6 +70,10 @@ export const getUsers = async () => {
  */
 export const getUser = async email => {
   const user = await User.findOne({ email })
+
+  if (!user) {
+    throw new InvalidUserError('user not found')
+  }
   return user
 }
 
@@ -135,7 +140,7 @@ export const updateUser = async (email, fieldsToUpdate) => {
 
   // 유효하지 않은 이메일 주소로 요청했다면 예외 처리
   if (!updated) {
-    throw new InvalidEmailError('invalid email address')
+    throw new InvalidUserError('user not found')
   }
 
   // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
@@ -150,6 +155,6 @@ export const removeUser = async email => {
 
   // 유효하지 않은 이메일 주소로 요청했다면 예외 처리
   if (!deleted) {
-    throw new InvalidEmailError('invalid email address')
+    throw new InvalidUserError('user not found')
   }
 }

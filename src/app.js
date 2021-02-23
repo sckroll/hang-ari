@@ -58,6 +58,9 @@ app.use((err, req, res, next) => {
     case 'InvalidPasswordError':
       err.status = 401
       break
+    case 'InvalidUserError':
+      err.status = 404
+      break
     case 'DuplicateError':
       err.status = 409
       break

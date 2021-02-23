@@ -1,5 +1,5 @@
 /**
- * 가입할 회원의 이메일 주소 중복 에러
+ * 가입할 사용자의 이메일 주소 중복 에러
  */
 export class DuplicateError extends Error {
   constructor(...params) {
@@ -13,7 +13,7 @@ export class DuplicateError extends Error {
 }
 
 /**
- * 가입하지 않은 회원의 이메일 주소 에러
+ * 가입하지 않은 사용자의 이메일 주소 에러
  */
 export class InvalidEmailError extends Error {
   constructor(...params) {
@@ -36,6 +36,20 @@ export class InvalidPasswordError extends Error {
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, InvalidPasswordError)
+    }
+  }
+}
+
+/**
+ * 존재하지 않는 사용자 이메일 주소 에러
+ */
+export class InvalidUserError extends Error {
+  constructor(...params) {
+    super(...params)
+    this.name = 'InvalidUserError'
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, InvalidUserError)
     }
   }
 }
