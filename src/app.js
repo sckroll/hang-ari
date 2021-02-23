@@ -67,7 +67,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500)
 
   console.error(`${err.name}: ${err.message}`)
-  res.json({ name: err.name, status: err.status, message: err.message })
+  res.json({ name: err.name, message: err.message })
 })
 
 // 서버 생성
