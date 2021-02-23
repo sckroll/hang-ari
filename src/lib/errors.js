@@ -1,4 +1,17 @@
 /**
+ * 각 에러에 따른 상태 코드를 반환하는 객체
+ */
+export const statusCode = {
+  ValidationError: 400,
+  AuthError: 401,
+  JsonWebTokenError: 401,
+  InvalidEmailError: 401,
+  InvalidPasswordError: 401,
+  InvalidUserError: 404,
+  DuplicateError: 409,
+}
+
+/**
  * 가입할 사용자의 이메일 주소 중복 에러
  */
 export class DuplicateError extends Error {

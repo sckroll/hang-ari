@@ -14,6 +14,7 @@ import cors from 'cors'
 import history from 'connect-history-api-fallback'
 import mongoose from 'mongoose'
 import api from './api'
+import { statusCode } from './lib/errors'
 import jwtUpdate from './lib/jwtUpdate'
 
 // Express 객체 생성
@@ -52,31 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // 에러 핸들러
 app.use((err, req, res, next) => {
-  switch (err.name) {
-    case 'ValidationError':
-      err.status = 400
-      break
-    case 'AuthError':
-      err.status = 401
-      break
-    case 'JsonWebTokenError':
-      err.status = 401
-      break
-    case 'InvalidEmailError':
-      err.status = 401
-      break
-    case 'InvalidPasswordError':
-      err.status = 401
-      break
-    case 'InvalidUserError':
-      err.status = 404
-      break
-    case 'DuplicateError':
-      err.status = 409
-      break
-    default:
-      break
-  }
+  err.status = statusCode[err.name]
   res.status(err.status || 500)
 
   console.error(`${err.name}: ${err.message}`)
