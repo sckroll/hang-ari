@@ -53,3 +53,17 @@ export class InvalidUserError extends Error {
     }
   }
 }
+
+/**
+ * 사용자 인증 에러
+ */
+export class AuthError extends Error {
+  constructor(...params) {
+    super(...params)
+    this.name = 'AuthError'
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, AuthError)
+    }
+  }
+}

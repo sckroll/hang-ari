@@ -52,6 +52,9 @@ app.use((err, req, res, next) => {
     case 'ValidationError':
       err.status = 400
       break
+    case 'AuthError':
+      err.status = 401
+      break
     case 'InvalidEmailError':
       err.status = 401
       break
