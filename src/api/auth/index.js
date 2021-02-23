@@ -92,9 +92,6 @@ authRouter.patch('/:email', async (req, res, next) => {
     const email = req.params.email
     const form = req.body
 
-    // 유효한 이메일 주소인지 검사
-    await authCtrl.checkValidEmail(email)
-
     // 업데이트할 사용자 정보 양식 유효성 검사
     await authCtrl.validateUpdateForm(form)
 
@@ -110,9 +107,6 @@ authRouter.patch('/:email', async (req, res, next) => {
 authRouter.delete('/:email', async (req, res, next) => {
   try {
     const email = req.params.email
-
-    // 유효한 이메일 주소인지 검사
-    await authCtrl.checkValidEmail(email)
 
     // 해당 사용자 삭제
     await authCtrl.removeUser(email)

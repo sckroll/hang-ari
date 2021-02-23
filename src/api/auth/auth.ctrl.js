@@ -83,16 +83,6 @@ export const checkDuplicatedEmail = async email => {
 }
 
 /**
- * 존재하는 사용자의 이메일인지 검사하는 함수
- */
-export const checkValidEmail = async email => {
-  const exists = await User.exists({ email })
-  if (!exists) {
-    throw new InvalidEmailError('invalid email address')
-  }
-}
-
-/**
  * 새로운 사용자를 생성하는 함수
  */
 export const register = async form => {
@@ -143,6 +133,11 @@ export const updateUser = async (email, fieldsToUpdate) => {
     new: true,
   })
 
+  // 유효하지 않은 이메일 주소로 요청했다면 예외 처리
+  if (!updated) {
+    throw new InvalidEmailError('invalid email address')
+  }
+
   // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
   return updated.serialize()
 }
@@ -151,5 +146,10 @@ export const updateUser = async (email, fieldsToUpdate) => {
  * DB에서 해당 이메일의 사용자를 삭제하는 함수
  */
 export const removeUser = async email => {
-  await User.findOneAndRemove({ email })
+  const deleted = await User.findOneAndRemove({ email })
+
+  // 유효하지 않은 이메일 주소로 요청했다면 예외 처리
+  if (!deleted) {
+    throw new InvalidEmailError('invalid email address')
+  }
 }
