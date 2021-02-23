@@ -6,9 +6,7 @@
 
 import { Router } from 'express'
 import * as authCtrl from './auth.ctrl'
-
-// 토큰 유효 기간 (ms)
-const maxAge = 1000 * 60 * 60 * 24 // 1일
+import authCheck from '../../lib/authCheck'
 
 const authRouter = Router()
 
@@ -67,8 +65,10 @@ authRouter.post('/login', async (req, res, next) => {
     // 해당 사용자가 가입되어 있으면 사용자와 토큰 반환
     const { user, token } = await authCtrl.validateUser(form)
 
+    const maxAge = parseInt(process.env.JWT_MAX_AGE)
+
     // 쿠키에 토큰 저장 후 사용자 정보 반환
-    res.cookie('access_token', token, {
+    res.cookie('hangari_token', token, {
       maxAge,
       httpOnly: true,
     })
@@ -80,14 +80,14 @@ authRouter.post('/login', async (req, res, next) => {
 
 // 로그아웃
 // POST /api/auth/logout
-authRouter.post('/logout', (req, res) => {
-  res.cookie('access_token')
+authRouter.post('/logout', authCheck, (req, res) => {
+  res.cookie('hangari_token')
   res.status(204).end()
 })
 
 // 사용자 정보 수정
 // PATCH /api/auth/:email
-authRouter.patch('/:email', async (req, res, next) => {
+authRouter.patch('/:email', authCheck, async (req, res, next) => {
   try {
     const email = req.params.email
     const form = req.body
@@ -104,7 +104,7 @@ authRouter.patch('/:email', async (req, res, next) => {
 
 // 사용자 정보 삭제
 // DELETE /api/auth/:email
-authRouter.delete('/:email', async (req, res, next) => {
+authRouter.delete('/:email', authCheck, async (req, res, next) => {
   try {
     const email = req.params.email
 
