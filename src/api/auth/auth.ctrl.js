@@ -41,6 +41,22 @@ export const validateRegForm = async form => {
 }
 
 /**
+ * 업데이트할 사용자 정보 양식의 유효성을 검사하는 함수
+ */
+export const validateUpdateForm = async form => {
+  const schema = Joi.object()
+    .keys({
+      username: Joi.string(),
+      grade: Joi.number(),
+      department: Joi.string(),
+      phoneNumber: Joi.string().allow(''),
+      thumbnail: Joi.string().allow(''),
+    })
+    .required()
+  await schema.validateAsync(form)
+}
+
+/**
  * 사용자의 정보를 조회하는 함수
  */
 export const getUsers = async () => {
@@ -59,10 +75,20 @@ export const getUser = async email => {
 /**
  * 이메일의 중복을 검사하는 함수
  */
-export const checkEmail = async email => {
+export const checkDuplicatedEmail = async email => {
   const exists = await User.exists({ email })
   if (exists) {
     throw new DuplicateError('duplicated email address')
+  }
+}
+
+/**
+ * 존재하는 사용자의 이메일인지 검사하는 함수
+ */
+export const checkValidEmail = async email => {
+  const exists = await User.exists({ email })
+  if (!exists) {
+    throw new InvalidEmailError('invalid email address')
   }
 }
 
@@ -80,7 +106,7 @@ export const register = async form => {
   await user.setPassword(form.password)
   await user.save()
 
-  // Response body에서 암호화된 비밀번호 제거
+  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
   return user.serialize()
 }
 
@@ -112,17 +138,18 @@ export const validateUser = async form => {
 /**
  * 해당 이메일의 사용자 정보를 갱신하는 함수
  */
-export const updateUser = async (email, updatedFields) => {
-  const updated = await User.findOneAndUpdate({ email }, updatedFields, {
+export const updateUser = async (email, fieldsToUpdate) => {
+  const updated = await User.findOneAndUpdate({ email }, fieldsToUpdate, {
     new: true,
   })
-  return updated
+
+  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
+  return updated.serialize()
 }
 
 /**
  * DB에서 해당 이메일의 사용자를 삭제하는 함수
  */
 export const removeUser = async email => {
-  const removed = await User.findOneAndRemove({ email })
-  return removed
+  await User.findOneAndRemove({ email })
 }

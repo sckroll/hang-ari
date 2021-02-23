@@ -45,7 +45,7 @@ authRouter.post('/register', async (req, res, next) => {
     await authCtrl.validateRegForm(form)
 
     // 이미 가입한 이메일인지 확인
-    await authCtrl.checkEmail(form.email)
+    await authCtrl.checkDuplicatedEmail(form.email)
 
     // 새로운 사용자 생성
     const user = await authCtrl.register(form)
@@ -89,14 +89,16 @@ authRouter.post('/logout', (req, res) => {
 // PATCH /api/auth/:email
 authRouter.patch('/:email', async (req, res, next) => {
   try {
-    const updated = await authCtrl.updateUser(
-      req.body.email,
-      req.body.updatedFields,
-    )
-    if (!updated) {
-      res.status(404)
-      next()
-    }
+    const email = req.params.email
+    const form = req.body
+
+    // 유효한 이메일 주소인지 검사
+    await authCtrl.checkValidEmail(email)
+
+    // 업데이트할 사용자 정보 양식 유효성 검사
+    await authCtrl.validateUpdateForm(form)
+
+    const updated = await authCtrl.updateUser(email, form)
     res.send(updated)
   } catch (e) {
     next(e)
@@ -107,11 +109,13 @@ authRouter.patch('/:email', async (req, res, next) => {
 // DELETE /api/auth/:email
 authRouter.delete('/:email', async (req, res, next) => {
   try {
-    const deleted = await authCtrl.removeUser(req.body.email)
-    if (!deleted) {
-      res.status(404)
-      next()
-    }
+    const email = req.params.email
+
+    // 유효한 이메일 주소인지 검사
+    await authCtrl.checkValidEmail(email)
+
+    // 해당 사용자 삭제
+    await authCtrl.removeUser(email)
     res.status(204).end()
   } catch (e) {
     next(e)
