@@ -113,7 +113,7 @@ export const register = async form => {
  */
 export const validateUser = async form => {
   // 해당 이메일의 사용자 조회
-  let user = await getUser(form.email)
+  let user = await User.findOne({ email: form.email })
   if (!user) {
     throw new InvalidEmailError('invalid email address')
   }
