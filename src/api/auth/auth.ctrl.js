@@ -29,7 +29,7 @@ export const validateLoginForm = async form => {
  */
 export const validateRegForm = async form => {
   const schema = Joi.object().keys({
-    username: Joi.string().required(),
+    name: Joi.string().required(),
     email: Joi.string().required(),
     password: Joi.string().required(),
     studentId: Joi.string().required(),
@@ -47,7 +47,7 @@ export const validateRegForm = async form => {
 export const validateUpdateForm = async form => {
   const schema = Joi.object()
     .keys({
-      username: Joi.string(),
+      name: Joi.string(),
       grade: Joi.number(),
       department: Joi.string(),
       phoneNumber: Joi.string().allow(''),

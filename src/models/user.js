@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken'
 const UserSchema = new Schema(
   {
     // 사용자 이름
-    username: { type: String, required: true },
+    name: { type: String, required: true },
 
     // 사용자 이메일
     email: { type: String, required: true, unique: true },
