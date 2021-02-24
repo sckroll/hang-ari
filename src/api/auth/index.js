@@ -84,6 +84,7 @@ authRouter.post('/login', async (req, res, next) => {
 // 로그아웃
 // POST /api/auth/logout
 authRouter.post('/logout', authCheck, (req, res) => {
+  // 쿠키 삭제
   res.clearCookie('hangari_token')
   res.status(204).end()
 })
@@ -98,6 +99,7 @@ authRouter.patch('/:email', authCheck, async (req, res, next) => {
     // 업데이트할 사용자 정보 양식 유효성 검사
     await authCtrl.validateUpdateForm(form)
 
+    // 사용자 정보 업데이트
     const updated = await authCtrl.updateUser(email, form)
     res.send(updated)
   } catch (e) {
@@ -114,6 +116,7 @@ authRouter.delete('/:email', authCheck, async (req, res, next) => {
     // 해당 사용자 삭제
     await authCtrl.removeUser(email)
 
+    // 쿠키 삭제
     res.clearCookie('hangari_token')
     res.status(204).end()
   } catch (e) {
