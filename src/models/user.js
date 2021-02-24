@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken'
 const UserSchema = new Schema(
   {
     // 사용자 이름
-    username: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
 
     // 사용자 이메일
     email: { type: String, required: true, unique: true },
@@ -20,7 +20,7 @@ const UserSchema = new Schema(
     hashedPassword: { type: String, required: true },
 
     // 사용자 학번
-    studentId: { type: String, required: true },
+    studentId: { type: String, required: true, unique: true },
 
     // 사용자 학년
     grade: { type: Number, requied: true },

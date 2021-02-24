@@ -45,6 +45,9 @@ authRouter.post('/register', async (req, res, next) => {
     // 이미 가입한 이메일인지 확인
     await authCtrl.checkDuplicatedEmail(form.email)
 
+    // 학번 중복 확인
+    await authCtrl.checkDuplicatedSid(form.studentId)
+
     // 새로운 사용자 생성
     const user = await authCtrl.register(form)
     res.send(user)

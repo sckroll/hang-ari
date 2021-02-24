@@ -58,7 +58,7 @@ export const validateUpdateForm = async form => {
 }
 
 /**
- * 사용자의 정보를 조회하는 함수
+ * 모든 사용자의 정보를 조회하는 함수
  */
 export const getUsers = async () => {
   const users = await User.find()
@@ -87,6 +87,16 @@ export const checkDuplicatedEmail = async email => {
   const exists = await User.exists({ email })
   if (exists) {
     throw new DuplicateError('duplicated email address')
+  }
+}
+
+/**
+ * 학번의 중복을 검사하는 함수
+ */
+export const checkDuplicatedSid = async studentId => {
+  const exists = await User.exists({ studentId })
+  if (exists) {
+    throw new DuplicateError('duplicated student ID')
   }
 }
 
