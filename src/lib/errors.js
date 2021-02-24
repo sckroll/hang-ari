@@ -8,11 +8,12 @@ export const statusCode = {
   InvalidEmailError: 401,
   InvalidPasswordError: 401,
   InvalidUserError: 404,
+  InvalidClubError: 404,
   DuplicateError: 409,
 }
 
 /**
- * 가입할 사용자의 이메일 주소 중복 에러
+ * 가입할 사용자의 필드값 중복 에러
  */
 export class DuplicateError extends Error {
   constructor(...params) {
@@ -77,6 +78,20 @@ export class AuthError extends Error {
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AuthError)
+    }
+  }
+}
+
+/**
+ * 존재하지 않는 동아리 에러
+ */
+export class InvalidClubError extends Error {
+  constructor(...params) {
+    super(...params)
+    this.name = 'InvalidClubError'
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, InvalidClubError)
     }
   }
 }

@@ -37,6 +37,9 @@ const ClubSchema = new Schema(
 
     // 동아리 배경화면
     background: { type: String },
+
+    // 설립일자
+    establishedAt: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
