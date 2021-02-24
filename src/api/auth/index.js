@@ -113,6 +113,8 @@ authRouter.delete('/:email', authCheck, async (req, res, next) => {
 
     // 해당 사용자 삭제
     await authCtrl.removeUser(email)
+
+    res.clearCookie('hangari_token')
     res.status(204).end()
   } catch (e) {
     next(e)
