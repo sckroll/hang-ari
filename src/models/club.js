@@ -4,7 +4,7 @@
  * @author Sckroll
  */
 
-import { Schema, model, Types } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 const ClubSchema = new Schema(
   {
@@ -33,17 +33,23 @@ const ClubSchema = new Schema(
     professor: { type: String },
 
     // 동아리 로고
-    logo: { type: String, required: true },
+    logo: { type: String },
 
     // 동아리 배경화면
     background: { type: String },
-
-    // 동아리 회원 리스트
-    members: { type: [Types.ObjectId], ref: 'Users', required: true },
   },
   {
     timestamps: true,
   },
 )
+
+/**
+ * Response body에서 ID 필드 제거
+ */
+ClubSchema.methods.serialize = function () {
+  const data = this.toJSON()
+  data._id = undefined
+  return data
+}
 
 export default model('Club', ClubSchema)
