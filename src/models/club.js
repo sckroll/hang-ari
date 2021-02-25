@@ -26,9 +26,6 @@ const ClubSchema = new Schema(
     // 동아리 방(동방) 위치
     room: { type: String },
 
-    // 동아리 회장
-    president: { type: String, required: true },
-
     // 지도교수
     professor: { type: String },
 

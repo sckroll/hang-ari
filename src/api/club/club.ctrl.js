@@ -28,7 +28,6 @@ export const validateClubForm = async form => {
     tags: Joi.array().items(Joi.string().required()).required(),
     homepage: Joi.string(),
     room: Joi.string(),
-    president: Joi.string().required(),
     professor: Joi.string(),
     logo: Joi.string(),
     background: Joi.string(),
