@@ -4,15 +4,17 @@
  * @author Sckroll
  */
 
-import { Schema, model, Types } from 'mongoose'
+import mongoose, { Schema, model } from 'mongoose'
+
+const ObjectId = mongoose.Types.ObjectId
 
 const MemberSchema = new Schema(
   {
     // 동아리 도큐먼트 ID
-    club: { type: Types.ObjectId, ref: 'Clubs', required: true },
+    club: { type: ObjectId, ref: 'Clubs', required: true },
 
     // 사용자 도큐먼트 ID
-    user: { type: Types.ObjectId, ref: 'Users', required: true },
+    user: { type: ObjectId, ref: 'Users', required: true },
 
     // 동아리 직책
     position: { type: String },
