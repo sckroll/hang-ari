@@ -23,6 +23,9 @@ const jwtUpdate = async (req, res, next) => {
           httpOnly: true,
         })
       }
+
+      // 사용자 정보를 전역 객체에 저장
+      req.app.locals.user = decoded._doc
     }
     next()
   } catch (e) {

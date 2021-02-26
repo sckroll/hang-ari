@@ -83,6 +83,9 @@ authRouter.post('/login', async (req, res, next) => {
 // 로그아웃
 // POST /api/auth/logout
 authRouter.post('/logout', authCheck, (req, res) => {
+  // 전역 객체에 저장된 사용자 정보 삭제
+  req.app.locals.user = undefined
+
   // 쿠키 삭제
   res.clearCookie('hangari_token')
   res.status(204).end()
