@@ -21,12 +21,24 @@ clubRouter.get('/', async (req, res, next) => {
   }
 })
 
-// 특정 동아리 정보 조회
+// 동아리 ID로 특정 동아리 정보 조회
+// GET /api/club/:id
+clubRouter.get('/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const club = await clubCtrl.getClubById(id)
+    res.send(club)
+  } catch (e) {
+    next(e)
+  }
+})
+
+// 동아리 이름으로 특정 동아리 정보 조회
 // GET /api/club/:name
 clubRouter.get('/:name', async (req, res, next) => {
   try {
     const name = req.params.name
-    const club = await clubCtrl.getClub(name)
+    const club = await clubCtrl.getClubByName(name)
     res.send(club)
   } catch (e) {
     next(e)
@@ -43,14 +55,17 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     await clubCtrl.validateClubForm(club)
     await clubCtrl.validateMemberForm(members)
 
+    // 이미 해당 ID로 동아리가 만들어졌는지 검사
+    await clubCtrl.checkDuplicatedId(club.clubId)
+
     // 이미 해당 이름으로 동아리가 만들어졌는지 검사
     await clubCtrl.checkDuplicatedName(club.name)
 
     // 새로운 동아리 생성
-    const clubId = await clubCtrl.createClub(club)
+    const clubDocId = await clubCtrl.createClub(club)
 
     // 동아리 회원 추가
-    await clubCtrl.addMember(clubId, members)
+    await clubCtrl.addMember(clubDocId, members)
 
     res.send()
   } catch (e) {

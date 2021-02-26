@@ -8,6 +8,9 @@ import { Schema, model } from 'mongoose'
 
 const ClubSchema = new Schema(
   {
+    // 동아리 ID (URL)
+    clubId: { type: String, required: true, unique: true },
+
     // 동아리 이름
     name: { type: String, required: true, unique: true },
 

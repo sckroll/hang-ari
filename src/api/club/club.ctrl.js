@@ -22,6 +22,7 @@ const Joi = JoiBase.extend(joiDate)
  */
 export const validateClubForm = async form => {
   const schema = Joi.object().keys({
+    clubId: Joi.string().required(),
     name: Joi.string().required(),
     description: Joi.string().required(),
     category: Joi.string().required(),
@@ -62,9 +63,22 @@ export const getClubs = async () => {
 }
 
 /**
- * 특정 동아리의 정보를 조회하는 함수
+ * 동아리 ID로 특정 동아리의 정보를 조회하는 함수
  */
-export const getClub = async name => {
+export const getClubById = async clubId => {
+  const club = await Club.findOne({ clubId })
+  if (!club) {
+    throw new InvalidClubError('club not found')
+  }
+
+  // 동아리의 도큐먼트 ID 제거
+  return club.serialize()
+}
+
+/**
+ * 동아리 이름으로 특정 동아리의 정보를 조회하는 함수
+ */
+export const getClubByName = async name => {
   const club = await Club.findOne({ name })
   if (!club) {
     throw new InvalidClubError('club not found')
@@ -72,6 +86,16 @@ export const getClub = async name => {
 
   // 동아리의 도큐먼트 ID 제거
   return club.serialize()
+}
+
+/**
+ * 동아리 ID가 중복되는지 검사하는 함수
+ */
+export const checkDuplicatedId = async clubId => {
+  const exists = await Club.exists({ clubId })
+  if (exists) {
+    throw new DuplicateError('duplicated club id')
+  }
 }
 
 /**
@@ -96,7 +120,7 @@ export const createClub = async form => {
 /**
  * 동아리에 회원을 추가하는 함수
  */
-export const addMember = async (clubId, members) => {
+export const addMember = async (clubDocId, members) => {
   for (const member of members) {
     // 학번과 일치하는 사용자의 도큐먼트 ID 추출
     const studentId = member.studentId
@@ -107,7 +131,7 @@ export const addMember = async (clubId, members) => {
 
     // Member 컬렉션에 저장함으로써 동아리에 회원 추가
     const form = {
-      club: clubId,
+      club: clubDocId,
       user: user.id,
       position: member.position,
     }
