@@ -252,3 +252,20 @@ export const removeClub = async (clubId, user) => {
   // 동아리 삭제
   await Club.findByIdAndDelete(clubDocId)
 }
+
+/**
+ * 특정 동아리의 모든 회원을 조회하는 함수
+ */
+export const getMembers = async clubId => {
+  // 동아리 객체 추출
+  const club = await Club.findOne({ clubId })
+  if (!club) {
+    throw new InvalidClubError('club not found')
+  }
+
+  // 동아리 회원 조회 후 populate
+  const members = await Member.find({ club: club.id })
+    .select('-club')
+    .populate('user', '-_id -hashedPassword')
+  return members.map(member => member.serialize())
+}

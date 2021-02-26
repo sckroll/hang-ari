@@ -11,10 +11,10 @@ const ObjectId = mongoose.Types.ObjectId
 const MemberSchema = new Schema(
   {
     // 동아리 도큐먼트 ID
-    club: { type: ObjectId, ref: 'Clubs', required: true },
+    club: { type: ObjectId, ref: 'Club', required: true },
 
     // 사용자 도큐먼트 ID
-    user: { type: ObjectId, ref: 'Users', required: true },
+    user: { type: ObjectId, ref: 'User', required: true },
 
     // 동아리 직책
     position: { type: String },
@@ -47,4 +47,4 @@ MemberSchema.methods.serialize = function () {
   return data
 }
 
-export default model('Members', MemberSchema)
+export default model('Member', MemberSchema)

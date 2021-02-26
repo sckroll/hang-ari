@@ -126,8 +126,8 @@ clubRouter.delete('/:id', authCheck, async (req, res, next) => {
 clubRouter.get('/:id/member', async (req, res, next) => {
   try {
     const id = req.params.id
-
-    res.send()
+    const members = await clubCtrl.getMembers(id)
+    res.send(members)
   } catch (e) {
     next(e)
   }
