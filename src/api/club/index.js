@@ -35,7 +35,7 @@ clubRouter.get('/:name', async (req, res, next) => {
 
 // 동아리 생성
 // POST /api/club
-clubRouter.post('/', async (req, res, next) => {
+clubRouter.post('/', authCheck, async (req, res, next) => {
   try {
     const { club, members } = req.body
 
@@ -60,7 +60,7 @@ clubRouter.post('/', async (req, res, next) => {
 
 // 동아리 정보 변경
 // PATCH /api/club/:name
-clubRouter.patch('/:name', async (req, res, next) => {
+clubRouter.patch('/:name', authCheck, async (req, res, next) => {
   try {
     const name = req.params.name
     const form = req.body
@@ -77,7 +77,7 @@ clubRouter.patch('/:name', async (req, res, next) => {
 
 // 동아리 삭제
 // DELETE /api/club/:name
-clubRouter.delete('/:name', async (req, res, next) => {
+clubRouter.delete('/:name', authCheck, async (req, res, next) => {
   try {
     const name = req.params.name
 
@@ -103,7 +103,7 @@ clubRouter.get('/member/:name', async (req, res, next) => {
 
 // 동아리 회원 추가
 // POST /api/club/member
-clubRouter.post('/member', async (req, res, next) => {
+clubRouter.post('/member', authCheck, async (req, res, next) => {
   try {
     const form = req.body
 
@@ -115,7 +115,7 @@ clubRouter.post('/member', async (req, res, next) => {
 
 // 동아리 회원 직책 변경
 // PATCH /api/club/member/:name/:email
-clubRouter.patch('/member/:name/:email', async (req, res, next) => {
+clubRouter.patch('/member/:name/:email', authCheck, async (req, res, next) => {
   try {
     const { name, email } = req.params
     const form = req.body
@@ -132,7 +132,7 @@ clubRouter.patch('/member/:name/:email', async (req, res, next) => {
 
 // 동아리 회원 탈퇴
 // DELETE /api/club/member/:name/:email
-clubRouter.delete('/member/:name/:email', async (req, res, next) => {
+clubRouter.delete('/member/:name/:email', authCheck, async (req, res, next) => {
   try {
     const { name, email } = req.params
 
