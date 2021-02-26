@@ -55,10 +55,8 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     await clubCtrl.validateClubForm(club)
     await clubCtrl.validateMemberForm(members)
 
-    // 이미 해당 ID로 동아리가 만들어졌는지 검사
+    // 이미 해당 ID와 이름으로 동아리가 만들어졌는지 검사
     await clubCtrl.checkDuplicatedId(club.clubId)
-
-    // 이미 해당 이름으로 동아리가 만들어졌는지 검사
     await clubCtrl.checkDuplicatedName(club.name)
 
     // 새로운 동아리 생성
@@ -67,38 +65,45 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     // 동아리 회원 추가
     await clubCtrl.addMember(clubDocId, members)
 
-    res.send()
+    res.status(201).end()
   } catch (e) {
     next(e)
   }
 })
 
 // 동아리 정보 변경
-// PATCH /api/club/:name
-clubRouter.patch('/:name', authCheck, async (req, res, next) => {
+// PATCH /api/club/:id
+clubRouter.patch('/:id', authCheck, async (req, res, next) => {
   try {
-    const name = req.params.name
+    const id = req.params.id
     const form = req.body
 
     // 동아리 정보 양식 유효성 검사
+    await clubCtrl.validateUpdateForm(form)
+
+    // 동아리 이름을 변경할 경우 중복되지 않는지 검사
+    if (form.name) {
+      await clubCtrl.checkDuplicatedName(form.name)
+    }
 
     // 동아리 정보 업데이트
+    await clubCtrl.updateClub(id, form)
 
-    res.send()
+    res.status(204).end()
   } catch (e) {
     next(e)
   }
 })
 
 // 동아리 삭제
-// DELETE /api/club/:name
-clubRouter.delete('/:name', authCheck, async (req, res, next) => {
+// DELETE /api/club/:id
+clubRouter.delete('/:id', authCheck, async (req, res, next) => {
   try {
-    const name = req.params.name
+    const id = req.params.id
 
-    // 해당 동아리 삭제
+    await clubCtrl.removeClub(id)
 
-    res.send()
+    res.status(204).end()
   } catch (e) {
     next(e)
   }

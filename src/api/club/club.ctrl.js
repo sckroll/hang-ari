@@ -53,6 +53,25 @@ export const validateMemberForm = async form => {
 }
 
 /**
+ * 업데이트할 동아리 양식의 유효성을 검사하는 함수
+ */
+export const validateUpdateForm = async form => {
+  const schema = Joi.object().keys({
+    name: Joi.string(),
+    description: Joi.string(),
+    category: Joi.string(),
+    tags: Joi.array().items(Joi.string().required()),
+    homepage: Joi.string().allow(''),
+    room: Joi.string().allow(''),
+    professor: Joi.string().allow(''),
+    logo: Joi.string().allow(''),
+    background: Joi.string().allow(''),
+    establishedAt: Joi.date().format('YYYY-MM-DD'),
+  })
+  await schema.validateAsync(form)
+}
+
+/**
  * 모든 동아리의 정보를 조회하는 함수
  */
 export const getClubs = async () => {
@@ -138,4 +157,34 @@ export const addMember = async (clubDocId, members) => {
     const newMember = new Member(form)
     await newMember.save()
   }
+}
+
+/**
+ * 동아리 정보를 업데이트하는 함수
+ */
+export const updateClub = async (clubId, fieldsToUpdate) => {
+  const updated = await Club.findOneAndUpdate({ clubId }, fieldsToUpdate, {
+    new: true,
+  })
+
+  // 유효하지 않은 ID로 요청했다면 예외 처리
+  if (!updated) {
+    throw new InvalidClubError('club not found')
+  }
+}
+
+/**
+ * 동아리를 삭제하는 함수
+ */
+export const removeClub = async clubId => {
+  const club = await Club.findOne({ clubId })
+  if (!club) {
+    throw new InvalidClubError('club not found')
+  }
+
+  // 동아리를 삭제하기 전에 동아리에 소속된 사용자와의 연결을 해제
+  await Member.remove({ club: club.id })
+
+  // 동아리 삭제
+  await Club.findByIdAndDelete(club.id)
 }
