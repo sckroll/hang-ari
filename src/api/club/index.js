@@ -50,6 +50,7 @@ clubRouter.get('/:name', async (req, res, next) => {
 clubRouter.post('/', authCheck, async (req, res, next) => {
   try {
     const { club, members } = req.body
+    const user = req.app.locals.user
 
     // 동아리 및 동아리 회원 양식 유효성 검사
     await clubCtrl.validateClubForm(club)
@@ -58,6 +59,9 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     // 이미 해당 ID와 이름으로 동아리가 만들어졌는지 검사
     await clubCtrl.checkDuplicatedId(club.clubId)
     await clubCtrl.checkDuplicatedName(club.name)
+
+    // 동아리를 생성하는 사용자가 동아리 간부인지 검사
+    clubCtrl.checkExecutive(user, members)
 
     // 새로운 동아리 생성
     const clubDocId = await clubCtrl.createClub(club)
@@ -110,10 +114,10 @@ clubRouter.delete('/:id', authCheck, async (req, res, next) => {
 })
 
 // 동아리 회원 전체 조회
-// GET /api/club/member/:name
-clubRouter.get('/member/:name', async (req, res, next) => {
+// GET /api/club/:id/member
+clubRouter.get('/:id/member', async (req, res, next) => {
   try {
-    const name = req.params.name
+    const id = req.params.id
 
     res.send()
   } catch (e) {

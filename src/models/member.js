@@ -18,6 +18,12 @@ const MemberSchema = new Schema(
 
     // 동아리 직책
     position: { type: String },
+
+    // 동아리 대표(회장) 여부
+    isPresident: { type: Boolean, default: false },
+
+    // 동아리 간부 여부
+    isExecutive: { type: Boolean, default: false },
   },
   {
     timestamps: true,

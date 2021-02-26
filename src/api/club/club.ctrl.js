@@ -13,6 +13,7 @@ import {
   InvalidClubError,
   DuplicateError,
   InvalidUserError,
+  AuthError,
 } from '../../lib/errors'
 
 const Joi = JoiBase.extend(joiDate)
@@ -32,7 +33,7 @@ export const validateClubForm = async form => {
     professor: Joi.string(),
     logo: Joi.string(),
     background: Joi.string(),
-    establishedAt: Joi.date().format('YYYY-MM-DD').utc(),
+    establishedAt: Joi.date().format('YYYY-MM-DD'),
   })
   await schema.validateAsync(form)
 }
@@ -46,6 +47,8 @@ export const validateMemberForm = async form => {
       .keys({
         studentId: Joi.string().required(),
         position: Joi.string(),
+        isPresident: Joi.boolean(),
+        isExecutive: Joi.boolean(),
       })
       .required(),
   )
@@ -128,6 +131,16 @@ export const checkDuplicatedName = async name => {
 }
 
 /**
+ * 동아리를 생성하는 사용자가 간부인지 확인하는 함수
+ */
+export const checkExecutive = (user, members) => {
+  const creator = members.find(member => member.studentId === user.studentId)
+  if (!creator.isExecutive) {
+    throw new AuthError('club creator should be executive')
+  }
+}
+
+/**
  * 새로운 동아리를 생성 후 회원 추가를 위해 도큐먼트 ID를 반환하는 함수
  */
 export const createClub = async form => {
@@ -153,6 +166,8 @@ export const addMember = async (clubDocId, members) => {
       club: clubDocId,
       user: user.id,
       position: member.position,
+      isPresident: member.isPresident,
+      isExecutive: member.isExecutive,
     }
     const newMember = new Member(form)
     await newMember.save()
@@ -183,7 +198,7 @@ export const removeClub = async clubId => {
   }
 
   // 동아리를 삭제하기 전에 동아리에 소속된 사용자와의 연결을 해제
-  await Member.remove({ club: club.id })
+  await Member.deleteMany({ club: club.id })
 
   // 동아리 삭제
   await Club.findByIdAndDelete(club.id)
