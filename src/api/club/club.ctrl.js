@@ -49,6 +49,7 @@ export const validateMemberForm = async form => {
         position: Joi.string(),
         isPresident: Joi.boolean(),
         isExecutive: Joi.boolean(),
+        isManager: Joi.boolean(),
       })
       .required(),
   )
@@ -131,12 +132,32 @@ export const checkDuplicatedName = async name => {
 }
 
 /**
+ * 동아리 회원 중에 회장이 있는지 확인하는 함수
+ */
+export const checkPresident = members => {
+  const president = members.find(member => member.isPresident)
+  if (!president) {
+    throw new AuthError('club should have at least one president')
+  }
+}
+
+/**
  * 동아리를 생성하는 사용자가 간부인지 확인하는 함수
  */
 export const checkExecutive = (user, members) => {
   const creator = members.find(member => member.studentId === user.studentId)
   if (!creator.isExecutive) {
     throw new AuthError('club creator should be executive')
+  }
+}
+
+/**
+ * 동아리를 생성하는 사용자가 동아리 페이지 관리자인지 확인하는 함수
+ */
+export const checkManager = (user, members) => {
+  const creator = members.find(member => member.studentId === user.studentId)
+  if (!creator.isManager) {
+    throw new AuthError('club creator should be manager')
   }
 }
 
@@ -168,6 +189,7 @@ export const addMember = async (clubDocId, members) => {
       position: member.position,
       isPresident: member.isPresident,
       isExecutive: member.isExecutive,
+      isManager: member.isManager,
     }
     const newMember = new Member(form)
     await newMember.save()

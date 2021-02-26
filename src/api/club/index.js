@@ -60,8 +60,14 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     await clubCtrl.checkDuplicatedId(club.clubId)
     await clubCtrl.checkDuplicatedName(club.name)
 
+    // 동아리 회원 중에 회장이 있는지 검사
+    clubCtrl.checkPresident(members)
+
     // 동아리를 생성하는 사용자가 동아리 간부인지 검사
     clubCtrl.checkExecutive(user, members)
+
+    // 동아리를 생성하는 사용자가 페이지 관리자인지 검사
+    clubCtrl.checkManager(user, members)
 
     // 새로운 동아리 생성
     const clubDocId = await clubCtrl.createClub(club)

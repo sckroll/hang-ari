@@ -24,6 +24,9 @@ const MemberSchema = new Schema(
 
     // 동아리 간부 여부
     isExecutive: { type: Boolean, default: false },
+
+    // 동아리 페이지 관리자 여부
+    isManager: { type: Boolean, default: false },
   },
   {
     timestamps: true,
