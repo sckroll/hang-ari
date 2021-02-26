@@ -13,6 +13,7 @@ import {
   InvalidClubError,
   DuplicateError,
   InvalidUserError,
+  InvalidMemberError,
   AuthError,
 } from '../../lib/errors'
 
@@ -147,7 +148,7 @@ export const checkPresident = members => {
 export const checkExecutive = (user, members) => {
   const creator = members.find(member => member.studentId === user.studentId)
   if (!creator.isExecutive) {
-    throw new AuthError('club creator should be executive')
+    throw new AuthError('club creator should be a executive')
   }
 }
 
@@ -157,7 +158,7 @@ export const checkExecutive = (user, members) => {
 export const checkManager = (user, members) => {
   const creator = members.find(member => member.studentId === user.studentId)
   if (!creator.isManager) {
-    throw new AuthError('club creator should be manager')
+    throw new AuthError('club creator should be a manager')
   }
 }
 
@@ -199,29 +200,55 @@ export const addMember = async (clubDocId, members) => {
 /**
  * 동아리 정보를 업데이트하는 함수
  */
-export const updateClub = async (clubId, fieldsToUpdate) => {
-  const updated = await Club.findOneAndUpdate({ clubId }, fieldsToUpdate, {
-    new: true,
-  })
-
-  // 유효하지 않은 ID로 요청했다면 예외 처리
-  if (!updated) {
+export const updateClub = async (clubId, fieldsToUpdate, user) => {
+  // 동아리와 사용자의 도큐먼트 ID 추출
+  const club = await Club.findOne({ clubId })
+  if (!club) {
     throw new InvalidClubError('club not found')
   }
+  const clubDocId = club.id
+  const userDocId = user._id
+
+  // 동아리에 소속된 사용자의 도큐먼트 추출
+  const member = await Member.findOne({ club: clubDocId, user: userDocId })
+  if (!member) {
+    throw new InvalidMemberError('member not found')
+  }
+
+  // 사용자가 동아리 페이지의 관리자인지 확인
+  if (!member.isManager) {
+    throw new AuthError('user should be a manager')
+  }
+
+  await Club.findByIdAndUpdate(clubDocId, fieldsToUpdate)
 }
 
 /**
  * 동아리를 삭제하는 함수
  */
-export const removeClub = async clubId => {
+export const removeClub = async (clubId, user) => {
+  // 동아리와 사용자의 도큐먼트 ID 추출
   const club = await Club.findOne({ clubId })
   if (!club) {
     throw new InvalidClubError('club not found')
   }
+  const clubDocId = club.id
+  const userDocId = user._id
+
+  // 동아리에 소속된 사용자의 도큐먼트 추출
+  const member = await Member.findOne({ club: clubDocId, user: userDocId })
+  if (!member) {
+    throw new InvalidMemberError('member not found')
+  }
+
+  // 사용자가 동아리 페이지의 관리자인지 확인
+  if (!member.isManager) {
+    throw new AuthError('user should be a manager')
+  }
 
   // 동아리를 삭제하기 전에 동아리에 소속된 사용자와의 연결을 해제
-  await Member.deleteMany({ club: club.id })
+  await Member.deleteMany({ club: clubDocId })
 
   // 동아리 삭제
-  await Club.findByIdAndDelete(club.id)
+  await Club.findByIdAndDelete(clubDocId)
 }

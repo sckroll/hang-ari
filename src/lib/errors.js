@@ -9,6 +9,7 @@ export const statusCode = {
   InvalidPasswordError: 401,
   InvalidUserError: 404,
   InvalidClubError: 404,
+  InvalidMemberError: 404,
   DuplicateError: 409,
 }
 
@@ -92,6 +93,20 @@ export class InvalidClubError extends Error {
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, InvalidClubError)
+    }
+  }
+}
+
+/**
+ * 존재하지 않는 동아리 회원 에러
+ */
+export class InvalidMemberError extends Error {
+  constructor(...params) {
+    super(...params)
+    this.name = 'InvalidMemberError'
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, InvalidMemberError)
     }
   }
 }
