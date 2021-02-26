@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
   err.status = statusCode[err.name]
   res.status(err.status || 500)
 
-  console.error(`${err.name}: ${err.message}`)
+  console.error(err)
   res.json({ name: err.name, message: err.message })
 })
 
