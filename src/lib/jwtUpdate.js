@@ -29,6 +29,7 @@ const jwtUpdate = async (req, res, next) => {
     }
     next()
   } catch (e) {
+    req.app.locals.user = undefined
     res.clearCookie('hangari_token')
     next(e)
   }
