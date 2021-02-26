@@ -113,13 +113,10 @@ export const register = async form => {
   // 비밀번호 암호화 후 저장
   await user.setPassword(form.password)
   await user.save()
-
-  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
-  return user.serialize()
 }
 
 /**
- * 이메일과 비밀번호를 검증 후 해당 사용자와 토큰을 반환하는 함수
+ * 이메일과 비밀번호를 검증 후 JWT 토큰을 반환하는 함수
  */
 export const validateUser = async form => {
   // 해당 이메일의 사용자 조회
@@ -134,13 +131,8 @@ export const validateUser = async form => {
     throw new InvalidPasswordError('invalid password')
   }
 
-  // 사용자 토큰 생성
-  const token = user.generateToken()
-
-  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
-  user = user.serialize()
-
-  return { user, token }
+  // 사용자 토큰 생성 후 반환
+  return user.generateToken()
 }
 
 /**
@@ -155,9 +147,6 @@ export const updateUser = async (email, fieldsToUpdate) => {
   if (!updated) {
     throw new InvalidUserError('user not found')
   }
-
-  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
-  return updated.serialize()
 }
 
 /**

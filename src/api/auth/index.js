@@ -42,15 +42,14 @@ authRouter.post('/register', async (req, res, next) => {
     // 회원가입 양식 유효성 검사
     await authCtrl.validateRegForm(form)
 
-    // 이미 가입한 이메일인지 확인
+    // 이미 가입한 이메일 및 학번인지 확인
     await authCtrl.checkDuplicatedEmail(form.email)
-
-    // 학번 중복 확인
     await authCtrl.checkDuplicatedSid(form.studentId)
 
     // 새로운 사용자 생성
-    const user = await authCtrl.register(form)
-    res.send(user)
+    await authCtrl.register(form)
+
+    res.status(201).end()
   } catch (e) {
     next(e)
   }
@@ -66,7 +65,7 @@ authRouter.post('/login', async (req, res, next) => {
     await authCtrl.validateLoginForm(form)
 
     // 해당 사용자가 가입되어 있으면 사용자와 토큰 반환
-    const { user, token } = await authCtrl.validateUser(form)
+    const token = await authCtrl.validateUser(form)
 
     const maxAge = parseInt(process.env.JWT_MAX_AGE)
 
@@ -75,7 +74,7 @@ authRouter.post('/login', async (req, res, next) => {
       maxAge,
       httpOnly: true,
     })
-    res.send(user)
+    res.status(201).end()
   } catch (e) {
     next(e)
   }
@@ -100,8 +99,9 @@ authRouter.patch('/:email', authCheck, async (req, res, next) => {
     await authCtrl.validateUpdateForm(form)
 
     // 사용자 정보 업데이트
-    const updated = await authCtrl.updateUser(email, form)
-    res.send(updated)
+    await authCtrl.updateUser(email, form)
+
+    res.status(204).end()
   } catch (e) {
     next(e)
   }
