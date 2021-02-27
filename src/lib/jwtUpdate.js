@@ -15,7 +15,7 @@ const jwtUpdate = async (req, res, next) => {
 
       // 로그인 후 3시간(JWT_RE_SIGN)이 지나면 JWT 토큰 재발급
       if (decoded.exp - now < updateTime) {
-        const user = await User.findById(decoded._id)
+        const user = await User.findById(decoded._doc._id)
         token = user.generateToken()
 
         res.cookie('hangari_token', token, {
