@@ -60,20 +60,20 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     await clubCtrl.checkDuplicatedId(club.clubId)
     await clubCtrl.checkDuplicatedName(club.name)
 
-    // 동아리 회원 중에 회장이 있는지 검사
+    // 동아리 회원 중에 유일한 회장이 있는지 검사
     clubCtrl.checkPresident(members)
 
     // 동아리를 생성하는 사용자가 동아리 간부인지 검사
     clubCtrl.checkExecutive(user, members)
 
-    // 동아리를 생성하는 사용자가 페이지 관리자인지 검사
+    // 동아리를 생성하는 사용자가 유일한 동아리 페이지 관리자인지 검사
     clubCtrl.checkManager(user, members)
 
     // 새로운 동아리 생성
     const clubDocId = await clubCtrl.createClub(club)
 
     // 동아리 회원 추가
-    await clubCtrl.addMember(clubDocId, members)
+    await clubCtrl.addMembers(clubDocId, members)
 
     res.status(201).end()
   } catch (e) {
@@ -90,7 +90,7 @@ clubRouter.patch('/:id', authCheck, async (req, res, next) => {
     const user = req.app.locals.user
 
     // 동아리 정보 양식 유효성 검사
-    await clubCtrl.validateUpdateForm(form)
+    await clubCtrl.validateUpdateClubForm(form)
 
     // 동아리 이름을 변경할 경우 중복되지 않는지 검사
     if (form.name) {
@@ -134,12 +134,26 @@ clubRouter.get('/:id/member', async (req, res, next) => {
 })
 
 // 동아리 회원 추가
-// POST /api/club/member
-clubRouter.post('/member', authCheck, async (req, res, next) => {
+// POST /api/club/:id/member
+clubRouter.post('/:id/member', authCheck, async (req, res, next) => {
   try {
+    const id = req.params.id
     const form = req.body
+    const user = req.app.locals.user
 
-    res.send()
+    // 동아리 회원 양식 유효성 검사
+    await clubCtrl.validateMemberForm(form)
+
+    // 추가할 동아리 회원의 유효성 검사
+    await clubCtrl.validateNewMember(id, user, form)
+
+    // 회원을 추가할 동아리의 도큐먼트 ID를 추출
+    const clubDocId = await clubCtrl.getClubDocId(id)
+
+    // 동아리 회원 추가
+    await clubCtrl.addMembers(clubDocId, form)
+
+    res.status(201).end()
   } catch (e) {
     next(e)
   }
@@ -152,11 +166,14 @@ clubRouter.patch('/member/:name/:email', authCheck, async (req, res, next) => {
     const { name, email } = req.params
     const form = req.body
 
+    // 동아리 회원 양식 유효성 검사
+    await clubCtrl.validateUpdateMemberForm(form)
+
     // 동아리 및 동아리 회원 도큐먼트 ID 추출
 
     // 해당 동아리의 회원 직책 변경
 
-    res.send()
+    res.status(204).end()
   } catch (e) {
     next(e)
   }
@@ -172,7 +189,7 @@ clubRouter.delete('/member/:name/:email', authCheck, async (req, res, next) => {
 
     // 해당 동아리에서 탈퇴
 
-    res.send()
+    res.status(204).end()
   } catch (e) {
     next(e)
   }
