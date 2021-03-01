@@ -90,7 +90,7 @@ clubRouter.patch('/:id', authCheck, async (req, res, next) => {
     const user = req.app.locals.user
 
     // 동아리 정보 양식 유효성 검사
-    await clubCtrl.validateUpdateClubForm(form)
+    await clubCtrl.validateClubUpdateForm(form)
 
     // 동아리 이름을 변경할 경우 중복되지 않는지 검사
     if (form.name) {
@@ -160,18 +160,21 @@ clubRouter.post('/:id/member', authCheck, async (req, res, next) => {
 })
 
 // 동아리 회원 직책 변경
-// PATCH /api/club/member/:name/:email
-clubRouter.patch('/member/:name/:email', authCheck, async (req, res, next) => {
+// PATCH /api/club/:id/member
+clubRouter.patch('/:id/member', authCheck, async (req, res, next) => {
   try {
-    const { name, email } = req.params
+    const id = req.params.id
     const form = req.body
+    const user = req.app.locals.user
 
     // 동아리 회원 양식 유효성 검사
-    await clubCtrl.validateUpdateMemberForm(form)
+    await clubCtrl.validateMemberUpdateForm(form)
 
-    // 동아리 및 동아리 회원 도큐먼트 ID 추출
+    // 업데이트할 동아리 회원 정보의 유효성 검사
+    await clubCtrl.validateMemberUpdate(id, user, form)
 
     // 해당 동아리의 회원 직책 변경
+    await clubCtrl.updateMember()
 
     res.status(204).end()
   } catch (e) {
@@ -180,15 +183,11 @@ clubRouter.patch('/member/:name/:email', authCheck, async (req, res, next) => {
 })
 
 // 동아리 회원 탈퇴
-// DELETE /api/club/member/:name/:email
-clubRouter.delete('/member/:name/:email', authCheck, async (req, res, next) => {
+// DELETE /api/club/:id/member/:email
+clubRouter.delete('/:id/member/:email', authCheck, async (req, res, next) => {
   try {
-    const { name, email } = req.params
-
-    // 동아리 및 동아리 회원 도큐먼트 ID 추출
-
-    // 해당 동아리에서 탈퇴
-
+    const { id, email } = req.params
+    await clubCtrl.removeMember(id, email)
     res.status(204).end()
   } catch (e) {
     next(e)

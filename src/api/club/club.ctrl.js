@@ -60,7 +60,7 @@ export const validateMemberForm = async form => {
 /**
  * 업데이트할 동아리 양식의 유효성을 검사하는 함수
  */
-export const validateUpdateClubForm = async form => {
+export const validateClubUpdateForm = async form => {
   const schema = Joi.object().keys({
     name: Joi.string(),
     description: Joi.string(),
@@ -79,10 +79,11 @@ export const validateUpdateClubForm = async form => {
 /**
  * 업데이트할 동아리 회원 양식의 유효성을 검사하는 함수
  */
-export const validateUpdateMemberForm = async form => {
+export const validateMemberUpdateForm = async form => {
   const schema = Joi.array().items(
     Joi.object()
       .keys({
+        studentId: Joi.string().required(),
         position: Joi.string().allow(''),
         isPresident: Joi.boolean(),
         isExecutive: Joi.boolean(),
@@ -234,6 +235,52 @@ export const validateNewMember = async (clubId, user, newMembers) => {
 }
 
 /**
+ * 업데이트할 동아리 회원 정보의 유효성을 검사하는 함수
+ */
+export const validateMemberUpdate = async (clubId, user, updatedMembers) => {
+  // 기존 동아리 회원 목록 조회
+  const beforeUpdate = await getMembers(clubId)
+  beforeUpdate.forEach(member => {
+    if (member.user) {
+      member.studentId = member.user.studentId
+      member.user = undefined
+    }
+  })
+
+  // 사용자의 동아리 간부 여부 확인
+  checkExecutive(user, beforeUpdate)
+
+  // 사용자가 유일한 동아리 페이지 관리자인지 확인
+  checkManager(user, beforeUpdate)
+
+  // 업데이트할 동아리 회원을 기존 회원에서 추출
+  const afterUpdate = [...beforeUpdate]
+  afterUpdate.forEach(member => {
+    for (const memberToUpdate of updatedMembers) {
+      if (memberToUpdate.studentId === member.studentId) {
+        member = { ...memberToUpdate }
+      }
+    }
+  })
+  console.log(beforeUpdate)
+  console.log(afterUpdate)
+
+  // 1. 동아리 회장을 양도하는 경우
+  // 업데이트 전과 후에도 유일한 회장이 있는지 확인
+  checkPresident(beforeUpdate)
+  checkPresident(afterUpdate)
+
+  // 2. 동아리 페이지 관리자를 양도하는 경우
+  // 업데이트 후에도 유일한 동아리 페이지 관리자가 있는지 확인
+  checkManager(user, afterUpdate)
+
+  // 3. 기타 직책을 변경하는 경우
+  // 검사 생략
+
+  // 이상이 없으면 업데이트할 회원들의 정보와 도큐먼트 ID를 배열로 반환
+}
+
+/**
  * 새로운 동아리를 생성 후 회원 추가를 위해 도큐먼트 ID를 반환하는 함수
  */
 export const createClub = async form => {
@@ -251,32 +298,6 @@ export const getClubDocId = async clubId => {
     throw new InvalidClubError('club not found')
   }
   return club.id
-}
-
-/**
- * 동아리에 회원을 추가하는 함수
- */
-export const addMembers = async (clubDocId, members) => {
-  for (const member of members) {
-    // 학번과 일치하는 사용자의 도큐먼트 ID 추출
-    const studentId = member.studentId
-    const user = await User.findOne({ studentId })
-    if (!user) {
-      throw new InvalidUserError('user not found')
-    }
-
-    // Member 컬렉션에 저장함으로써 동아리에 회원 추가
-    const form = {
-      club: clubDocId,
-      user: user.id,
-      position: member.position,
-      isPresident: member.isPresident,
-      isExecutive: member.isExecutive,
-      isManager: member.isManager,
-    }
-    const newMember = new Member(form)
-    await newMember.save()
-  }
 }
 
 /**
@@ -339,4 +360,59 @@ export const getMembers = async clubId => {
     .select('-club')
     .populate('user', '-_id -hashedPassword')
   return members.map(member => member.serialize())
+}
+
+/**
+ * 동아리에 회원을 추가하는 함수
+ */
+export const addMembers = async (clubDocId, members) => {
+  for (const member of members) {
+    // 학번과 일치하는 사용자의 도큐먼트 ID 추출
+    const studentId = member.studentId
+    const user = await User.findOne({ studentId })
+    if (!user) {
+      throw new InvalidUserError('user not found')
+    }
+
+    // Member 컬렉션에 저장함으로써 동아리에 회원 추가
+    const form = {
+      club: clubDocId,
+      user: user.id,
+      position: member.position,
+      isPresident: member.isPresident,
+      isExecutive: member.isExecutive,
+      isManager: member.isManager,
+    }
+    const newMember = new Member(form)
+    await newMember.save()
+  }
+}
+
+/**
+ * 동아리 회원의 정보를 업데이트하는 함수
+ */
+export const updateMember = async (clubId, email) => {
+  // // 동아리 및 동아리 회원 도큐먼트 ID 추출
+  // const club = await getClubDocId(clubId)
+  // const member = await User.findOne({ email })
+  // if (!member) {
+  //   throw new InvalidClubError('user not found')
+  // }
+  // const user = member.id
+  // await Member.findOneAndRemove({ club, user })
+}
+
+/**
+ * DB에서 해당 동아리의 회원을 삭제하는 함수
+ */
+export const removeMember = async (clubId, email) => {
+  // 동아리 및 동아리 회원 도큐먼트 ID 추출
+  const club = await getClubDocId(clubId)
+  const member = await User.findOne({ email })
+  if (!member) {
+    throw new InvalidClubError('user not found')
+  }
+  const user = member.id
+
+  await Member.findOneAndRemove({ club, user })
 }
