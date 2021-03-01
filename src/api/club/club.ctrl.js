@@ -153,7 +153,7 @@ export const checkDuplicatedName = async name => {
 /**
  * 동아리 회원 중에 유일한 회장이 있는지 확인하는 함수
  */
-export const checkPresident = members => {
+export const checkOnlyPresident = members => {
   const president = members.filter(member => member.isPresident)
   if (president.length !== 1) {
     throw new AuthError('club should have only one president')
@@ -173,18 +173,23 @@ export const checkExecutive = (user, members) => {
 }
 
 /**
- * 동아리를 생성하는 사용자가 유일한 동아리 페이지 관리자인지 확인하는 함수
+ * 동아리를 생성/수정/삭제하는 사용자가 동아리 페이지 관리자인지 확인하는 함수
  */
 export const checkManager = (user, members) => {
   if (members.length === 0) return
 
-  // 사용자가 동아리 페이지 관리자인지 확인
   const creator = members.find(member => member.studentId === user.studentId)
   if (!creator.isManager) {
-    throw new AuthError('club creator should be a manager')
+    throw new AuthError('request should be done by a manager')
   }
+}
 
-  // 동아리 페이지 관리자가 유일한 한 명인지 확인
+/**
+ * 동아리 페이지 관리자가 유일하게 존재하는지 확인하는 함수
+ */
+export const checkOnlyManager = members => {
+  if (members.length === 0) return
+
   const manager = members.filter(member => member.isManager)
   if (manager.length !== 1) {
     throw new AuthError('club should have only one manager')
@@ -222,13 +227,14 @@ export const validateNewMember = async (clubId, user, newMembers) => {
   })
 
   // 동아리 회원 중에 유일한 회장이 있는지 확인
-  checkPresident(members)
+  checkOnlyPresident(members)
 
   // 사용자의 동아리 간부 여부 확인
   checkExecutive(user, members)
 
   // 사용자가 유일한 동아리 페이지 관리자인지 확인
   checkManager(user, members)
+  checkOnlyManager(members)
 
   // 새 회원과 학번이 중복되는 회원이 있는지 확인
   checkDuplicatedMember(currMembers, newMembers)
@@ -237,47 +243,45 @@ export const validateNewMember = async (clubId, user, newMembers) => {
 /**
  * 업데이트할 동아리 회원 정보의 유효성을 검사하는 함수
  */
-export const validateMemberUpdate = async (clubId, user, updatedMembers) => {
+export const validateMemberUpdate = async (clubId, user, payload) => {
   // 기존 동아리 회원 목록 조회
-  const beforeUpdate = await getMembers(clubId)
-  beforeUpdate.forEach(member => {
-    if (member.user) {
-      member.studentId = member.user.studentId
-      member.user = undefined
-    }
-  })
+  const currMembers = await getMembers(clubId)
+  const beforeUpdate = currMembers.map(member => ({
+    studentId: member.user.studentId,
+    position: member.position,
+    isPresident: member.isPresident,
+    isExecutive: member.isExecutive,
+    isManager: member.isManager,
+  }))
 
   // 사용자의 동아리 간부 여부 확인
   checkExecutive(user, beforeUpdate)
 
   // 사용자가 유일한 동아리 페이지 관리자인지 확인
   checkManager(user, beforeUpdate)
+  checkOnlyManager(beforeUpdate)
 
-  // 업데이트할 동아리 회원을 기존 회원에서 추출
-  const afterUpdate = [...beforeUpdate]
-  afterUpdate.forEach(member => {
-    for (const memberToUpdate of updatedMembers) {
+  // 업데이트할 동아리 회원 정보를 기존 회원 정보와 비교
+  const afterUpdate = []
+  beforeUpdate.forEach(member => {
+    for (const memberToUpdate of payload) {
       if (memberToUpdate.studentId === member.studentId) {
-        member = { ...memberToUpdate }
+        const updated = { ...member, ...memberToUpdate }
+        afterUpdate.push(updated)
+        return
       }
     }
+    afterUpdate.push(member)
   })
-  console.log(beforeUpdate)
-  console.log(afterUpdate)
 
-  // 1. 동아리 회장을 양도하는 경우
+  // 동아리 회장을 양도하는 경우
   // 업데이트 전과 후에도 유일한 회장이 있는지 확인
-  checkPresident(beforeUpdate)
-  checkPresident(afterUpdate)
+  checkOnlyPresident(beforeUpdate)
+  checkOnlyPresident(afterUpdate)
 
-  // 2. 동아리 페이지 관리자를 양도하는 경우
+  // 동아리 페이지 관리자를 양도하는 경우
   // 업데이트 후에도 유일한 동아리 페이지 관리자가 있는지 확인
-  checkManager(user, afterUpdate)
-
-  // 3. 기타 직책을 변경하는 경우
-  // 검사 생략
-
-  // 이상이 없으면 업데이트할 회원들의 정보와 도큐먼트 ID를 배열로 반환
+  checkOnlyManager(afterUpdate)
 }
 
 /**
@@ -391,15 +395,21 @@ export const addMembers = async (clubDocId, members) => {
 /**
  * 동아리 회원의 정보를 업데이트하는 함수
  */
-export const updateMember = async (clubId, email) => {
-  // // 동아리 및 동아리 회원 도큐먼트 ID 추출
-  // const club = await getClubDocId(clubId)
-  // const member = await User.findOne({ email })
-  // if (!member) {
-  //   throw new InvalidClubError('user not found')
-  // }
-  // const user = member.id
-  // await Member.findOneAndRemove({ club, user })
+export const updateMember = async (clubId, updatedMembers) => {
+  // 동아리 도큐먼트 ID 추출
+  const club = await getClubDocId(clubId)
+
+  updatedMembers.forEach(async member => {
+    // 동아리 회원 도큐먼트 ID 추출
+    const studentId = member.studentId
+    const updatedMember = await User.findOne({ studentId })
+    if (!updatedMember) {
+      throw new InvalidClubError('user not found')
+    }
+    const user = updatedMember.id
+
+    await Member.findOneAndUpdate({ club, user }, member)
+  })
 }
 
 /**

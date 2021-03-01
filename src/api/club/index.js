@@ -61,13 +61,14 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     await clubCtrl.checkDuplicatedName(club.name)
 
     // 동아리 회원 중에 유일한 회장이 있는지 검사
-    clubCtrl.checkPresident(members)
+    clubCtrl.checkOnlyPresident(members)
 
     // 동아리를 생성하는 사용자가 동아리 간부인지 검사
     clubCtrl.checkExecutive(user, members)
 
     // 동아리를 생성하는 사용자가 유일한 동아리 페이지 관리자인지 검사
     clubCtrl.checkManager(user, members)
+    clubCtrl.checkOnlyManager(members)
 
     // 새로운 동아리 생성
     const clubDocId = await clubCtrl.createClub(club)
@@ -174,7 +175,7 @@ clubRouter.patch('/:id/member', authCheck, async (req, res, next) => {
     await clubCtrl.validateMemberUpdate(id, user, form)
 
     // 해당 동아리의 회원 직책 변경
-    await clubCtrl.updateMember()
+    await clubCtrl.updateMember(id, form)
 
     res.status(204).end()
   } catch (e) {
