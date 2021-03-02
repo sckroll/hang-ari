@@ -64,12 +64,11 @@ authRouter.post('/login', async (req, res, next) => {
     // 로그인 양식 유효성 검사
     await authCtrl.validateLoginForm(form)
 
-    // 해당 사용자가 가입되어 있으면 사용자와 토큰 반환
+    // 해당 사용자가 가입되어 있으면 JWT 토큰 반환
     const token = await authCtrl.validateUser(form)
 
-    const maxAge = parseInt(process.env.JWT_MAX_AGE)
-
     // 쿠키에 토큰 저장 후 사용자 정보 반환
+    const maxAge = parseInt(process.env.JWT_MAX_AGE)
     res.cookie('hangari_token', token, {
       maxAge,
       httpOnly: true,

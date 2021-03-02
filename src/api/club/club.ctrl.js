@@ -47,7 +47,7 @@ export const validateMemberForm = async form => {
     Joi.object()
       .keys({
         studentId: Joi.string().required(),
-        position: Joi.string(),
+        position: Joi.string().allow(''),
         isPresident: Joi.boolean(),
         isExecutive: Joi.boolean(),
         isManager: Joi.boolean(),
@@ -73,24 +73,6 @@ export const validateClubUpdateForm = async form => {
     background: Joi.string().allow(''),
     establishedAt: Joi.date().format('YYYY-MM-DD'),
   })
-  await schema.validateAsync(form)
-}
-
-/**
- * 업데이트할 동아리 회원 양식의 유효성을 검사하는 함수
- */
-export const validateMemberUpdateForm = async form => {
-  const schema = Joi.array().items(
-    Joi.object()
-      .keys({
-        studentId: Joi.string().required(),
-        position: Joi.string().allow(''),
-        isPresident: Joi.boolean(),
-        isExecutive: Joi.boolean(),
-        isManager: Joi.boolean(),
-      })
-      .required(),
-  )
   await schema.validateAsync(form)
 }
 
@@ -290,18 +272,6 @@ export const validateMemberUpdate = async (clubId, user, payload) => {
 export const createClub = async form => {
   const club = new Club(form)
   await club.save()
-  return club.id
-}
-
-/**
- * 동아리의 도큐먼트 ID를 추출하는 함수
- */
-export const getClubDocId = async clubId => {
-  const club = await Club.findOne({ clubId })
-  if (!club) {
-    throw new InvalidClubError('club not found')
-  }
-  return club.id
 }
 
 /**
@@ -309,7 +279,11 @@ export const getClubDocId = async clubId => {
  */
 export const updateClub = async (clubId, fieldsToUpdate, user) => {
   // 동아리와 사용자의 도큐먼트 ID 추출
-  const clubDocId = await getClubDocId(clubId)
+  const club = await Club.findOne({ clubId })
+  if (!club) {
+    throw new InvalidClubError('club not found')
+  }
+  const clubDocId = club.id
   const userDocId = user._id
 
   // 동아리에 소속된 사용자의 도큐먼트 추출
@@ -331,7 +305,11 @@ export const updateClub = async (clubId, fieldsToUpdate, user) => {
  */
 export const removeClub = async (clubId, user) => {
   // 동아리와 사용자의 도큐먼트 ID 추출
-  const clubDocId = await getClubDocId(clubId)
+  const club = await Club.findOne({ clubId })
+  if (!club) {
+    throw new InvalidClubError('club not found')
+  }
+  const clubDocId = club.id
   const userDocId = user._id
 
   // 동아리에 소속된 사용자의 도큐먼트 추출
@@ -357,7 +335,11 @@ export const removeClub = async (clubId, user) => {
  */
 export const getMembers = async clubId => {
   // 동아리의 도큐먼트 ID 추출
-  const club = await getClubDocId(clubId)
+  const clubObj = await Club.findOne({ clubId })
+  if (!clubObj) {
+    throw new InvalidClubError('club not found')
+  }
+  const club = clubObj.id
 
   // 동아리 회원 조회 후 populate
   const members = await Member.find({ club })
@@ -369,8 +351,14 @@ export const getMembers = async clubId => {
 /**
  * 동아리에 회원을 추가하는 함수
  */
-export const addMembers = async (clubDocId, members) => {
+export const addMembers = async (clubId, members) => {
   for (const member of members) {
+    // 동아리 도큐먼트 ID 추출
+    const club = await Club.findOne({ clubId })
+    if (!club) {
+      throw new InvalidClubError('club not found')
+    }
+
     // 학번과 일치하는 사용자의 도큐먼트 ID 추출
     const studentId = member.studentId
     const user = await User.findOne({ studentId })
@@ -380,7 +368,7 @@ export const addMembers = async (clubDocId, members) => {
 
     // Member 컬렉션에 저장함으로써 동아리에 회원 추가
     const form = {
-      club: clubDocId,
+      club: club.id,
       user: user.id,
       position: member.position,
       isPresident: member.isPresident,
@@ -397,7 +385,11 @@ export const addMembers = async (clubDocId, members) => {
  */
 export const updateMember = async (clubId, updatedMembers) => {
   // 동아리 도큐먼트 ID 추출
-  const club = await getClubDocId(clubId)
+  const clubObj = await Club.findOne({ clubId })
+  if (!clubObj) {
+    throw new InvalidClubError('club not found')
+  }
+  const club = clubObj.id
 
   updatedMembers.forEach(async member => {
     // 동아리 회원 도큐먼트 ID 추출
@@ -416,13 +408,19 @@ export const updateMember = async (clubId, updatedMembers) => {
  * DB에서 해당 동아리의 회원을 삭제하는 함수
  */
 export const removeMember = async (clubId, email) => {
-  // 동아리 및 동아리 회원 도큐먼트 ID 추출
-  const club = await getClubDocId(clubId)
-  const member = await User.findOne({ email })
-  if (!member) {
+  // 동아리 도큐먼트 ID 추출
+  const clubObj = await Club.findOne({ clubId })
+  if (!clubObj) {
+    throw new InvalidClubError('club not found')
+  }
+  const club = clubObj.id
+
+  // 동아리 회원 도큐먼트 ID 추출
+  const userObj = await User.findOne({ email })
+  if (!userObj) {
     throw new InvalidClubError('user not found')
   }
-  const user = member.id
+  const user = userObj.id
 
   await Member.findOneAndRemove({ club, user })
 }
