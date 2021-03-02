@@ -133,9 +133,23 @@ export const checkDuplicatedName = async name => {
 }
 
 /**
- * 동아리 회원 중에 유일한 회장이 있는지 확인하는 함수
+ * 사용자가 동아리 회장인지 확인하는 함수
+ */
+export const checkPresident = (user, members) => {
+  if (members.length === 0) return
+
+  const president = members.find(member => member.studentId === user.studentId)
+  if (!president.isPresident) {
+    throw new AuthError('request should be done by a president')
+  }
+}
+
+/**
+ * 동아리 회장이 유일하게 존재하는지 확인하는 함수
  */
 export const checkOnlyPresident = members => {
+  if (members.length === 0) return
+
   const president = members.filter(member => member.isPresident)
   if (president.length !== 1) {
     throw new AuthError('club should have only one president')
@@ -143,25 +157,25 @@ export const checkOnlyPresident = members => {
 }
 
 /**
- * 동아리를 생성하는 사용자가 동아리 간부인지 확인하는 함수
+ * 사용자가 동아리 간부인지 확인하는 함수
  */
 export const checkExecutive = (user, members) => {
   if (members.length === 0) return
 
-  const creator = members.find(member => member.studentId === user.studentId)
-  if (!creator.isExecutive) {
-    throw new AuthError('club creator should be a executive')
+  const executive = members.find(member => member.studentId === user.studentId)
+  if (!executive.isExecutive) {
+    throw new AuthError('request should be done by a executive')
   }
 }
 
 /**
- * 동아리를 생성/수정/삭제하는 사용자가 동아리 페이지 관리자인지 확인하는 함수
+ * 사용자가 동아리 페이지 관리자인지 확인하는 함수
  */
 export const checkManager = (user, members) => {
   if (members.length === 0) return
 
-  const creator = members.find(member => member.studentId === user.studentId)
-  if (!creator.isManager) {
+  const manager = members.find(member => member.studentId === user.studentId)
+  if (!manager.isManager) {
     throw new AuthError('request should be done by a manager')
   }
 }
@@ -421,6 +435,23 @@ export const removeMember = async (clubId, email) => {
     throw new InvalidClubError('user not found')
   }
   const user = userObj.id
+
+  // 동아리에 소속된 사용자의 도큐먼트 추출
+  const member = await Member.findOne({ club, user })
+  if (!member) {
+    throw new InvalidMemberError('member not found')
+  }
+
+  // 탈퇴하는 회원이 현재 회장, 간부, 관리자인지 확인
+  if (member.isPresident) {
+    throw new AuthError('president cannot withdraw from the club')
+  }
+  if (member.isExecutive) {
+    throw new AuthError('executive cannot withdraw from the club')
+  }
+  if (member.isManager) {
+    throw new AuthError('manager cannot withdraw from the club')
+  }
 
   await Member.findOneAndRemove({ club, user })
 }
