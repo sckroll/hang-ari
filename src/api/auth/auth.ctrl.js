@@ -58,26 +58,20 @@ export const validateUpdateForm = async form => {
 }
 
 /**
- * 모든 사용자의 정보를 조회하는 함수
+ * 쿼리에 따라 동아리를 조회하는 함수
  */
-export const getUsers = async () => {
-  const users = await User.find()
+export const getUser = async ({ name, email, id, grade, department }) => {
+  const query = {}
+  if (name && name.length > 0) query.name = name
+  if (email && email.length > 0) query.email = email
+  if (id && id.length > 0) query.studentId = id
+  if (grade && grade.length > 0) query.grade = parseInt(grade)
+  if (department && department.length > 0) query.department = department
 
-  // 각 사용자의 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
+  const users = await User.find(query)
+
+  // 각 동아리의 도큐먼트 ID 제거
   return users.map(user => user.serialize())
-}
-
-/**
- * 특정 사용자의 정보를 조회하는 함수
- */
-export const getUser = async email => {
-  const user = await User.findOne({ email })
-  if (!user) {
-    throw new InvalidUserError('user not found')
-  }
-
-  // 도큐먼트 ID 및 암호화된 비밀번호 필드 제거
-  return user.serialize()
 }
 
 /**

@@ -10,36 +10,13 @@ import authCheck from '../../lib/authCheck'
 
 const clubRouter = Router()
 
-// 모든 동아리 정보 조회
-// GET /api/club
+// 쿼리에 따른 동아리 리스트 조회 (카테고리, 동아리 ID, 동아리 이름)
+// GET /api/club{?category,id,name}
 clubRouter.get('/', async (req, res, next) => {
   try {
-    const clubs = await clubCtrl.getClubs()
+    const query = req.query
+    const clubs = await clubCtrl.getClub(query)
     res.send(clubs)
-  } catch (e) {
-    next(e)
-  }
-})
-
-// 동아리 ID로 특정 동아리 정보 조회
-// GET /api/club/:id
-clubRouter.get('/:id', async (req, res, next) => {
-  try {
-    const id = req.params.id
-    const club = await clubCtrl.getClubById(id)
-    res.send(club)
-  } catch (e) {
-    next(e)
-  }
-})
-
-// 동아리 이름으로 특정 동아리 정보 조회
-// GET /api/club/:name
-clubRouter.get('/:name', async (req, res, next) => {
-  try {
-    const name = req.params.name
-    const club = await clubCtrl.getClubByName(name)
-    res.send(club)
   } catch (e) {
     next(e)
   }

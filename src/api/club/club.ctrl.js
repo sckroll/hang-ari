@@ -77,39 +77,18 @@ export const validateClubUpdateForm = async form => {
 }
 
 /**
- * 모든 동아리의 정보를 조회하는 함수
+ * 쿼리에 따라 동아리를 조회하는 함수
  */
-export const getClubs = async () => {
-  const clubs = await Club.find()
+export const getClub = async ({ category, id, name }) => {
+  const query = {}
+  if (category && category.length > 0) query.category = category
+  if (id && id.length > 0) query.clubId = id
+  if (name && name.length > 0) query.name = name
+
+  const clubs = await Club.find(query)
 
   // 각 동아리의 도큐먼트 ID 제거
   return clubs.map(club => club.serialize())
-}
-
-/**
- * 동아리 ID로 특정 동아리의 정보를 조회하는 함수
- */
-export const getClubById = async clubId => {
-  const club = await Club.findOne({ clubId })
-  if (!club) {
-    throw new InvalidClubError('club not found')
-  }
-
-  // 동아리의 도큐먼트 ID 제거
-  return club.serialize()
-}
-
-/**
- * 동아리 이름으로 특정 동아리의 정보를 조회하는 함수
- */
-export const getClubByName = async name => {
-  const club = await Club.findOne({ name })
-  if (!club) {
-    throw new InvalidClubError('club not found')
-  }
-
-  // 동아리의 도큐먼트 ID 제거
-  return club.serialize()
 }
 
 /**

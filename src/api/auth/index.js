@@ -10,24 +10,13 @@ import authCheck from '../../lib/authCheck'
 
 const authRouter = Router()
 
-// 모든 사용자 정보 조회
-// GET /api/auth
+// 쿼리에 따른 사용자 조회 (이름, 이메일, 학번, 학년, 학부/학과)
+// GET /api/auth{?name,email,id,grade,department}
 authRouter.get('/', async (req, res, next) => {
   try {
-    const users = await authCtrl.getUsers()
+    const query = req.query
+    const users = await authCtrl.getUser(query)
     res.send(users)
-  } catch (e) {
-    next(e)
-  }
-})
-
-// 특정 사용자 정보 조회
-// GET /api/auth/:email
-authRouter.get('/:email', async (req, res, next) => {
-  try {
-    const email = req.params.email
-    const user = await authCtrl.getUser(email)
-    res.send(user)
   } catch (e) {
     next(e)
   }
