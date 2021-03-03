@@ -16,6 +16,7 @@ import mongoose from 'mongoose'
 import api from './api'
 import { statusCode } from './lib/errors'
 import jwtUpdate from './lib/jwtUpdate'
+import { NotFoundError } from './lib/errors'
 
 // Express 객체 생성
 const app = express()
@@ -51,7 +52,14 @@ app.use(history())
 // 정적 파일을 저장할 디렉토리 설정
 app.use(express.static(path.join(__dirname, 'public')))
 
+// 404 에러 핸들러
+// eslint-disable-next-line no-unused-vars
+app.use((req, res, next) => {
+  throw new NotFoundError('API not found')
+})
+
 // 에러 핸들러
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   err.status = statusCode[err.name]
   res.status(err.status || 500)
