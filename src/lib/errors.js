@@ -10,6 +10,7 @@ export const statusCode = {
   InvalidUserError: 404,
   InvalidClubError: 404,
   InvalidMemberError: 404,
+  InvalidPostError: 404,
   DuplicateError: 409,
 }
 
@@ -107,6 +108,20 @@ export class InvalidMemberError extends Error {
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, InvalidMemberError)
+    }
+  }
+}
+
+/**
+ * 존재하지 않는 포스트 에러
+ */
+export class InvalidPostError extends Error {
+  constructor(...params) {
+    super(...params)
+    this.name = 'InvalidPostError'
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, InvalidPostError)
     }
   }
 }

@@ -28,13 +28,13 @@ postRouter.get('/', async (req, res, next) => {
 postRouter.post('/', authCheck, async (req, res, next) => {
   try {
     const { clubId, form } = req.body
-    const { name } = req.app.locals.user
+    const { email } = req.app.locals.user
 
     // 포스트 양식 유효성 검사
     await postCtrl.validatePostForm(form)
 
     // 새로운 포스트 생성
-    await postCtrl.createPost(form, name, clubId)
+    await postCtrl.createPost(form, email, clubId)
 
     res.status(201).end()
   } catch (e) {
@@ -43,9 +43,18 @@ postRouter.post('/', authCheck, async (req, res, next) => {
 })
 
 // 포스트 수정
-// PATCH /api/post
-postRouter.patch('/', authCheck, async (req, res, next) => {
+// PATCH /api/post/:id
+postRouter.patch('/:id', authCheck, async (req, res, next) => {
   try {
+    const { id } = req.params
+    const form = req.body
+
+    // 업데이트할 포스트 양식 유효성 검사
+    await postCtrl.validatePostUpdateForm(form)
+
+    // 포스트 업데이트
+    await postCtrl.updatePost(id, form)
+
     res.status(204).end()
   } catch (e) {
     next(e)
@@ -53,9 +62,11 @@ postRouter.patch('/', authCheck, async (req, res, next) => {
 })
 
 // 포스트 삭제
-// DELETE /api/post
-postRouter.delete('/', authCheck, async (req, res, next) => {
+// DELETE /api/post/:id
+postRouter.delete('/:id', authCheck, async (req, res, next) => {
   try {
+    const { id } = req.params
+    await postCtrl.removePost(id)
     res.status(204).end()
   } catch (e) {
     next(e)

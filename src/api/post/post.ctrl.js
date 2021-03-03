@@ -9,7 +9,11 @@ import crypto from 'crypto'
 import Club from '../../models/club'
 import User from '../../models/user'
 import Post from '../../models/post'
-import { InvalidClubError, InvalidUserError } from '../../lib/errors'
+import {
+  InvalidClubError,
+  InvalidUserError,
+  InvalidPostError,
+} from '../../lib/errors'
 
 /**
  * 포스트 양식의 유효성을 검사하는 함수
@@ -19,6 +23,18 @@ export const validatePostForm = async form => {
     category: Joi.string().required(),
     title: Joi.string().required(),
     content: Joi.string().required(),
+  })
+  await schema.validateAsync(form)
+}
+
+/**
+ * 업데이트할 포스트 양식의 유효성을 검사하는 함수
+ */
+export const validatePostUpdateForm = async form => {
+  const schema = Joi.object().keys({
+    category: Joi.string(),
+    title: Joi.string(),
+    content: Joi.string(),
   })
   await schema.validateAsync(form)
 }
@@ -63,9 +79,12 @@ export const getPost = async params => {
   return posts.map(post => post.serialize())
 }
 
-export const createPost = async (form, name, clubId) => {
+/**
+ * 포스트를 생성하는 함수
+ */
+export const createPost = async (form, email, clubId) => {
   // 사용자 ID 추출
-  const user = await User.findOne({ name })
+  const user = await User.findOne({ email })
   if (!user) {
     throw new InvalidUserError('user not found')
   }
@@ -97,4 +116,30 @@ export const createPost = async (form, name, clubId) => {
   }
   if (clubId) newPost.club = club.id
   await Post.create(newPost)
+}
+
+/**
+ * 포스트 정보를 업데이트하는 함수
+ */
+export const updatePost = async (postId, form) => {
+  const updated = await Post.findOneAndUpdate({ postId }, form, {
+    new: true,
+  })
+
+  // 유효하지 않은 포스트 ID로 요청했다면 예외 처리
+  if (!updated) {
+    throw new InvalidPostError('post not found')
+  }
+}
+
+/**
+ * 포스트를 삭제하는 함수
+ */
+export const removePost = async postId => {
+  const removed = await Post.findOneAndRemove({ postId })
+
+  // 유효하지 않은 포스트 ID로 요청했다면 예외 처리
+  if (!removed) {
+    throw new InvalidPostError('post not found')
+  }
 }
