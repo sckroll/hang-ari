@@ -1,31 +1,45 @@
 /**
- * 포스트 게시글 스키마
+ * 포스트 스키마
  *
  * @author Sckroll
  */
 
-import { Schema, Types, model } from 'mongoose'
+import mongoose, { Schema, model } from 'mongoose'
+
+const ObjectId = mongoose.Types.ObjectId
 
 const PostSchema = new Schema(
   {
-    // 게시글 카테고리
+    // 포스트 ID
+    postId: { type: String, required: true, unique: true },
+
+    // 포스트 카테고리
     category: { type: String, required: true },
 
-    // 게시글 제목
+    // 포스트 제목
     title: { type: String, required: true },
 
-    // 게시글 내용
+    // 포스트 내용
     content: { type: String, required: true },
 
-    // 게시글 작성자
-    author: { type: Types.ObjectId, ref: 'Users', required: true },
+    // 포스트 작성자
+    author: { type: ObjectId, ref: 'User', required: true },
 
-    // 게시글 관련 동아리
-    relatedClub: { type: Types.ObjectId, ref: 'Clubs' },
+    // 포스트 관련 동아리
+    club: { type: ObjectId, ref: 'Club' },
   },
   {
     timestamps: true,
   },
 )
+
+/**
+ * Response body에서 ID 필드 제거
+ */
+PostSchema.methods.serialize = function () {
+  const data = this.toJSON()
+  data._id = undefined
+  return data
+}
 
 export default model('Post', PostSchema)
