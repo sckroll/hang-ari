@@ -151,10 +151,10 @@ export const updateUser = async (email, fieldsToUpdate) => {
  * DB에서 해당 이메일의 사용자를 삭제하는 함수
  */
 export const removeUser = async email => {
-  const deleted = await User.findOneAndRemove({ email })
+  const removed = await User.findOneAndRemove({ email })
 
   // 유효하지 않은 이메일 주소로 요청했다면 예외 처리
-  if (!deleted) {
+  if (!removed) {
     throw new InvalidUserError('user not found')
   }
 }
