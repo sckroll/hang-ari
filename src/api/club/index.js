@@ -27,7 +27,7 @@ clubRouter.get('/', async (req, res, next) => {
 clubRouter.post('/', authCheck, async (req, res, next) => {
   try {
     const { club, members } = req.body
-    const { user } = req.app.locals
+    const { studentId } = req.app.locals.user
 
     // 동아리 및 동아리 회원 양식 유효성 검사
     await clubCtrl.validateClubForm(club)
@@ -41,10 +41,10 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
     clubCtrl.checkOnlyPresident(members)
 
     // 동아리를 생성하는 사용자가 동아리 간부인지 검사
-    clubCtrl.checkExecutive(user, members)
+    clubCtrl.checkExecutive(studentId, members)
 
     // 동아리를 생성하는 사용자가 유일한 동아리 페이지 관리자인지 검사
-    clubCtrl.checkManager(user, members)
+    clubCtrl.checkManager(studentId, members)
     clubCtrl.checkOnlyManager(members)
 
     // 새로운 동아리 생성
@@ -63,9 +63,9 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
 // PATCH /api/club/:id
 clubRouter.patch('/:id', authCheck, async (req, res, next) => {
   try {
-    const id = req.params.id
+    const { id } = req.params
     const form = req.body
-    const { user } = req.app.locals
+    const { _id: userDocId } = req.app.locals.user
 
     // 동아리 정보 양식 유효성 검사
     await clubCtrl.validateClubUpdateForm(form)
@@ -76,7 +76,7 @@ clubRouter.patch('/:id', authCheck, async (req, res, next) => {
     }
 
     // 동아리 정보 업데이트
-    await clubCtrl.updateClub(id, form, user)
+    await clubCtrl.updateClub(id, form, userDocId)
 
     res.status(204).end()
   } catch (e) {
@@ -88,10 +88,10 @@ clubRouter.patch('/:id', authCheck, async (req, res, next) => {
 // DELETE /api/club/:id
 clubRouter.delete('/:id', authCheck, async (req, res, next) => {
   try {
-    const id = req.params.id
-    const { user } = req.app.locals
+    const { id } = req.params
+    const { _id: userDocId } = req.app.locals.user
 
-    await clubCtrl.removeClub(id, user)
+    await clubCtrl.removeClub(id, userDocId)
 
     res.status(204).end()
   } catch (e) {
@@ -103,7 +103,7 @@ clubRouter.delete('/:id', authCheck, async (req, res, next) => {
 // GET /api/club/:id/member
 clubRouter.get('/:id/member', async (req, res, next) => {
   try {
-    const id = req.params.id
+    const { id } = req.params
     const members = await clubCtrl.getMembers(id)
     res.send(members)
   } catch (e) {
@@ -115,13 +115,13 @@ clubRouter.get('/:id/member', async (req, res, next) => {
 // POST /api/club/:id/member
 clubRouter.post('/:id/member', authCheck, async (req, res, next) => {
   try {
-    const id = req.params.id
+    const { id } = req.params
     const form = req.body
-    const { user } = req.app.locals
+    const { studentId } = req.app.locals.user
 
     // 기존 및 추가할 동아리 회원 양식의 유효성 검사
     await clubCtrl.validateMemberForm(form)
-    await clubCtrl.validateNewMember(id, user, form)
+    await clubCtrl.validateNewMember(id, studentId, form)
 
     // 동아리 회원 추가
     await clubCtrl.addMembers(id, form)
@@ -136,13 +136,13 @@ clubRouter.post('/:id/member', authCheck, async (req, res, next) => {
 // PATCH /api/club/:id/member
 clubRouter.patch('/:id/member', authCheck, async (req, res, next) => {
   try {
-    const id = req.params.id
+    const { id } = req.params
     const form = req.body
-    const { user } = req.app.locals
+    const { studentId } = req.app.locals.user
 
     // 업데이트 전/후의 동아리 회원 양식 유효성 검사
     await clubCtrl.validateMemberForm(form)
-    await clubCtrl.validateMemberUpdate(id, user, form)
+    await clubCtrl.validateMemberUpdate(id, studentId, form)
 
     // 해당 동아리의 회원 직책 변경
     await clubCtrl.updateMember(id, form)

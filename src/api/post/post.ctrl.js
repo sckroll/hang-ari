@@ -5,7 +5,6 @@
  */
 
 import Joi from 'joi'
-import crypto from 'crypto'
 import Club from '../../models/club'
 import User from '../../models/user'
 import Post from '../../models/post'
@@ -14,12 +13,14 @@ import {
   InvalidUserError,
   InvalidPostError,
 } from '../../lib/errors'
+import hashedIdGenerator from '../../lib/hashedIdGenerator'
 
 /**
  * 포스트 양식의 유효성을 검사하는 함수
  */
 export const validatePostForm = async form => {
   const schema = Joi.object().keys({
+    clubId: Joi.string().required(),
     category: Joi.string().required(),
     title: Joi.string().required(),
     content: Joi.string().required(),
@@ -52,8 +53,8 @@ export const getPost = async params => {
           throw new InvalidUserError('user not found')
         }
         query[key] = user.id
-      } else if (key === 'userName') {
-        const user = User.findOne({ name: params[key] })
+      } else if (key === 'studentId') {
+        const user = User.findOne({ studentId: params[key] })
         if (!user) {
           throw new InvalidUserError('user not found')
         }
@@ -82,13 +83,10 @@ export const getPost = async params => {
 /**
  * 포스트를 생성하는 함수
  */
-export const createPost = async (form, email, clubId) => {
-  // 사용자 ID 추출
-  const user = await User.findOne({ email })
-  if (!user) {
-    throw new InvalidUserError('user not found')
-  }
-
+export const createPost = async (
+  { clubId, category, title, content },
+  userDocId,
+) => {
   // 동아리 ID 추출 (동아리 ID를 파라미터로 받았을 때만)
   let club
   if (clubId) {
@@ -101,8 +99,7 @@ export const createPost = async (form, email, clubId) => {
   // 포스트 ID 생성 (base64url)
   let postId
   while (true) {
-    const randomByte = crypto.randomBytes(256).toString('base64').substr(100, 8)
-    postId = randomByte.replace(/\+/gi, '-').replace(/\//gi, '_')
+    postId = hashedIdGenerator()
 
     // 중복 확인
     const exists = await Post.exists({ postId })
@@ -110,9 +107,11 @@ export const createPost = async (form, email, clubId) => {
   }
 
   const newPost = {
-    ...form,
+    category,
+    title,
+    content,
     postId,
-    author: user.id,
+    author: userDocId,
   }
   if (clubId) newPost.club = club.id
   await Post.create(newPost)
@@ -122,9 +121,7 @@ export const createPost = async (form, email, clubId) => {
  * 포스트 정보를 업데이트하는 함수
  */
 export const updatePost = async (postId, form) => {
-  const updated = await Post.findOneAndUpdate({ postId }, form, {
-    new: true,
-  })
+  const updated = await Post.findOneAndUpdate({ postId }, form)
 
   // 유효하지 않은 포스트 ID로 요청했다면 예외 처리
   if (!updated) {

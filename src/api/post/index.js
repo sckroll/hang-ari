@@ -11,8 +11,8 @@ import authCheck from '../../lib/authCheck'
 const postRouter = new Router()
 
 // 쿼리에 따른 포스트 리스트 조회
-// (포스트 ID, 카테고리, 제목, 작성자 이메일, 작성자 이름, 동아리 이름)
-// GET /api/post{?postId,category,title,email,userName,clubName}
+// (포스트 ID, 카테고리, 제목, 작성자 이메일, 작성자 학번, 동아리 이름)
+// GET /api/post{?postId,category,title,email,studentId,clubName}
 postRouter.get('/', async (req, res, next) => {
   try {
     const query = req.query
@@ -27,14 +27,14 @@ postRouter.get('/', async (req, res, next) => {
 // POST /api/post
 postRouter.post('/', authCheck, async (req, res, next) => {
   try {
-    const { clubId, form } = req.body
-    const { email } = req.app.locals.user
+    const form = req.body
+    const { _id: userDocId } = req.app.locals.user
 
     // 포스트 양식 유효성 검사
     await postCtrl.validatePostForm(form)
 
     // 새로운 포스트 생성
-    await postCtrl.createPost(form, email, clubId)
+    await postCtrl.createPost(form, userDocId)
 
     res.status(201).end()
   } catch (e) {

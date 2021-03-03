@@ -83,7 +83,7 @@ authRouter.post('/logout', authCheck, (req, res) => {
 // PATCH /api/auth/:email
 authRouter.patch('/:email', authCheck, async (req, res, next) => {
   try {
-    const email = req.params.email
+    const { email } = req.params
     const form = req.body
 
     // 업데이트할 사용자 정보 양식 유효성 검사
@@ -102,7 +102,7 @@ authRouter.patch('/:email', authCheck, async (req, res, next) => {
 // DELETE /api/auth/:email
 authRouter.delete('/:email', authCheck, async (req, res, next) => {
   try {
-    const email = req.params.email
+    const { email } = req.params
 
     // 해당 사용자 삭제
     await authCtrl.removeUser(email)

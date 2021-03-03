@@ -5,7 +5,6 @@
  */
 
 import Joi from 'joi'
-import crypto from 'crypto'
 import User from '../../models/user'
 import Comment from '../../models/comment'
 import {
@@ -13,6 +12,7 @@ import {
   InvalidCommentError,
   AuthError,
 } from '../../lib/errors'
+import hashedIdGenerator from '../../lib/hashedIdGenerator'
 
 /**
  * 댓글 양식의 유효성을 검사하는 함수
@@ -79,8 +79,7 @@ export const createComment = async (
   // 댓글 ID 생성 (base64url)
   let commentId
   while (true) {
-    const randomByte = crypto.randomBytes(256).toString('base64').substr(100, 8)
-    commentId = randomByte.replace(/\+/gi, '-').replace(/\//gi, '_')
+    commentId = hashedIdGenerator()
 
     // 중복 확인
     const exists = await Comment.exists({ commentId })

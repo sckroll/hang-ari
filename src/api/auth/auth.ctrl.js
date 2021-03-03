@@ -137,9 +137,7 @@ export const validateUser = async form => {
  * 해당 이메일의 사용자 정보를 갱신하는 함수
  */
 export const updateUser = async (email, fieldsToUpdate) => {
-  const updated = await User.findOneAndUpdate({ email }, fieldsToUpdate, {
-    new: true,
-  })
+  const updated = await User.findOneAndUpdate({ email }, fieldsToUpdate)
 
   // 유효하지 않은 이메일 주소로 요청했다면 예외 처리
   if (!updated) {
