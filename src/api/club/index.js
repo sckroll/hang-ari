@@ -27,7 +27,7 @@ clubRouter.get('/', async (req, res, next) => {
 clubRouter.post('/', authCheck, async (req, res, next) => {
   try {
     const { club, members } = req.body
-    const user = req.app.locals.user
+    const { user } = req.app.locals
 
     // 동아리 및 동아리 회원 양식 유효성 검사
     await clubCtrl.validateClubForm(club)
@@ -65,7 +65,7 @@ clubRouter.patch('/:id', authCheck, async (req, res, next) => {
   try {
     const id = req.params.id
     const form = req.body
-    const user = req.app.locals.user
+    const { user } = req.app.locals
 
     // 동아리 정보 양식 유효성 검사
     await clubCtrl.validateClubUpdateForm(form)
@@ -89,7 +89,7 @@ clubRouter.patch('/:id', authCheck, async (req, res, next) => {
 clubRouter.delete('/:id', authCheck, async (req, res, next) => {
   try {
     const id = req.params.id
-    const user = req.app.locals.user
+    const { user } = req.app.locals
 
     await clubCtrl.removeClub(id, user)
 
@@ -117,7 +117,7 @@ clubRouter.post('/:id/member', authCheck, async (req, res, next) => {
   try {
     const id = req.params.id
     const form = req.body
-    const user = req.app.locals.user
+    const { user } = req.app.locals
 
     // 기존 및 추가할 동아리 회원 양식의 유효성 검사
     await clubCtrl.validateMemberForm(form)
@@ -138,7 +138,7 @@ clubRouter.patch('/:id/member', authCheck, async (req, res, next) => {
   try {
     const id = req.params.id
     const form = req.body
-    const user = req.app.locals.user
+    const { user } = req.app.locals
 
     // 업데이트 전/후의 동아리 회원 양식 유효성 검사
     await clubCtrl.validateMemberForm(form)
