@@ -11,7 +11,7 @@ import authCheck from '../../lib/authCheck'
 const authRouter = Router()
 
 // 쿼리에 따른 사용자 조회 (이름, 이메일, 학번, 학년, 학부/학과)
-// GET /api/auth{?name,email,id,grade,department}
+// GET /api/auth{?name,email,studentId,grade,department}
 authRouter.get('/', async (req, res, next) => {
   try {
     const query = req.query

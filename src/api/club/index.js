@@ -11,7 +11,7 @@ import authCheck from '../../lib/authCheck'
 const clubRouter = Router()
 
 // 쿼리에 따른 동아리 리스트 조회 (카테고리, 동아리 ID, 동아리 이름)
-// GET /api/club{?category,id,name}
+// GET /api/club{?category,clubId,name}
 clubRouter.get('/', async (req, res, next) => {
   try {
     const query = req.query
@@ -59,7 +59,7 @@ clubRouter.post('/', authCheck, async (req, res, next) => {
   }
 })
 
-// 동아리 정보 변경
+// 동아리 정보 수정
 // PATCH /api/club/:id
 clubRouter.patch('/:id', authCheck, async (req, res, next) => {
   try {

@@ -79,11 +79,13 @@ export const validateClubUpdateForm = async form => {
 /**
  * 쿼리에 따라 동아리를 조회하는 함수
  */
-export const getClub = async ({ category, id, name }) => {
+export const getClub = async params => {
   const query = {}
-  if (category && category.length > 0) query.category = category
-  if (id && id.length > 0) query.clubId = id
-  if (name && name.length > 0) query.name = name
+  for (const key in params) {
+    if (key && params[key].length > 0) {
+      query[key] = params[key]
+    }
+  }
 
   const clubs = await Club.find(query)
 

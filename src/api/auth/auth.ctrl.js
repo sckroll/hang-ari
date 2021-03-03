@@ -58,15 +58,19 @@ export const validateUpdateForm = async form => {
 }
 
 /**
- * 쿼리에 따라 동아리를 조회하는 함수
+ * 쿼리에 따라 사용자를 조회하는 함수
  */
-export const getUser = async ({ name, email, id, grade, department }) => {
+export const getUser = async params => {
   const query = {}
-  if (name && name.length > 0) query.name = name
-  if (email && email.length > 0) query.email = email
-  if (id && id.length > 0) query.studentId = id
-  if (grade && grade.length > 0) query.grade = parseInt(grade)
-  if (department && department.length > 0) query.department = department
+  for (const key in params) {
+    if (key && params[key].length > 0) {
+      if (key === 'grade') {
+        query[key] = parseInt(params[key])
+      } else {
+        query[key] = params[key]
+      }
+    }
+  }
 
   const users = await User.find(query)
 
