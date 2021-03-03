@@ -12,6 +12,7 @@ export const statusCode = {
   InvalidMemberError: 404,
   InvalidPostError: 404,
   InvalidCommentError: 404,
+  NotFoundError: 404,
   DuplicateError: 409,
 }
 
@@ -137,6 +138,20 @@ export class InvalidCommentError extends Error {
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, InvalidCommentError)
+    }
+  }
+}
+
+/**
+ * 존재하지 않는 댓글 에러
+ */
+export class NotFoundError extends Error {
+  constructor(...params) {
+    super(...params)
+    this.name = 'NotFoundError'
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, NotFoundError)
     }
   }
 }
