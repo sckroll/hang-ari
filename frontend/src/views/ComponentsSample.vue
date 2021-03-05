@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import haButton from '@/components/common/Button'
+import haButton from '@/components/common/HAButton'
 
 export default {
   components: {

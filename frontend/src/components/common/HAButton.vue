@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'HAButton',
   props: {
     sm1: Boolean,
     sm2: Boolean,
@@ -45,6 +46,9 @@ export default {
       if (!size) size = this.defaultSize
       return size
     },
+  },
+  mounted() {
+    console.log(this.$el.classList.contains('asdf'))
   },
 }
 </script>
