@@ -6,3 +6,14 @@ $primary-color-2: #ee7801;
 $primary-color-3: #f39800;
 $primary-color-4: #f7ab00;
 $secondary-color: #23449c;
+
+/* Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+}
