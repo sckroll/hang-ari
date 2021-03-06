@@ -8,12 +8,15 @@
 export default {
   name: 'HAButton',
   props: {
+    sm: Boolean,
     sm1: Boolean,
     sm2: Boolean,
     sm3: Boolean,
+    md: Boolean,
     md1: Boolean,
     md2: Boolean,
     md3: Boolean,
+    lg: Boolean,
     lg1: Boolean,
     lg2: Boolean,
     lg3: Boolean,
@@ -28,14 +31,17 @@ export default {
   },
   data() {
     return {
-      defaultSize: 'medium-2',
+      defaultSize: 'medium',
       sizes: new Map([
+        ['sm', 'small'],
         ['sm1', 'small-1'],
         ['sm2', 'small-2'],
         ['sm3', 'small-3'],
+        ['md', 'medium'],
         ['md1', 'medium-1'],
         ['md2', 'medium-2'],
         ['md3', 'medium-3'],
+        ['lg', 'large'],
         ['lg1', 'large-1'],
         ['lg2', 'large-2'],
         ['lg3', 'large-3'],
@@ -63,9 +69,9 @@ button {
   border: 0;
   border-radius: 3px;
   margin: 0 8px;
-  padding: 0;
   cursor: pointer;
   outline: none;
+  vertical-align: text-bottom;
   transition: all 0.2s ease;
   @include change-button-color();
 
@@ -77,45 +83,90 @@ button {
   }
 
   &.small {
+    $small-width: 24px;
+    $small-font: 12px;
+
+    & {
+      min-width: $small-width;
+      height: $small-width;
+      padding: 0 ($small-width / 3);
+      font-size: $small-font;
+    }
     &-1 {
-      width: 24px;
-      height: 24px;
+      width: $small-width;
+      height: $small-width;
+      padding: 0 ($small-width / 3);
+      font-size: $small-font;
     }
     &-2 {
-      width: 48px;
-      height: 24px;
+      width: $small-width * 2;
+      height: $small-width;
+      padding: 0 ($small-width / 3);
+      font-size: $small-font;
     }
     &-3 {
-      width: 72px;
-      height: 24px;
+      width: $small-width * 3;
+      height: $small-width;
+      padding: 0 ($small-width / 3);
+      font-size: $small-font;
     }
   }
   &.medium {
+    $medium-width: 32px;
+    $medium-font: 12px;
+
+    & {
+      min-width: $medium-width;
+      height: $medium-width;
+      padding: 0 ($medium-width / 3);
+      font-size: $medium-font;
+    }
     &-1 {
-      width: 32px;
-      height: 32px;
+      width: $medium-width;
+      height: $medium-width;
+      padding: 0 ($medium-width / 3);
+      font-size: $medium-font;
     }
     &-2 {
-      width: 64px;
-      height: 32px;
+      width: $medium-width * 2;
+      height: $medium-width;
+      padding: 0 ($medium-width / 3);
+      font-size: $medium-font;
     }
     &-3 {
-      width: 96px;
-      height: 32px;
+      width: $medium-width * 3;
+      height: $medium-width;
+      padding: 0 ($medium-width / 3);
+      font-size: $medium-font;
     }
   }
   &.large {
+    $large-width: 40px;
+    $large-font: 14px;
+
+    & {
+      min-width: $large-width;
+      height: $large-width;
+      padding: 0 ($large-width / 3);
+      font-size: $large-font;
+    }
     &-1 {
-      width: 40px;
-      height: 40px;
+      width: $large-width;
+      height: $large-width;
+      padding: 0 ($large-width / 3);
+      font-size: $large-font;
     }
     &-2 {
-      width: 80px;
-      height: 40px;
+      width: $large-width * 2;
+      height: $large-width;
+      padding: 0 ($large-width / 3);
+      font-size: $large-font;
     }
     &-3 {
-      width: 120px;
-      height: 40px;
+      width: $large-width * 3;
+      height: $large-width;
+      padding: 0 ($large-width / 3);
+      font-size: $large-font;
     }
   }
 
