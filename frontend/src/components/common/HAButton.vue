@@ -1,5 +1,5 @@
 <template>
-  <button :class="getSize + ' ' + color">
+  <button :class="getSize + ' ' + color" :disabled="disabled">
     <slot></slot>
   </button>
 </template>
@@ -20,6 +20,10 @@ export default {
     color: {
       type: String,
       default: 'primary-0',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

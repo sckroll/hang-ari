@@ -14,7 +14,7 @@
       <div class="row">
         <ha-button lg1 color="secondary-3">lg1</ha-button>
         <ha-button lg2 color="secondary-4">lg2</ha-button>
-        <ha-button lg3 color="grey-1">lg3</ha-button>
+        <ha-button lg3 disabled>lg3</ha-button>
       </div>
     </div>
   </div>
