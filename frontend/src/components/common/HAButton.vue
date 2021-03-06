@@ -1,5 +1,5 @@
 <template>
-  <button :class="getSize">
+  <button :class="getSize + ' ' + color">
     <slot></slot>
   </button>
 </template>
@@ -17,6 +17,10 @@ export default {
     lg1: Boolean,
     lg2: Boolean,
     lg3: Boolean,
+    color: {
+      type: String,
+      default: 'primary-0',
+    },
   },
   data() {
     return {
@@ -47,9 +51,6 @@ export default {
       return size
     },
   },
-  mounted() {
-    console.log(this.$el.classList.contains('asdf'))
-  },
 }
 </script>
 
@@ -61,61 +62,99 @@ button {
   padding: 0;
   cursor: pointer;
   outline: none;
-  background-color: $default-color-1;
   transition: all 0.2s ease;
+  @include change-button-color();
 
-  &:hover,
-  &:focus {
-    background-color: lighten($default-color-1, 10%);
+  &.small {
+    &-1 {
+      width: 24px;
+      height: 24px;
+    }
+    &-2 {
+      width: 48px;
+      height: 24px;
+    }
+    &-3 {
+      width: 72px;
+      height: 24px;
+    }
+  }
+  &.medium {
+    &-1 {
+      width: 32px;
+      height: 32px;
+    }
+    &-2 {
+      width: 64px;
+      height: 32px;
+    }
+    &-3 {
+      width: 96px;
+      height: 32px;
+    }
+  }
+  &.large {
+    &-1 {
+      width: 40px;
+      height: 40px;
+    }
+    &-2 {
+      width: 80px;
+      height: 40px;
+    }
+    &-3 {
+      width: 120px;
+      height: 40px;
+    }
   }
 
-  &:active {
-    background-color: darken($default-color-1, 5%);
+  &.primary {
+    &-0 {
+      @include change-button-color($primary-color-0);
+    }
+    &-1 {
+      @include change-button-color($primary-color-1);
+    }
+    &-2 {
+      @include change-button-color($primary-color-2);
+    }
+    &-3 {
+      @include change-button-color($primary-color-3);
+    }
+    &-4 {
+      @include change-button-color($primary-color-4);
+    }
   }
-}
-
-.small {
-  &-1 {
-    width: 24px;
-    height: 24px;
+  &.secondary {
+    &-0 {
+      @include change-button-color($secondary-color-0);
+    }
+    &-1 {
+      @include change-button-color($secondary-color-1);
+    }
+    &-2 {
+      @include change-button-color($secondary-color-2);
+    }
+    &-3 {
+      @include change-button-color($secondary-color-3);
+    }
+    &-4 {
+      @include change-button-color($secondary-color-4);
+    }
   }
-  &-2 {
-    width: 48px;
-    height: 24px;
+  &.grey {
+    &-1 {
+      @include change-button-color($grey-color-1);
+    }
+    &-2 {
+      @include change-button-color($grey-color-2);
+    }
+    &-3 {
+      @include change-button-color($grey-color-3);
+    }
   }
-  &-3 {
-    width: 72px;
-    height: 24px;
-  }
-}
-
-.medium {
-  &-1 {
-    width: 32px;
-    height: 32px;
-  }
-  &-2 {
-    width: 64px;
-    height: 32px;
-  }
-  &-3 {
-    width: 96px;
-    height: 32px;
-  }
-}
-
-.large {
-  &-1 {
-    width: 40px;
-    height: 40px;
-  }
-  &-2 {
-    width: 80px;
-    height: 40px;
-  }
-  &-3 {
-    width: 120px;
-    height: 40px;
+  &.error {
+    @include change-button-color($error-color);
   }
 }
 </style>
