@@ -62,12 +62,19 @@ export default {
 button {
   border: 0;
   border-radius: 3px;
-  margin: 8px;
+  margin: 0 8px;
   padding: 0;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
   @include change-button-color();
+
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
 
   &.small {
     &-1 {

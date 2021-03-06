@@ -38,9 +38,13 @@ $disabled-color: $grey-color-2;
   }
 }
 
-@mixin change-button-color($color: $primary-color-0) {
+@mixin set-color($color) {
   background-color: $color;
   @include text-contrast($color);
+}
+
+@mixin change-button-color($color: $primary-color-0) {
+  @include set-color($color);
 
   &:hover,
   &:focus {
@@ -61,4 +65,9 @@ $disabled-color: $grey-color-2;
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
+  margin: 1rem 0;
+}
+
+h3, h4, h5, h6 {
+  font-weight: 500;
 }
