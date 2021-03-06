@@ -1,18 +1,58 @@
-/* Colors */
-$default-color-1: #ff7f00;
-$default-color-2: #183072;
+/* Color variables */
+
+$primary-color-0: #ff7f00;
 $primary-color-1: #eb6101;
 $primary-color-2: #ee7801;
 $primary-color-3: #f39800;
 $primary-color-4: #f7ab00;
-$secondary-color: #23449c;
+$secondary-color-0: #183072;
+$secondary-color-1: #002752;
+$secondary-color-2: #22449c;
+$secondary-color-3: #225ea9;
+$secondary-color-4: #349ecf;
+$grey-color-1: #4c4c4c;
+$grey-color-2: #969494;
+$grey-color-3: #b3b3aa;
+$error-color: #ab2e39;
 
 /* Fonts import */
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
 * {
   font-family: 'Noto Sans KR', sans-serif;
 }
+
+/* Global mixins */
+
+// 배경 색상에 따라 폰트 색상을 자동으로 변경하는 믹스인
+// 출처: https://gist.github.com/jonnykates/c2961ec71d493ede56ac9dcd55f10254#file-text-contrast-david-halford-scss
+@mixin text-contrast($n) {
+  $color-brightness: round((red($n)*299)+(green($n)*587)+(blue($n)*114)/1000);
+  $light-color: round((red(#ffffff)*299)+(green(#ffffff)*587)+(blue(#ffffff)*114)/1000);
+  @if abs($color-brightness) < ($light-color/2){
+    color: white;
+  } @else {
+    color: black;
+  }
+}
+
+@mixin change-button-color($color: $primary-color-0) {
+  background-color: $color;
+  @include text-contrast($color);
+
+  &:hover,
+  &:focus {
+    background-color: lighten($color, 10%);
+  }
+  &:active {
+    background-color: darken($color, 5%);
+  }
+}
+
+/* Global functions */
+
+/* Global styles */
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
