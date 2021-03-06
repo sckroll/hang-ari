@@ -146,19 +146,5 @@ button {
       @include change-button-color($secondary-color-4);
     }
   }
-  &.grey {
-    &-1 {
-      @include change-button-color($grey-color-1);
-    }
-    &-2 {
-      @include change-button-color($grey-color-2);
-    }
-    &-3 {
-      @include change-button-color($grey-color-3);
-    }
-  }
-  &.error {
-    @include change-button-color($error-color);
-  }
 }
 </style>
