@@ -6,13 +6,33 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Landing',
-    component: () => import('@/views/landing/Index.vue'),
+    name: 'Home',
+    component: () => import('@/views/HomePage.vue'),
+  },
+  {
+    path: '/club',
+    name: 'Club',
+    component: () => import('@/views/club/ClubPage.vue'),
+  },
+  {
+    path: '/community',
+    name: 'Community',
+    component: () => import('@/views/community/CommunityPage.vue'),
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: () => import('@/views/user/UserPage.vue'),
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: () => import('@/views/AboutPage.vue'),
   },
   {
     path: '/components',
     name: 'ComponentsSample',
-    component: () => import('@/views/ComponentsSample.vue'),
+    component: () => import('@/views/ComponentsSamplePage.vue'),
   },
 ]
 
