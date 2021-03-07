@@ -55,6 +55,7 @@ $disabled-color: $grey-color-2;
   }
   &:disabled {
     background-color: $disabled-color;
+    color: #000000;
     cursor: default;
   }
 }
