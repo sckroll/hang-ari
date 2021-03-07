@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div>
     <h1>Hang-ari Components</h1>
     <div class="component">
       <h2 class="title">Colors</h2>
@@ -115,6 +115,7 @@
         <ha-button sm3>sm3</ha-button>
         <ha-button sm>s</ha-button>
         <ha-button sm>small button</ha-button>
+        <ha-button sm disabled>disabled</ha-button>
       </div>
 
       <h3>Medium</h3>
@@ -124,6 +125,7 @@
         <ha-button md3 color="secondary-0">md3</ha-button>
         <ha-button md color="secondary-0">m</ha-button>
         <ha-button md color="secondary-0">medium button</ha-button>
+        <ha-button md color="secondary-0" disabled>disabled</ha-button>
       </div>
 
       <h3>Large</h3>
@@ -133,14 +135,10 @@
         <ha-button lg3 color="secondary-4">lg3</ha-button>
         <ha-button lg color="secondary-4">l</ha-button>
         <ha-button lg color="secondary-4">large button</ha-button>
-      </div>
-
-      <h3>Disabled</h3>
-      <div class="row">
-        <ha-button disabled>disabled</ha-button>
+        <ha-button lg color="secondary-4" disabled>disabled</ha-button>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -154,10 +152,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-main {
-  padding: 16px;
-}
-
 .component {
   margin-bottom: 32px;
 }
