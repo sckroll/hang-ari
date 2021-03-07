@@ -39,9 +39,8 @@ export default {}
 header {
   display: flex;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
   height: 128px;
-  /* background-color: #dddddd66; */
 }
 
 .header-menu-container {
@@ -49,7 +48,6 @@ header {
   align-items: flex-end;
   width: 1200px;
   margin-bottom: 16px;
-  /* background-color: #dddddd66; */
 }
 
 .header-menu-center {

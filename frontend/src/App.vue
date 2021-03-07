@@ -29,13 +29,14 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
   overflow-y: scroll;
 }
 
 main {
   display: flex;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
 }
 
 .main-container {
