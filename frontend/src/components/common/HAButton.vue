@@ -95,7 +95,6 @@ button {
     &-1 {
       width: $small-width;
       height: $small-width;
-      padding: 0 ($small-width / 3);
       font-size: $small-font;
     }
     &-2 {
@@ -124,7 +123,6 @@ button {
     &-1 {
       width: $medium-width;
       height: $medium-width;
-      padding: 0 ($medium-width / 3);
       font-size: $medium-font;
     }
     &-2 {
@@ -153,7 +151,6 @@ button {
     &-1 {
       width: $large-width;
       height: $large-width;
-      padding: 0 ($large-width / 3);
       font-size: $large-font;
     }
     &-2 {

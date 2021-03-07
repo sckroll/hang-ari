@@ -105,12 +105,14 @@
         <br />
         주의: <strong>너비 배수가 1</strong>인 버튼은 아이콘만 허용됩니다.
         <br /><br />
-        아래 예시는 <strong>1배수, 2배수, 3배수, 배수X, 배수X</strong> 순입니다.
+        아래 예시는
+        <strong>1배수, 2배수, 3배수, 배수X, 배수X, 배수X(비활성)</strong>
+        순입니다.
       </p>
 
       <h3>Small</h3>
       <div class="row">
-        <ha-button sm1></ha-button>
+        <ha-button sm1><fa-icon icon="eye"/></ha-button>
         <ha-button sm2>sm2</ha-button>
         <ha-button sm3>sm3</ha-button>
         <ha-button sm>s</ha-button>
@@ -120,7 +122,7 @@
 
       <h3>Medium</h3>
       <div class="row">
-        <ha-button md1 color="secondary-0"></ha-button>
+        <ha-button md1 color="secondary-0"><fa-icon icon="eye"/></ha-button>
         <ha-button md2 color="secondary-0">md2</ha-button>
         <ha-button md3 color="secondary-0">md3</ha-button>
         <ha-button md color="secondary-0">m</ha-button>
@@ -130,7 +132,7 @@
 
       <h3>Large</h3>
       <div class="row">
-        <ha-button lg1 color="secondary-4"></ha-button>
+        <ha-button lg1 color="secondary-4"><fa-icon icon="eye"/></ha-button>
         <ha-button lg2 color="secondary-4">lg2</ha-button>
         <ha-button lg3 color="secondary-4">lg3</ha-button>
         <ha-button lg color="secondary-4">l</ha-button>
