@@ -83,9 +83,6 @@ button {
   }
 
   &.small {
-    $small-width: 24px;
-    $small-font: 12px;
-
     & {
       min-width: $small-width;
       height: $small-width;
@@ -111,9 +108,6 @@ button {
     }
   }
   &.medium {
-    $medium-width: 32px;
-    $medium-font: 12px;
-
     & {
       min-width: $medium-width;
       height: $medium-width;
@@ -139,9 +133,6 @@ button {
     }
   }
   &.large {
-    $large-width: 40px;
-    $large-font: 14px;
-
     & {
       min-width: $large-width;
       height: $large-width;

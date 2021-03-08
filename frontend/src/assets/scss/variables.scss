@@ -1,0 +1,34 @@
+/* Colors */
+
+$primary-color-0: #ff7f00;
+$primary-color-1: #eb6101;
+$primary-color-2: #ee7801;
+$primary-color-3: #f39800;
+$primary-color-4: #f7ab00;
+$secondary-color-0: #183072;
+$secondary-color-1: #002752;
+$secondary-color-2: #22449c;
+$secondary-color-3: #225ea9;
+$secondary-color-4: #349ecf;
+$grey-color-1: #4c4c4c;
+$grey-color-2: #969494;
+$grey-color-3: #b3b3aa;
+$error-color: #ab2e39;
+$disabled-color: $grey-color-2;
+
+/* Widths, Heights */
+
+$small-width: 24px;
+$small-font: 12px;
+$medium-width: 32px;
+$medium-font: 12px;
+$large-width: 40px;
+$large-font: 14px;
+
+$preview-width: 256px;
+$box-radius: 5px;
+
+/* exports */
+:export {
+  previewWidth: $preview-width;
+}

@@ -1,28 +1,10 @@
-/* Color variables */
-
-$primary-color-0: #ff7f00;
-$primary-color-1: #eb6101;
-$primary-color-2: #ee7801;
-$primary-color-3: #f39800;
-$primary-color-4: #f7ab00;
-$secondary-color-0: #183072;
-$secondary-color-1: #002752;
-$secondary-color-2: #22449c;
-$secondary-color-3: #225ea9;
-$secondary-color-4: #349ecf;
-$grey-color-1: #4c4c4c;
-$grey-color-2: #969494;
-$grey-color-3: #b3b3aa;
-$error-color: #ab2e39;
-$disabled-color: $grey-color-2;
-
 /* Fonts import */
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
-* {
-  font-family: 'Noto Sans KR', sans-serif;
-}
+/* Variables import */
+
+@import './variables.scss';
 
 /* Global mixins */
 
@@ -71,4 +53,8 @@ h1, h2, h3, h4, h5, h6 {
 
 h3, h4, h5, h6 {
   font-weight: 500;
+}
+
+* {
+  font-family: 'Noto Sans KR', sans-serif;
 }
