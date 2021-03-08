@@ -32,7 +32,9 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'HeaderMenu',
+}
 </script>
 
 <style lang="scss" scoped>
