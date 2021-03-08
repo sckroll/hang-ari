@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1 v-if="topic">{{ topic }}</h1>
-    <div class="club-list-container">
+    <div v-if="clubs.length > 0" class="club-list-container">
       <div ref="leftButton" class="scroll-button" @click="moveRight">
         <fa-icon icon="chevron-left" />
       </div>
@@ -15,6 +15,9 @@
       </div>
       <div ref="leftSpace" class="space-left"></div>
       <div ref="rightSpace" class="space-right"></div>
+    </div>
+    <div v-else class="club-list-empty">
+      <span>동아리가 존재하지 않습니다.</span>
     </div>
   </section>
 </template>
@@ -44,15 +47,17 @@ export default {
     }
   },
   mounted() {
-    this.clubListStyles = this.$refs.clubList.style
-    this.clubListStyles.right = '0px'
+    if (this.clubs.length > 0) {
+      this.clubListStyles = this.$refs.clubList.style
+      this.clubListStyles.right = '0px'
 
-    this.resizeMargin()
-
-    // 브라우저 해상도에 따라 스크롤 버튼 위치 조정
-    window.addEventListener('resize', () => {
       this.resizeMargin()
-    })
+
+      // 브라우저 해상도에 따라 스크롤 버튼 위치 조정
+      window.addEventListener('resize', () => {
+        this.resizeMargin()
+      })
+    }
   },
   methods: {
     resizeMargin() {
@@ -174,6 +179,19 @@ h1 {
     width: 0;
     height: $preview-width + 48px;
     background: linear-gradient(to left, #ffffffff 50%, #ffffff00);
+  }
+}
+
+.club-list-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: $preview-width;
+  padding: 16px 0;
+
+  & > span {
+    font-size: 20px;
   }
 }
 </style>
