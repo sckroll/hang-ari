@@ -58,6 +58,8 @@ export default {
   },
   methods: {
     moveLeft() {
+      if (this.clubs.length <= 4) return
+
       const maxX = this.previewWidthSize * (this.clubs.length - 4) + 16
       if (this.clubListX === maxX) return
 
@@ -72,6 +74,7 @@ export default {
       this.clubListStyles.right = `${this.clubListX}px`
     },
     moveRight() {
+      if (this.clubs.length <= 4) return
       if (this.clubListX === 0) return
 
       if (this.clubListX < this.previewWidthSize) {
