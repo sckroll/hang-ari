@@ -2,10 +2,10 @@
   <section>
     <h1 v-if="topic">{{ topic }}</h1>
     <div class="club-list-container">
-      <div ref="left" class="scroll-button left" @click="moveRight">
+      <div ref="leftButton" class="scroll-button" @click="moveRight">
         <fa-icon icon="chevron-left" />
       </div>
-      <div ref="right" class="scroll-button right" @click="moveLeft">
+      <div ref="rightButton" class="scroll-button" @click="moveLeft">
         <fa-icon icon="chevron-right" />
       </div>
       <div ref="clubList" class="club-list">
@@ -13,6 +13,8 @@
           <club-preview :club="club" />
         </div>
       </div>
+      <div ref="leftSpace" class="space-left"></div>
+      <div ref="rightSpace" class="space-right"></div>
     </div>
   </section>
 </template>
@@ -45,18 +47,23 @@ export default {
     this.clubListStyles = this.$refs.clubList.style
     this.clubListStyles.right = '0px'
 
-    let buttonMargin = (window.innerWidth - 1200) / 2 + 32
-    this.$refs.left.style.left = `${buttonMargin}px`
-    this.$refs.right.style.right = `${buttonMargin}px`
+    this.resizeMargin()
 
     // 브라우저 해상도에 따라 스크롤 버튼 위치 조정
     window.addEventListener('resize', () => {
-      buttonMargin = (window.innerWidth - 1200) / 2 + 32
-      this.$refs.left.style.left = `${buttonMargin}px`
-      this.$refs.right.style.right = `${buttonMargin}px`
+      this.resizeMargin()
     })
   },
   methods: {
+    resizeMargin() {
+      const buttonMargin = (window.innerWidth - 1200) / 2 + 32
+      this.$refs.leftButton.style.left = `${buttonMargin}px`
+      this.$refs.rightButton.style.right = `${buttonMargin}px`
+
+      const spaceMargin = (window.innerWidth - 1200) / 2 + 16
+      this.$refs.leftSpace.style.width = `${spaceMargin}px`
+      this.$refs.rightSpace.style.width = `${spaceMargin}px`
+    },
     moveLeft() {
       if (this.clubs.length <= 4) return
 
@@ -95,6 +102,10 @@ export default {
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
+}
+
+section {
+  padding-bottom: 32px;
 }
 
 h1 {
@@ -144,6 +155,25 @@ h1 {
 
   &:hover {
     background-color: rgba($grey-color-2, 0.7);
+  }
+}
+
+.space {
+  &-left {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    width: 0;
+    height: $preview-width + 48px;
+    background: linear-gradient(to right, #ffffffff 50%, #ffffff00);
+  }
+  &-right {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    width: 0;
+    height: $preview-width + 48px;
+    background: linear-gradient(to left, #ffffffff 50%, #ffffff00);
   }
 }
 </style>
