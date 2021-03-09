@@ -21,9 +21,19 @@
               </li>
             </ul>
           </nav>
-          <span class="user-info">
+          <span v-if="user" class="user-info">
             <span class="user-name">김성찬</span>
             <div class="user-avatar"></div>
+          </span>
+          <span v-else class="user-auth">
+            <ul>
+              <li>
+                <router-link to="/register">회원가입</router-link>
+              </li>
+              <li>
+                <router-link to="/login">로그인</router-link>
+              </li>
+            </ul>
           </span>
         </div>
       </div>
@@ -34,6 +44,11 @@
 <script>
 export default {
   name: 'HeaderMenu',
+  props: {
+    user: {
+      type: Object,
+    },
+  },
 }
 </script>
 
@@ -42,7 +57,7 @@ header {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 128px;
+  height: $header-height;
 }
 
 .header-menu-container {
@@ -92,7 +107,7 @@ li {
   transition: all 0.2s ease;
 
   & > a {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     color: #000000;
     text-decoration: none;
 
@@ -113,7 +128,7 @@ li {
 
 .user-name {
   margin-right: 32px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', 'Noto Sans KR', sans-serif;
   font-weight: 600;
 }
 
@@ -122,5 +137,14 @@ li {
   height: 48px;
   border-radius: 50%;
   background-color: $primary-color-0;
+}
+
+.user-auth {
+  display: flex;
+  align-items: center;
+
+  & li:last-child {
+    margin-right: 0;
+  }
 }
 </style>

@@ -41,7 +41,7 @@ footer {
   display: flex;
   justify-content: center;
   width: 100vw;
-  height: 160px;
+  height: $footer-height;
   background-color: $primary-color-0;
   color: #ffffff;
 

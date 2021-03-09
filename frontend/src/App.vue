@@ -34,12 +34,19 @@ body {
   justify-content: center;
   overflow-x: hidden;
   overflow-y: scroll;
+  min-height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
 }
 
 main {
   display: flex;
   justify-content: center;
   width: 100%;
+  height: 100%;
 }
 
 .main-container {
@@ -49,5 +56,6 @@ main {
 
 .main-center {
   padding: 0 32px;
+  height: 100%;
 }
 </style>
