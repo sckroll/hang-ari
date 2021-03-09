@@ -76,6 +76,10 @@
           <span>grey-3</span>
           <span>#b3b3aa</span>
         </div>
+        <div class="color-bar grey-4">
+          <span>grey-4</span>
+          <span>#ececec</span>
+        </div>
       </div>
 
       <br />
@@ -206,6 +210,9 @@ export default {
     }
     &-3 {
       @include set-color($grey-color-3);
+    }
+    &-4 {
+      @include set-color($grey-color-4);
     }
   }
   &.error {
