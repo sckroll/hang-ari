@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'HAButton',
+  name: 'HaButton',
   props: {
     sm: Boolean,
     sm1: Boolean,

@@ -144,11 +144,11 @@
 </template>
 
 <script>
-import haButton from '@/components/common/HAButton'
+import HaButton from '@/components/common/HaButton.vue'
 
 export default {
   components: {
-    haButton,
+    HaButton,
   },
 }
 </script>
