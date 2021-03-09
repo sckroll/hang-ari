@@ -20,7 +20,7 @@
             </a>
           </div>
           <div class="additional-info">
-            주의: 이 사이트는 토이 프로젝트로 개발되었습니다. 실제로 운영되는
+            주의: 토이 프로젝트로 개발된 페이지입니다. 실제로 운영되는
             커뮤니티가 아닙니다.
           </div>
           <div class="copyright">

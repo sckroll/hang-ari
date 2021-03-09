@@ -192,6 +192,7 @@ h1 {
 
   & > span {
     font-size: 20px;
+    color: $grey-color-2;
   }
 }
 </style>
