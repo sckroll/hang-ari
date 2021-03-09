@@ -9,10 +9,20 @@ import {
   faBars,
   faChevronLeft,
   faChevronRight,
+  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faEye, faEyeSlash, faBars, faChevronLeft, faChevronRight)
+library.add(
+  faEye,
+  faEyeSlash,
+  faBars,
+  faChevronLeft,
+  faChevronRight,
+  faGithub,
+  faEnvelope,
+)
 Vue.component('fa-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false

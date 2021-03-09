@@ -8,15 +8,18 @@
         </div>
       </div>
     </main>
+    <footer-bar />
   </div>
 </template>
 
 <script>
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import FooterBar from '@/components/FooterBar.vue'
 
 export default {
   components: {
     HeaderMenu,
+    FooterBar,
   },
 }
 </script>
