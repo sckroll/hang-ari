@@ -1,21 +1,30 @@
 <template>
-  <input
-    :value="value"
-    :placeholder="placeholder"
-    @input="$emit('input', $event.target.value)"
-    type="text"
-  />
+  <input :type="type" :placeholder="placeholder" v-model.lazy="val" />
 </template>
 
 <script>
 export default {
   name: 'HaInput',
   props: {
+    type: {
+      type: String,
+      default: 'text',
+    },
     value: {
       type: [String, Number],
     },
     placeholder: {
       type: String,
+    },
+  },
+  computed: {
+    val: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      },
     },
   },
 }
@@ -28,16 +37,14 @@ input {
   border-left: 0;
   border-right: 0;
   border-bottom: 3px solid $grey-color-3;
-  padding: 5px 8px;
-  width: 100%;
+  padding: 5px 0;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: $grey-color-4;
+    border-bottom: 3px solid $primary-color-4;
   }
   &:focus {
     border-bottom: 3px solid $primary-color-0;
-    background-color: $grey-color-4;
   }
 }
 </style>
