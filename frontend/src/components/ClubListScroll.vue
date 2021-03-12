@@ -55,7 +55,9 @@ export default {
 
       // 브라우저 해상도에 따라 스크롤 버튼 위치 조정
       window.addEventListener('resize', () => {
-        this.resizeMargin()
+        if (this.$refs.leftButton && this.$refs.rightButton) {
+          this.resizeMargin()
+        }
       })
     }
   },
@@ -104,6 +106,7 @@ export default {
 *,
 *::after,
 *::before {
+  user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
