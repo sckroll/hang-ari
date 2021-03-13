@@ -1,5 +1,5 @@
 <template>
-  <input :type="type" :placeholder="placeholder" v-model.lazy="val" />
+  <input :type="type" :placeholder="placeholder" v-model.lazy="newValue" />
 </template>
 
 <script>
@@ -18,12 +18,14 @@ export default {
     },
   },
   computed: {
-    val: {
+    newValue: {
       get() {
         return this.value
       },
-      set(val) {
-        this.$emit('input', val)
+      set(newValue) {
+        this.$emit('input', newValue)
+        this.$emit('change', newValue)
+        this.$emit('blur', newValue)
       },
     },
   },
