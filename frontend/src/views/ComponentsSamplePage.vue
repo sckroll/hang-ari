@@ -88,7 +88,7 @@
       <div class="color-bar-wrapper">
         <div class="color-bar error">
           <span>error</span>
-          <span>#4c4c4c</span>
+          <span>#ba2546</span>
         </div>
         <div class="color-bar grey-2">
           <span>disabled (grey-2)</span>
