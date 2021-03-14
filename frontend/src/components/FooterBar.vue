@@ -41,26 +41,26 @@ footer {
   background-color: $primary-color-0;
   color: #ffffff;
 
-  & .footer-container {
+  .footer-container {
     width: 1200px;
   }
 
-  & .footer-center {
+  .footer-center {
     padding: 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  & .logo {
+  .logo {
     height: 64px;
     display: flex;
     align-items: center;
 
-    & > img {
+    > img {
       height: inherit;
     }
-    & .logo-title {
+    .logo-title {
       margin-left: 16px;
       font-family: 'Poppins', sans-serif;
       font-size: 24px;
@@ -68,13 +68,13 @@ footer {
     }
   }
 
-  & .links {
+  .links {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 8px;
     font-size: 20px;
 
-    & .link {
+    .link {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -91,7 +91,7 @@ footer {
     }
   }
 
-  & .info {
+  .info {
     text-align: right;
   }
 }

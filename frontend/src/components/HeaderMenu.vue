@@ -77,7 +77,7 @@ header {
 .logo-container {
   height: 64px;
 
-  & > a {
+  > a {
     height: inherit;
   }
 }
@@ -106,7 +106,7 @@ li {
   border-bottom: 3px solid transparent;
   transition: all 0.2s ease;
 
-  & > a {
+  > a {
     font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     color: #000000;
     text-decoration: none;
@@ -143,7 +143,7 @@ li {
   display: flex;
   align-items: center;
 
-  & li:last-child {
+  li:last-child {
     margin-right: 0;
   }
 }

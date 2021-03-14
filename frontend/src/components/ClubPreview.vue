@@ -36,30 +36,30 @@ export default {
     box-shadow: 0 0 24px #66666699;
   }
 
-  & a {
+  a {
     text-decoration: none;
   }
-  & .club-thumbnail-container {
+  .club-thumbnail-container {
     height: $preview-width;
   }
-  & .club-thumbnail {
+  .club-thumbnail {
     width: $preview-width;
     height: 160px;
     object-fit: cover;
     border-top-left-radius: $box-radius;
     border-top-right-radius: $box-radius;
   }
-  & .club-info {
+  .club-info {
     border-bottom-left-radius: $box-radius;
     border-bottom-right-radius: $box-radius;
     padding: 8px 16px;
     color: #000000;
   }
-  & .club-title {
+  .club-title {
     margin: 0;
     font-size: 18px;
   }
-  & .club-description {
+  .club-description {
     margin: 0;
     font-size: 14px;
   }

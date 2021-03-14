@@ -133,7 +133,7 @@ h1 {
   padding: 16px 0;
   transition: all 0.3s ease;
 
-  & > div {
+  > div {
     margin: 0 8px;
 
     &:first-child {
@@ -193,7 +193,7 @@ h1 {
   height: $preview-width;
   padding: 16px 0;
 
-  & > span {
+  > span {
     font-size: 20px;
     color: $grey-color-2;
   }
