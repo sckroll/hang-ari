@@ -12,24 +12,24 @@
       <div class="color-bar-wrapper">
         <div class="color-bar primary-0">
           <span>primary-0</span>
-          <span>#ff7f00</span>
+          <span>{{ colors.primaryColor0 }}</span>
         </div>
         <br />
         <div class="color-bar primary-1">
           <span>primary-1</span>
-          <span>#eb6101</span>
+          <span>{{ colors.primaryColor1 }}</span>
         </div>
         <div class="color-bar primary-2">
           <span>primary-2</span>
-          <span>#ee7801</span>
+          <span>{{ colors.primaryColor2 }}</span>
         </div>
         <div class="color-bar primary-3">
           <span>primary-3</span>
-          <span>#f39800</span>
+          <span>{{ colors.primaryColor3 }}</span>
         </div>
         <div class="color-bar primary-4">
           <span>primary-4</span>
-          <span>#f7ab00</span>
+          <span>{{ colors.primaryColor4 }}</span>
         </div>
       </div>
 
@@ -39,24 +39,24 @@
       <div class="color-bar-wrapper">
         <div class="color-bar secondary-0">
           <span>secondary-0</span>
-          <span>#183072 </span>
+          <span>{{ colors.secondaryColor0 }}</span>
         </div>
         <br />
         <div class="color-bar secondary-1">
           <span>secondary-1</span>
-          <span>#002752</span>
+          <span>{{ colors.secondaryColor1 }}</span>
         </div>
         <div class="color-bar secondary-2">
           <span>secondary-2</span>
-          <span>#22449c</span>
+          <span>{{ colors.secondaryColor2 }}</span>
         </div>
         <div class="color-bar secondary-3">
           <span>secondary-3</span>
-          <span>#225ea9</span>
+          <span>{{ colors.secondaryColor3 }}</span>
         </div>
         <div class="color-bar secondary-4">
           <span>secondary-4</span>
-          <span>#349ecf</span>
+          <span>{{ colors.secondaryColor4 }}</span>
         </div>
       </div>
 
@@ -66,19 +66,19 @@
       <div class="color-bar-wrapper">
         <div class="color-bar grey-1">
           <span>grey-1</span>
-          <span>#4c4c4c</span>
+          <span>{{ colors.greyColor1 }}</span>
         </div>
         <div class="color-bar grey-2">
           <span>grey-2</span>
-          <span>#969494</span>
+          <span>{{ colors.greyColor2 }}</span>
         </div>
         <div class="color-bar grey-3">
           <span>grey-3</span>
-          <span>#b3b3aa</span>
+          <span>{{ colors.greyColor3 }}</span>
         </div>
         <div class="color-bar grey-4">
           <span>grey-4</span>
-          <span>#ececec</span>
+          <span>{{ colors.greyColor4 }}</span>
         </div>
       </div>
 
@@ -88,11 +88,11 @@
       <div class="color-bar-wrapper">
         <div class="color-bar error">
           <span>error</span>
-          <span>#ba2546</span>
+          <span>{{ colors.errorColor }}</span>
         </div>
         <div class="color-bar grey-2">
           <span>disabled (grey-2)</span>
-          <span>#969494</span>
+          <span>{{ colors.disabledColor }}</span>
         </div>
       </div>
     </div>
@@ -148,11 +148,17 @@
 </template>
 
 <script>
+import colors from '@/assets/scss/variables.scss'
 import HaButton from '@/components/common/HaButton.vue'
 
 export default {
   components: {
     HaButton,
+  },
+  data() {
+    return {
+      colors,
+    }
   },
 }
 </script>

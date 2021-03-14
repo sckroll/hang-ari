@@ -33,5 +33,21 @@ $footer-height: 160px;
 
 /* exports */
 :export {
+  primaryColor0: $primary-color-0;
+  primaryColor1: $primary-color-1;
+  primaryColor2: $primary-color-2;
+  primaryColor3: $primary-color-3;
+  primaryColor4: $primary-color-4;
+  secondaryColor0: $secondary-color-0;
+  secondaryColor1: $secondary-color-1;
+  secondaryColor2: $secondary-color-2;
+  secondaryColor3: $secondary-color-3;
+  secondaryColor4: $secondary-color-4;
+  greyColor1: $grey-color-1;
+  greyColor2: $grey-color-2;
+  greyColor3: $grey-color-3;
+  greyColor4: $grey-color-4;
+  errorColor: $error-color;
+  disabledColor: $disabled-color;
   previewWidth: $preview-width;
 }
