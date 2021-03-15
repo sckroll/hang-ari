@@ -62,3 +62,6 @@ typings/
 
 # vscode config directory
 .vscode
+
+# thumbnail images
+uploads
