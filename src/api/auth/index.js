@@ -7,6 +7,7 @@
 import { Router } from 'express'
 import * as authCtrl from './auth.ctrl'
 import authCheck from '../../lib/authCheck'
+import upload from '../../lib/imageUpload'
 
 const authRouter = Router()
 
@@ -24,25 +25,33 @@ authRouter.get('/', async (req, res, next) => {
 
 // 회원가입
 // POST /api/auth/register
-authRouter.post('/register', async (req, res, next) => {
-  try {
-    const form = req.body
+authRouter.post(
+  '/register',
+  upload.single('thumbnail'),
+  async (req, res, next) => {
+    try {
+      const form = req.body
+      const thumbnail = req.file
 
-    // 회원가입 양식 유효성 검사
-    await authCtrl.validateRegForm(form)
+      console.log(form)
+      console.log(thumbnail)
 
-    // 이미 가입한 이메일 및 학번인지 확인
-    await authCtrl.checkDuplicatedEmail(form.email)
-    await authCtrl.checkDuplicatedSid(form.studentId)
+      // // 회원가입 양식 유효성 검사
+      // await authCtrl.validateRegForm(form)
 
-    // 새로운 사용자 생성
-    await authCtrl.register(form)
+      // // 이미 가입한 이메일 및 학번인지 확인
+      // await authCtrl.checkDuplicatedEmail(form.email)
+      // await authCtrl.checkDuplicatedSid(form.studentId)
 
-    res.status(201).end()
-  } catch (e) {
-    next(e)
-  }
-})
+      // // 새로운 사용자 생성
+      // await authCtrl.register(form)
+
+      res.status(201).end()
+    } catch (e) {
+      next(e)
+    }
+  },
+)
 
 // 로그인
 // POST /api/auth/login
