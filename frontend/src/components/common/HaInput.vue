@@ -1,12 +1,19 @@
 <template>
-  <div ref="input" class="input-container">
+  <div ref="container" class="input-container">
+    <div v-if="type === 'file'" class="file-upload-button" @click="openFile">
+      <span v-if="file" class="file-uploaded">{{ filename }}</span>
+      <span v-else class="file-placeholder">{{ placeholder }}</span>
+    </div>
     <input
+      ref="input"
       :type="inputType"
       :name="name"
       :placeholder="placeholder"
       v-model.lazy="newValue"
+      accept="image/jpeg, image/png"
       @focus="onFocus"
       @blur="onBlur"
+      @change="onChange"
     />
     <div v-if="type === 'password'" class="visibility-toggle">
       <div
@@ -47,6 +54,7 @@ export default {
     return {
       inputType: 'text',
       visibility: true,
+      file: null,
     }
   },
   computed: {
@@ -56,12 +64,26 @@ export default {
       },
       set(newValue) {
         this.$emit('input', newValue)
-        this.$emit('change', newValue)
+        // this.$emit('change', newValue)
         this.$emit('blur', newValue)
       },
     },
+    filename() {
+      const maxLength = 50
+      const name = this.file.name
+      if (name.length > maxLength) {
+        return name.substring(0, maxLength) + '...'
+      } else {
+        return name
+      }
+    },
   },
   watch: {
+    value(val) {
+      if (this.type === 'file' && val === '') {
+        this.file = null
+      }
+    },
     type: {
       immediate: true,
       handler(value) {
@@ -81,10 +103,20 @@ export default {
   },
   methods: {
     onFocus() {
-      this.$refs.input.style.borderBottom = `3px solid ${primaryColor0}`
+      this.$refs.container.style.borderBottom = `3px solid ${primaryColor0}`
     },
     onBlur() {
-      this.$refs.input.style.borderBottom = ''
+      this.$refs.container.style.borderBottom = ''
+    },
+    onChange({ target }) {
+      if (this.type !== 'file') return
+
+      this.file = target.files[0]
+      this.$emit('change', this.file)
+    },
+    openFile() {
+      const file = this.$refs.input
+      file.click()
     },
   },
 }
@@ -108,9 +140,24 @@ export default {
 
 input {
   width: 100%;
+  height: 22px;
   outline: none;
   border: 0;
   padding: 5px 0;
+
+  &::placeholder {
+    color: $grey-color-2;
+  }
+
+  &[type='file'] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    border: 0;
+  }
 }
 
 .visibility-toggle {
@@ -129,6 +176,21 @@ input {
     &:hover {
       background-color: $grey-color-4;
     }
+  }
+}
+
+.file-upload-button {
+  cursor: pointer;
+  width: 100%;
+  height: 22px;
+  padding: 5px 0;
+  font-size: 14px;
+
+  > .file-uploaded {
+    color: #000000;
+  }
+  > .file-placeholder {
+    color: $grey-color-2;
   }
 }
 </style>

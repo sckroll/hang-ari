@@ -4,7 +4,8 @@ import Vue from 'vue'
 import axios from 'axios'
 
 // Full config:  https://github.com/axios/axios#request-config
-// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
+axios.defaults.baseURL =
+  process.env.baseURL || process.env.apiUrl || 'http://localhost:3000/'
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -39,6 +40,7 @@ _axios.interceptors.response.use(
   },
 )
 
+// eslint-disable-next-line no-unused-vars
 Plugin.install = function(Vue, options) {
   Vue.axios = _axios
   window.axios = _axios

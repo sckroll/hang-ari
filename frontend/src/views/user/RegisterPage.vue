@@ -30,10 +30,16 @@
               :type="formProp.type"
               :name="formProp.key"
               :placeholder="formProp.placeholder"
+              @change="setThumbnail"
             />
             <div class="error-message">
               {{ formProp.error }}
             </div>
+            <div
+              v-if="formProp.key === 'thumbnail' && thumbnailFile"
+              ref="thumbnail"
+              class="thumbnail-preview"
+            ></div>
           </div>
         </div>
         <div class="action-area">
@@ -67,6 +73,7 @@ export default {
         phoneNumber: '',
         thumbnail: '',
       },
+      thumbnailFile: null,
       formProps: {
         email: {
           name: '이메일',
@@ -122,6 +129,8 @@ export default {
           name: '프로필 이미지',
           isRequired: false,
           error: '',
+          placeholder: '클릭하여 이미지 업로드 (.jpg/.png 권장)',
+          type: 'file',
         },
       },
       message: {
@@ -178,30 +187,37 @@ export default {
   },
   watch: {
     getEmail({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkEmail(key, value)
     },
     getPassword({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkPassword(key, value)
       this.checkConfirmed('passwordConfirm', value, 'passwordConfirm')
     },
     getPasswordConfirm({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkConfirmed(key, value, 'password')
     },
     getName({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
     },
     getStudentId({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkDigits(key, value)
     },
     getGrade({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkBetween(key, value)
     },
     getDepartment({ key, value }) {
+      if (!value) return
       if (!this.checkRequired(key, value)) return
     },
     getPhoneNumber({ key, value }) {
@@ -213,6 +229,17 @@ export default {
     },
   },
   methods: {
+    setThumbnail(file) {
+      this.thumbnailFile = file
+
+      if (file) {
+        const fReader = new FileReader()
+        fReader.readAsDataURL(file)
+        fReader.onloadend = ({ target }) => {
+          this.$refs.thumbnail[0].style.backgroundImage = `url(${target.result})`
+        }
+      }
+    },
     checkRequired(key, value) {
       if (value.length === 0) {
         this.formProps[key].error =
@@ -302,24 +329,36 @@ export default {
       }
     },
     async onSubmit() {
-      console.log('good')
-
       // 모든 항목에 대해 유효성 재검사
 
-      // 이상이 없으면 form 객체에서 비밀번호 확인 속성 제거 후 객체를 서버로 전송
-      // delete this.form.passwordConfirm
-      // try {
+      // form 객체에서 비밀번호 확인 속성 및 프로필 이미지 파일명 속성 제거
+      delete this.form.passwordConfirm
+      delete this.form.thumbnail
 
-      // } catch (e) {
-      //   console.error(e)
-      // }
+      // form 객체의 속성들과 프로필 이미지 파일 객체를 formData에 저장
+      const formData = new FormData()
+      for (const item in this.form) {
+        formData.append(item, this.form[item])
+      }
+      formData.append('thumbnail', this.thumbnailFile)
+
+      try {
+        await this.axios.post('/api/auth/register', formData)
+      } catch (e) {
+        console.error(e)
+      }
     },
     onReset() {
-      for (const item in this.form) {
-        this.form[item] = ''
-      }
-      for (const formProp of this.getFormProps) {
-        formProp.error = ''
+      if (confirm('입력 양식을 초기화하시겠습니까?')) {
+        for (const item in this.form) {
+          this.form[item] = ''
+        }
+        for (const formProp of this.getFormProps) {
+          formProp.error = ''
+        }
+        this.thumbnailFile = null
+
+        alert('입력 양식을 초기화하였습니다.')
       }
     },
   },
@@ -396,6 +435,14 @@ h2 {
   > .error-message {
     font-size: 14px;
     color: $error-color;
+  }
+
+  > .thumbnail-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    background-color: $grey-color-4;
+    background-size: cover;
   }
 }
 
