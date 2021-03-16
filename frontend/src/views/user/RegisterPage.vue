@@ -181,9 +181,9 @@ export default {
     getPhoneNumber() {
       return { key: 'phoneNumber', value: this.form.phoneNumber }
     },
-    getThumbnail() {
-      return { key: 'thumbnail', value: this.form.thumbnail }
-    },
+    // getThumbnail() {
+    //   return { key: 'thumbnail', value: this.form.thumbnail }
+    // },
   },
   watch: {
     getEmail({ key, value }) {
@@ -381,9 +381,16 @@ export default {
         // form 객체에서 비밀번호 확인 속성 및 프로필 이미지 파일명 속성 제거
         if (item === 'passwordConfirm' || item === 'thumbnail') continue
 
+        // form 객체에서 값이 없는 속성 제거
+        if (this.form[item].length === 0) continue
+
         formData.append(item, this.form[item])
       }
-      formData.append('thumbnail', this.thumbnailFile)
+
+      // 프로필 이미지를 업로드했다면 formData에 파일 추가
+      if (this.thumbnailFile) {
+        formData.append('thumbnail', this.thumbnailFile)
+      }
 
       try {
         await this.axios.post('/api/auth/register', formData)
