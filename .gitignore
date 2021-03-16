@@ -65,3 +65,6 @@ typings/
 
 # thumbnail images
 uploads
+
+# AWS S3 config file
+config
