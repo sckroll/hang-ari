@@ -33,18 +33,15 @@ authRouter.post(
       const form = req.body
       const thumbnail = req.file
 
-      console.log(form)
-      console.log(thumbnail)
+      // 회원가입 양식 유효성 검사
+      await authCtrl.validateRegForm(form)
 
-      // // 회원가입 양식 유효성 검사
-      // await authCtrl.validateRegForm(form)
+      // 이미 가입한 이메일 및 학번인지 확인
+      await authCtrl.checkDuplicatedEmail(form.email)
+      await authCtrl.checkDuplicatedSid(form.studentId)
 
-      // // 이미 가입한 이메일 및 학번인지 확인
-      // await authCtrl.checkDuplicatedEmail(form.email)
-      // await authCtrl.checkDuplicatedSid(form.studentId)
-
-      // // 새로운 사용자 생성
-      // await authCtrl.register(form)
+      // 새로운 사용자 생성
+      await authCtrl.register(form, thumbnail)
 
       res.status(201).end()
     } catch (e) {

@@ -5,6 +5,7 @@
  */
 
 import Joi from 'joi'
+import path from 'path'
 import User from '../../models/user'
 import {
   DuplicateError,
@@ -36,7 +37,7 @@ export const validateRegForm = async form => {
     grade: Joi.number().required(),
     department: Joi.string().required(),
     phoneNumber: Joi.string(),
-    thumbnail: Joi.string(),
+    // thumbnail: Joi.string(),
   })
   await schema.validateAsync(form)
 }
@@ -51,7 +52,7 @@ export const validateUpdateForm = async form => {
       grade: Joi.number(),
       department: Joi.string(),
       phoneNumber: Joi.string().allow(''),
-      thumbnail: Joi.string().allow(''),
+      // thumbnail: Joi.string().allow(''),
     })
     .required()
   await schema.validateAsync(form)
@@ -101,9 +102,19 @@ export const checkDuplicatedSid = async studentId => {
 /**
  * 새로운 사용자를 생성하는 함수
  */
-export const register = async form => {
+export const register = async (form, profileImage) => {
+  // 프로필 이미지가 없으면 기본 이미지 중 하나를 설정
+  let thumbnail
+  if (profileImage) {
+    thumbnail = profileImage.location
+  } else {
+    const num = Math.round(Math.random() * 3) + 1
+    const defaultImage = `ha_profile${num}.png`
+    thumbnail = path.join(__dirname, `../../public/images/${defaultImage}`)
+  }
+
   // Request body에서 비밀번호 속성 분리
-  const verifiedForm = { ...form }
+  const verifiedForm = { ...form, thumbnail }
   verifiedForm.password = undefined
 
   const user = new User(verifiedForm)
