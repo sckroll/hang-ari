@@ -187,46 +187,39 @@ export default {
   },
   watch: {
     getEmail({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkEmail(key, value)
     },
     getPassword({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkPassword(key, value)
       this.checkConfirmed('passwordConfirm', value, 'passwordConfirm')
     },
     getPasswordConfirm({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkConfirmed(key, value, 'password')
     },
     getName({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
     },
     getStudentId({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkDigits(key, value)
     },
     getGrade({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
       this.checkBetween(key, value)
     },
     getDepartment({ key, value }) {
-      if (!value) return
       if (!this.checkRequired(key, value)) return
     },
     getPhoneNumber({ key, value }) {
       if (this.checkOptional(key, value)) return
       this.checkPhoneNumber(key, value)
     },
-    getThumbnail({ key, value }) {
-      if (this.checkOptional(key, value)) return
-    },
+    // getThumbnail({ key, value }) {
+    //   if (this.checkOptional(key, value)) return
+    // },
   },
   methods: {
     setThumbnail(file) {
@@ -328,16 +321,66 @@ export default {
         return true
       }
     },
+    validateForm(form) {
+      let result = true
+
+      for (const item in form) {
+        const key = item
+        const value = form[item]
+
+        // 필수 입력 규칙 유효성 검사
+        if (this.formProps[key].isRequired) {
+          if (!this.checkRequired(key, value)) {
+            result = false
+            continue
+          }
+        }
+
+        // 각 항목의 필수 입력 규칙을 제외한 모든 규칙 유효성 검사
+        switch (key) {
+          case 'email':
+            result = this.checkEmail(key, value)
+            break
+          case 'password':
+            result = this.checkPassword(key, value)
+            result = this.checkConfirmed(
+              'passwordConfirm',
+              value,
+              'passwordConfirm',
+            )
+            break
+          case 'passwordConfirm':
+            result = this.checkConfirmed(key, value, 'password')
+            break
+          case 'studentId':
+            result = this.checkDigits(key, value)
+            break
+          case 'grade':
+            result = this.checkBetween(key, value)
+            break
+          case 'phoneNumber':
+            if (this.checkOptional(key, value)) break
+            result = this.checkPhoneNumber(key, value)
+            break
+        }
+      }
+
+      return result
+    },
     async onSubmit() {
       // 모든 항목에 대해 유효성 재검사
-
-      // form 객체에서 비밀번호 확인 속성 및 프로필 이미지 파일명 속성 제거
-      delete this.form.passwordConfirm
-      delete this.form.thumbnail
+      const validateResult = this.validateForm(this.form)
+      if (!validateResult) {
+        alert('모든 양식을 올바르게 입력해주세요.')
+        return
+      }
 
       // form 객체의 속성들과 프로필 이미지 파일 객체를 formData에 저장
       const formData = new FormData()
       for (const item in this.form) {
+        // form 객체에서 비밀번호 확인 속성 및 프로필 이미지 파일명 속성 제거
+        if (item === 'passwordConfirm' || item === 'thumbnail') continue
+
         formData.append(item, this.form[item])
       }
       formData.append('thumbnail', this.thumbnailFile)
