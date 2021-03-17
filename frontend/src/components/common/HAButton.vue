@@ -17,14 +17,17 @@ export default {
     sm1: Boolean,
     sm2: Boolean,
     sm3: Boolean,
+    smx: Boolean,
     md: Boolean,
     md1: Boolean,
     md2: Boolean,
     md3: Boolean,
+    mdx: Boolean,
     lg: Boolean,
     lg1: Boolean,
     lg2: Boolean,
     lg3: Boolean,
+    lgx: Boolean,
     color: {
       type: String,
       default: 'primary-0',
@@ -45,14 +48,17 @@ export default {
         ['sm1', 'small-1'],
         ['sm2', 'small-2'],
         ['sm3', 'small-3'],
+        ['smx', 'small-extended'],
         ['md', 'medium'],
         ['md1', 'medium-1'],
         ['md2', 'medium-2'],
         ['md3', 'medium-3'],
+        ['mdx', 'medium-extended'],
         ['lg', 'large'],
         ['lg1', 'large-1'],
         ['lg2', 'large-2'],
         ['lg3', 'large-3'],
+        ['lgx', 'large-extended'],
       ]),
     }
   },
@@ -80,6 +86,7 @@ button {
   cursor: pointer;
   outline: none;
   vertical-align: text-bottom;
+  white-space: nowrap;
   transition: all 0.2s ease;
   @include change-button-color();
 
@@ -92,7 +99,6 @@ button {
 
   &.small {
     & {
-      min-width: $small-width;
       height: $small-width;
       padding: 0 ($small-width / 3);
       font-size: $small-font;
@@ -114,10 +120,15 @@ button {
       padding: 0 ($small-width / 3);
       font-size: $small-font;
     }
+    &-extended {
+      width: 100%;
+      height: $small-width;
+      padding: 0 ($small-width / 3);
+      font-size: $small-font;
+    }
   }
   &.medium {
     & {
-      min-width: $medium-width;
       height: $medium-width;
       padding: 0 ($medium-width / 3);
       font-size: $medium-font;
@@ -139,10 +150,15 @@ button {
       padding: 0 ($medium-width / 3);
       font-size: $medium-font;
     }
+    &-extended {
+      width: 100%;
+      height: $medium-width;
+      padding: 0 ($medium-width / 3);
+      font-size: $medium-font;
+    }
   }
   &.large {
     & {
-      min-width: $large-width;
       height: $large-width;
       padding: 0 ($large-width / 3);
       font-size: $large-font;
@@ -160,6 +176,12 @@ button {
     }
     &-3 {
       width: $large-width * 3;
+      height: $large-width;
+      padding: 0 ($large-width / 3);
+      font-size: $large-font;
+    }
+    &-extended {
+      width: 100%;
       height: $large-width;
       padding: 0 ($large-width / 3);
       font-size: $large-font;

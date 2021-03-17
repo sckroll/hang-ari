@@ -102,15 +102,20 @@
       <p>
         버튼의 속성으로 들어가는 이름은 다음과 같이 구성되어 있습니다.
         <br />
-        <strong>크기 (sm, md, lg) + 너비 배수 (1, 2, 3)</strong>
+        <strong>크기 (sm, md, lg) + 너비 배수 (1, 2, 3, x)</strong>
         <br />
         너비 배수는 생략이 가능하며, 생략할 경우 버튼의 너비는 텍스트에 따라
         유동적으로 변화합니다.
         <br />
+        그리고 너비 배수를 x로 설정하면 너비가 100%인 버튼이 됩니다.
+        <br />
         주의: <strong>너비 배수가 1</strong>인 버튼은 아이콘만 허용됩니다.
         <br /><br />
         아래 예시는
-        <strong>1배수, 2배수, 3배수, 배수X, 배수X, 배수X(비활성)</strong>
+        <strong
+          >1배수, 2배수, 3배수, 배수 생략, 배수 생략, 배수 생략(비활성), 너비
+          100%
+        </strong>
         순입니다.
       </p>
 
@@ -122,6 +127,7 @@
         <ha-button sm>s</ha-button>
         <ha-button sm>small button</ha-button>
         <ha-button sm disabled>disabled</ha-button>
+        <ha-button smx>smx</ha-button>
       </div>
 
       <h3>Medium</h3>
@@ -132,6 +138,7 @@
         <ha-button md color="secondary-0">m</ha-button>
         <ha-button md color="secondary-0">medium button</ha-button>
         <ha-button md color="secondary-0" disabled>disabled</ha-button>
+        <ha-button mdx color="secondary-0">mdx</ha-button>
       </div>
 
       <h3>Large</h3>
@@ -142,6 +149,7 @@
         <ha-button lg color="secondary-4">l</ha-button>
         <ha-button lg color="secondary-4">large button</ha-button>
         <ha-button lg color="secondary-4" disabled>disabled</ha-button>
+        <ha-button lgx color="secondary-4">lgx</ha-button>
       </div>
     </div>
   </div>
@@ -224,5 +232,9 @@ export default {
   &.error {
     @include set-color($error-color);
   }
+}
+
+.row {
+  display: flex;
 }
 </style>
