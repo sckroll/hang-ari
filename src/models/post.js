@@ -30,6 +30,7 @@ const PostSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 )
 

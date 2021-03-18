@@ -43,6 +43,7 @@ const ClubSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 )
 
