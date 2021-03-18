@@ -321,18 +321,18 @@ export default {
         return true
       }
     },
-    validateForm(form) {
+    validateForm() {
       let result = true
 
-      for (const item in form) {
+      for (const item in this.form) {
         const key = item
-        const value = form[item]
+        const value = this.form[item]
 
         // 필수 입력 규칙 유효성 검사
         if (this.formProps[key].isRequired) {
           if (!this.checkRequired(key, value)) {
             result = false
-            continue
+            break
           }
         }
 
@@ -363,39 +363,46 @@ export default {
             result = this.checkPhoneNumber(key, value)
             break
         }
+
+        if (!result) break
       }
 
       return result
     },
     async onSubmit() {
       // 모든 항목에 대해 유효성 재검사
-      const validateResult = this.validateForm(this.form)
+      const validateResult = this.validateForm()
       if (!validateResult) {
         alert('모든 양식을 올바르게 입력해주세요.')
         return
       }
 
-      // form 객체의 속성들과 프로필 이미지 파일 객체를 formData에 저장
-      const formData = new FormData()
-      for (const item in this.form) {
-        // form 객체에서 비밀번호 확인 속성 및 프로필 이미지 파일명 속성 제거
-        if (item === 'passwordConfirm' || item === 'thumbnail') continue
+      if (confirm('입력하신 정보로 가입하시겠습니까?')) {
+        // form 객체의 속성들과 프로필 이미지 파일 객체를 formData에 저장
+        const formData = new FormData()
+        for (const item in this.form) {
+          // form 객체에서 비밀번호 확인 속성 및 프로필 이미지 파일명 속성 제거
+          if (item === 'passwordConfirm' || item === 'thumbnail') continue
 
-        // form 객체에서 값이 없는 속성 제거
-        if (this.form[item].length === 0) continue
+          // form 객체에서 값이 없는 속성 제거
+          if (this.form[item].length === 0) continue
 
-        formData.append(item, this.form[item])
-      }
+          formData.append(item, this.form[item])
+        }
 
-      // 프로필 이미지를 업로드했다면 formData에 파일 추가
-      if (this.thumbnailFile) {
-        formData.append('thumbnail', this.thumbnailFile)
-      }
+        // 프로필 이미지를 업로드했다면 formData에 파일 추가
+        if (this.thumbnailFile) {
+          formData.append('thumbnail', this.thumbnailFile)
+        }
 
-      try {
-        await this.axios.post('/api/auth/register', formData)
-      } catch (e) {
-        console.error(e)
+        try {
+          await this.axios.post('/api/auth/register', formData)
+
+          alert('회원가입이 완료되었습니다.')
+          this.$router.push('/login')
+        } catch (e) {
+          alert(e.message)
+        }
       }
     },
     onReset() {
@@ -476,10 +483,6 @@ h2 {
     font-size: 18px;
     font-weight: 500;
     margin: 0;
-  }
-
-  > input {
-    margin: 8px 0;
   }
 
   > .error-message {
