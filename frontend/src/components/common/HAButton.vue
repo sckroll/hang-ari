@@ -96,6 +96,9 @@ button {
   &:last-child {
     margin-right: 0;
   }
+  &:only-child {
+    margin: 0;
+  }
 
   &.small {
     & {
