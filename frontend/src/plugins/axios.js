@@ -2,6 +2,7 @@
 
 import Vue from 'vue'
 import axios from 'axios'
+import store from '@/store'
 
 // Full config:  https://github.com/axios/axios#request-config
 axios.defaults.baseURL =
@@ -12,7 +13,7 @@ axios.defaults.baseURL =
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   // timeout: 60 * 1000, // Timeout
-  // withCredentials: true, // Check cross-site Access-Control
+  withCredentials: true, // Check cross-site Access-Control
 }
 
 const _axios = axios.create(config)
@@ -31,11 +32,20 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   function(response) {
-    // Do something with response data
     return response
   },
   function(error) {
-    // Do something with response error
+    switch (error.response.data.name) {
+      case 'TokenExpiredError':
+      case 'JsonWebTokenError':
+      case 'NotBeforeError':
+      case 'AuthError':
+        // JWT 에러라면 스토어에서 사용자 정보 삭제
+        store.commit('deleteUser')
+        break
+      default:
+        break
+    }
     return Promise.reject(error)
   },
 )

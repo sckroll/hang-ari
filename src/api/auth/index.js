@@ -59,8 +59,8 @@ authRouter.post('/login', async (req, res, next) => {
     // 로그인 양식 유효성 검사
     await authCtrl.validateLoginForm(form)
 
-    // 해당 사용자가 가입되어 있으면 JWT 토큰 반환
-    const token = await authCtrl.validateUser(form)
+    // 해당 사용자가 가입되어 있는지 확인
+    const { token, user } = await authCtrl.validateUser(form)
 
     // 쿠키에 토큰 저장 후 사용자 정보 반환
     const maxAge = parseInt(process.env.JWT_MAX_AGE)
@@ -68,7 +68,7 @@ authRouter.post('/login', async (req, res, next) => {
       maxAge,
       httpOnly: true,
     })
-    res.status(201).end()
+    res.send(user)
   } catch (e) {
     next(e)
   }
@@ -119,6 +119,16 @@ authRouter.delete('/:email', authCheck, async (req, res, next) => {
   } catch (e) {
     next(e)
   }
+})
+
+// 프론트엔드로부터 로그인 여부 확인
+// GET /api/auth/check
+authRouter.get('/check', (req, res, next) => {
+  const cookie = req.app.locals.user
+  if (cookie) {
+    cookie._id = cookie.hashedPassword = undefined
+  }
+  res.send(cookie)
 })
 
 export default authRouter

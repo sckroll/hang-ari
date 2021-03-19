@@ -141,7 +141,7 @@ export const validateUser = async form => {
   }
 
   // 사용자 토큰 생성 후 반환
-  return user.generateToken()
+  return { token: user.generateToken(), user: user.serialize() }
 }
 
 /**

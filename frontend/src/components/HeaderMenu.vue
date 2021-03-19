@@ -22,8 +22,8 @@
             </ul>
           </nav>
           <span v-if="user" class="user-info">
-            <span class="user-name">김성찬</span>
-            <div class="user-avatar"></div>
+            <span class="user-name">{{ user.name }}</span>
+            <ha-avatar :thumbnail="user.thumbnail" />
           </span>
           <span v-else class="user-auth">
             <ul>
@@ -42,8 +42,13 @@
 </template>
 
 <script>
+import HaAvatar from '@/components/common/HaAvatar.vue'
+
 export default {
   name: 'HeaderMenu',
+  components: {
+    HaAvatar,
+  },
   props: {
     user: {
       type: Object,
@@ -130,13 +135,6 @@ li {
   margin-right: 32px;
   font-family: 'Poppins', 'Noto Sans KR', sans-serif;
   font-weight: 600;
-}
-
-.user-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: $primary-color-0;
 }
 
 .user-auth {

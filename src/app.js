@@ -29,7 +29,8 @@ const port = process.env.PORT || 3000
 
 // CORS 옵션
 const corsOptions = {
-  origin: 'http://localhost:8080',
+  origin: true,
+  credentials: true,
 }
 
 // 미들웨어 설정
@@ -61,8 +62,8 @@ app.use((req, res, next) => {
 // 에러 핸들러
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  err.status = statusCode[err.name]
-  res.status(err.status || 500)
+  err.status = statusCode[err.name] || 500
+  res.status(err.status)
 
   console.error(err)
   res.json({ name: err.name, message: err.message })
