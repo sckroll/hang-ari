@@ -1,5 +1,5 @@
 <template>
-  <div class="user-avatar"></div>
+  <div class="user-avatar" @mouseover="$emit('mouseover')"></div>
 </template>
 
 <script>

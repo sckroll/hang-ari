@@ -23,7 +23,15 @@
           </nav>
           <span v-if="user" class="user-info">
             <span class="user-name">{{ user.name }}</span>
-            <ha-avatar :thumbnail="user.thumbnail" />
+            <ha-avatar
+              :thumbnail="user.thumbnail"
+              @mouseover="contextMenu = true"
+            />
+            <ha-context-menu
+              :contextMenu="contextMenu"
+              :menu="menu"
+              @mouseleave="contextMenu = false"
+            />
           </span>
           <span v-else class="user-auth">
             <ul>
@@ -43,15 +51,51 @@
 
 <script>
 import HaAvatar from '@/components/common/HaAvatar.vue'
+import HaContextMenu from '@/components/common/HaContextMenu.vue'
 
 export default {
   name: 'HeaderMenu',
   components: {
     HaAvatar,
+    HaContextMenu,
   },
   props: {
     user: {
       type: Object,
+    },
+  },
+  data() {
+    return {
+      contextMenu: false,
+      menu: [
+        {
+          name: '내 정보 수정',
+          method: this.updateUser,
+          isDisabled: false,
+        },
+        {
+          name: '로그아웃',
+          method: this.logout,
+          isDisabled: false,
+        },
+      ],
+    }
+  },
+  methods: {
+    updateUser() {},
+    async logout() {
+      try {
+        this.contextMenu = false
+        await this.$axios.post('/api/auth/logout')
+
+        // 로그아웃 후 홈(메인) 페이지로 이동
+        this.$store.commit('deleteUser')
+        if (this.$router.currentRoute.path !== '/') {
+          this.$router.push('/')
+        }
+      } catch (e) {
+        console.error(e)
+      }
     },
   },
 }
