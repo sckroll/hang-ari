@@ -1,7 +1,7 @@
 <template>
   <div>
+    <club-list-scroll v-if="user" :clubs="[]" :topic="'최근 방문한 동아리'" />
     <club-list-scroll :clubs="shuffle()" :topic="'지금 뜨고 있는 동아리'" />
-    <club-list-scroll :clubs="[]" :topic="'최근 방문한 동아리'" />
     <club-list-scroll :clubs="shuffle()" :topic="'가장 활동이 활발한 동아리'" />
   </div>
 </template>
@@ -12,6 +12,11 @@ import ClubListScroll from '@/components/ClubListScroll.vue'
 export default {
   components: {
     ClubListScroll,
+  },
+  props: {
+    user: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -72,6 +77,9 @@ export default {
         },
       ],
     }
+  },
+  mounted() {
+    this.$store.getters.getUser
   },
   methods: {
     // 테스트 동아리 리스트를 섞는 함수

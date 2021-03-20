@@ -4,7 +4,7 @@
     <main>
       <div class="main-container">
         <div class="main-center">
-          <router-view />
+          <router-view :user="$store.getters.getUser" />
         </div>
       </div>
     </main>
