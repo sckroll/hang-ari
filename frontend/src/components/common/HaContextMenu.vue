@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name: 'HaContextMenu',
   props: {
     contextMenu: {
       type: Boolean,
@@ -41,15 +42,17 @@ export default {
     position: absolute;
     top: 56px;
     width: 48px;
-    height: 48px;
+    height: 64px;
   }
 
   > .context-menu {
     position: absolute;
-    top: 104px;
-    background-color: $grey-color-3;
+    top: 120px;
+    background-color: #ffffff;
     margin: 0;
     padding: 8px 0;
+    border-radius: $box-radius;
+    box-shadow: 0 0 8px #66666666;
 
     > li {
       list-style: none;
