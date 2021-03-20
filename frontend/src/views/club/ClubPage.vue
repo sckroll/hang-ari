@@ -1,11 +1,22 @@
 <template>
   <div>
-    Club page
+    <club-list-grid :clubs="clubs" topic="동아리 목록 - 가나다순" />
   </div>
 </template>
 
 <script>
-export default {}
+import ClubListGrid from '@/components/ClubListGrid.vue'
+
+export default {
+  components: {
+    ClubListGrid,
+  },
+  data() {
+    return {
+      clubs: this.$store.getters.getClubs,
+    }
+  },
+}
 </script>
 
 <style></style>
