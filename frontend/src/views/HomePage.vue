@@ -1,7 +1,11 @@
 <template>
   <div>
     <club-list-scroll v-if="user" :clubs="[]" topic="최근 방문한 동아리" />
-    <club-list-scroll :clubs="shuffle()" topic="지금 뜨고 있는 동아리" />
+    <club-list-scroll
+      :clubs="shuffle()"
+      topic="지금 뜨고 있는 동아리"
+      :more="moreButton"
+    />
     <club-list-scroll :clubs="shuffle()" topic="가장 활동이 활발한 동아리" />
   </div>
 </template>
@@ -17,6 +21,14 @@ export default {
     user: {
       type: Object,
     },
+  },
+  data() {
+    return {
+      moreButton: {
+        name: '더 보기',
+        to: '/club',
+      },
+    }
   },
   methods: {
     // 테스트 동아리 리스트를 섞는 함수

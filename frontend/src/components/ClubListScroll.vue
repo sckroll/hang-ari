@@ -12,12 +12,18 @@
         <div v-for="club in clubs" :key="club.name">
           <club-preview :club="club" />
         </div>
+        <club-preview v-if="more" :club="{}" :more="more" class="more-button" />
       </div>
       <div ref="leftSpace" class="space-left"></div>
       <div ref="rightSpace" class="space-right"></div>
     </div>
-    <div v-else class="club-list-empty">
-      <span>동아리가 존재하지 않습니다.</span>
+    <div v-else>
+      <div v-if="more" class="club-list">
+        <club-preview :club="{}" :more="more" class="more-button" />
+      </div>
+      <div v-else class="club-list-empty">
+        <span>동아리가 존재하지 않습니다.</span>
+      </div>
     </div>
   </section>
 </template>
@@ -37,6 +43,9 @@ export default {
     },
     topic: {
       type: String,
+    },
+    more: {
+      type: Object,
     },
   },
   data() {
@@ -72,14 +81,16 @@ export default {
       this.$refs.rightSpace.style.width = `${spaceMargin}px`
     },
     moveLeft() {
-      if (this.clubs.length <= 4) return
+      const offset = this.more ? 1 : 0
+      if (this.clubs.length <= 4 - offset) return
 
-      const maxX = this.previewWidthSize * (this.clubs.length - 4) + 16
+      const maxX =
+        (this.previewWidthSize + 16) * (this.clubs.length - 4 + offset) - 64
       if (this.clubListX === maxX) return
 
       if (
-        this.clubListX > maxX - this.previewWidthSize &&
-        this.clubListX < maxX
+        this.clubListX >
+        (this.previewWidthSize + 16) * (this.clubs.length - 6 + offset)
       ) {
         this.clubListX = maxX
       } else {
@@ -88,7 +99,8 @@ export default {
       this.clubListStyles.right = `${this.clubListX}px`
     },
     moveRight() {
-      if (this.clubs.length <= 4) return
+      const offset = this.more ? 1 : 0
+      if (this.clubs.length <= 4 - offset) return
       if (this.clubListX === 0) return
 
       if (this.clubListX < this.previewWidthSize) {
@@ -96,6 +108,7 @@ export default {
       } else {
         this.clubListX -= this.previewWidthSize + 16
       }
+      console.log('clubListX: ' + this.clubListX)
       this.clubListStyles.right = `${this.clubListX}px`
     },
   },
@@ -136,11 +149,19 @@ h1 {
   > div {
     margin: 0 8px;
 
-    &:first-child {
+    &:nth-of-type(1) {
       margin-left: 0;
     }
-    &:last-child {
+    &:nth-last-of-type(1) {
       margin-right: 0;
+    }
+  }
+
+  > .more-button {
+    margin-left: 16px;
+
+    &:only-child {
+      margin-left: 0;
     }
   }
 }
