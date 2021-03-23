@@ -1,22 +1,28 @@
 <template>
   <div>
-    <club-list-grid :clubs="clubs" topic="동아리 목록 - 가나다순" />
+    {{ $router.currentRoute.params.id }}
   </div>
 </template>
 
 <script>
-import ClubListGrid from '@/components/ClubListGrid.vue'
-
 export default {
-  components: {
-    ClubListGrid,
-  },
   data() {
     return {
-      clubs: this.$store.getters.getClubs,
+      club: null,
+    }
+  },
+  async mounted() {
+    try {
+      const clubId = this.$router.currentRoute.params.id
+      const { data } = await this.$axios.get(`/api/club/${clubId}`)
+      this.club = data
+      console.log(data)
+    } catch (e) {
+      alert('존재하지 않는 동아리입니다.')
+      this.$router.push('/club')
     }
   },
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>

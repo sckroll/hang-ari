@@ -4,55 +4,55 @@
       "name": "테스트 1",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/100/250",
-      "to": "/"
+      "to": "test1"
     },
     {
       "name": "테스트 2",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/200/250",
-      "to": "/"
+      "to": "test2"
     },
     {
       "name": "테스트 3",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/300/250",
-      "to": "/"
+      "to": "test3"
     },
     {
       "name": "테스트 4",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/400/250",
-      "to": "/"
+      "to": "test4"
     },
     {
       "name": "테스트 5",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/500/250",
-      "to": "/"
+      "to": "test5"
     },
     {
       "name": "테스트 6",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/600/250",
-      "to": "/"
+      "to": "test6"
     },
     {
       "name": "테스트 7",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/700/250",
-      "to": "/"
+      "to": "test7"
     },
     {
       "name": "테스트 8",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/800/250",
-      "to": "/"
+      "to": "test8"
     },
     {
       "name": "테스트 9",
       "description": "뭔가 있어 보이는 동아리입니다.",
       "thumbnail": "http://picsum.photos/id/900/250",
-      "to": "/"
+      "to": "test9"
     }
   ]
 }

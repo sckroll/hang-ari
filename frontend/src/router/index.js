@@ -12,6 +12,11 @@ const routes = [
   },
   {
     path: '/club',
+    name: 'ClubList',
+    component: () => import('@/views/club/ClubListPage.vue'),
+  },
+  {
+    path: '/club/:id',
     name: 'Club',
     component: () => import('@/views/club/ClubPage.vue'),
   },

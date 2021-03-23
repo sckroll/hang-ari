@@ -123,7 +123,7 @@ authRouter.delete('/:email', authCheck, async (req, res, next) => {
 
 // 프론트엔드로부터 로그인 여부 확인
 // GET /api/auth/check
-authRouter.get('/check', (req, res, next) => {
+authRouter.get('/check', (req, res) => {
   const cookie = req.app.locals.user
   if (cookie) {
     cookie._id = cookie.hashedPassword = undefined
