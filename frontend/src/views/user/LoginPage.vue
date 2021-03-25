@@ -13,6 +13,16 @@ export default {
   components: {
     LoginForm,
   },
+  props: {
+    user: {
+      type: Object,
+    },
+  },
+  mounted() {
+    if (this.user) {
+      this.$router.replace('/')
+    }
+  },
 }
 </script>
 
