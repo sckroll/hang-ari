@@ -61,7 +61,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // meta.isAuthRequired 속성이 true일 때만 로그인 여부 확인
-  if (to.meta.isAuthRequired && !store.getters.getUser) {
+  if (to.meta.isAuthRequired && from.name && !store.getters.getUser) {
     alert('로그인이 필요합니다.')
     next('/login')
     return

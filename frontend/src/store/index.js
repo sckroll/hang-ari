@@ -25,6 +25,18 @@ export default new Vuex.Store({
       state.user = null
     },
   },
-  actions: {},
+  actions: {
+    async initUser(context, axios) {
+      try {
+        const { data } = await axios.get('/api/auth/check')
+        if (data) {
+          context.commit('setUser', data)
+        }
+      } catch (e) {
+        const errorName = e.response.data.name
+        return errorName
+      }
+    },
+  },
   modules: {},
 })

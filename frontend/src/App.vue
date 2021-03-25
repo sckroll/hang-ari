@@ -21,14 +21,11 @@ export default {
     HeaderMenu,
     FooterBar,
   },
-  async created() {
-    try {
-      const { data } = await this.$axios.get('/api/auth/check')
-      if (data) {
-        this.$store.commit('setUser', data)
-      }
-    } catch (e) {
-      const errorName = e.response.data.name
+  async mounted() {
+    const errorName = await this.$store.dispatch('initUser', this.$axios)
+
+    // 에러 메시지 출력 후 로그인 화면으로 이동
+    if (errorName) {
       if (errorName === 'TokenExpiredError') {
         alert('유효하지 않은 토큰입니다. 다시 로그인해주세요.')
       } else if (errorName === 'JsonWebTokenError') {
@@ -36,6 +33,7 @@ export default {
       } else {
         alert('계정 오류가 발생하였습니다. 다시 로그인해주세요.')
       }
+      this.$router.push('/login')
     }
   },
 }
