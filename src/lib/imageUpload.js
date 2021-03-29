@@ -21,7 +21,7 @@ export const uploadThumbnail = multer({
   },
 }).single('thumbnail')
 
-export const uploadClub = multer({
+export const uploadClubImage = multer({
   storage: multerS3({
     s3,
     bucket: 'hang-ari-storage',
