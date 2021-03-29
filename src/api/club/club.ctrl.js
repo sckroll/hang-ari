@@ -6,6 +6,7 @@
 
 import JoiBase from 'joi'
 import joiDate from '@joi/date'
+import path from 'path'
 import Club from '../../models/club'
 import User from '../../models/user'
 import Member from '../../models/member'
@@ -32,8 +33,8 @@ export const validateClubForm = async form => {
     homepage: Joi.string(),
     room: Joi.string(),
     professor: Joi.string(),
-    logo: Joi.string(),
-    background: Joi.string(),
+    // logo: Joi.string(),
+    // background: Joi.string(),
     establishedAt: Joi.date().format('YYYY-MM-DD'),
   })
   await schema.validateAsync(form)
@@ -264,8 +265,25 @@ export const validateMemberUpdate = async (clubId, studentId, payload) => {
 /**
  * 새로운 동아리를 생성 후 회원 추가를 위해 도큐먼트 ID를 반환하는 함수
  */
-export const createClub = async form => {
-  await Club.create(form)
+export const createClub = async (form, images) => {
+  let logo, background
+
+  // 동아리 로고 이미지가 없으면 기본 이미지로 설정
+  if (images.logo) {
+    logo = images.logo[0]
+  } else {
+    const num = Math.round(Math.random() * 3) + 1
+    const defaultImage = `ha_club_logo${num}.png`
+    logo = path.join(__dirname, `../../public/images/${defaultImage}`)
+  }
+
+  // 동아리 배경 사진 이미지가 없으면 기본 이미지(패턴)로 설정
+  if (images.background) {
+    background = images.background[0]
+  }
+
+  const club = { ...form, logo, background }
+  await Club.create(club)
 }
 
 /**

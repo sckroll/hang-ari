@@ -7,6 +7,7 @@
 import { Router } from 'express'
 import * as clubCtrl from './club.ctrl'
 import authCheck from '../../lib/authCheck'
+import { uploadClubImage } from '../../lib/imageUpload'
 
 const clubRouter = Router()
 
@@ -24,34 +25,43 @@ clubRouter.get('/', async (req, res, next) => {
 
 // 동아리 생성
 // POST /api/club
-clubRouter.post('/', authCheck, async (req, res, next) => {
+clubRouter.post('/', authCheck, uploadClubImage, async (req, res, next) => {
   try {
-    const { club, members } = req.body
+    // const members = req.body
+    const { members, ...form } = req.body
     const { studentId } = req.app.locals.user
+    const images = req.files
+
+    // 문자열 형식의 JSON 객체를 다시 객체 형식으로 변환
+    const parsedMembers = JSON.parse(members)
+    const club = {
+      ...form,
+      tags: JSON.parse(form.tags),
+    }
 
     // 동아리 및 동아리 회원 양식 유효성 검사
     await clubCtrl.validateClubForm(club)
-    await clubCtrl.validateMemberForm(members)
+    await clubCtrl.validateMemberForm(parsedMembers)
 
     // 이미 해당 ID와 이름으로 동아리가 만들어졌는지 검사
     await clubCtrl.checkDuplicatedId(club.clubId)
     await clubCtrl.checkDuplicatedName(club.name)
 
     // 동아리 회원 중에 유일한 회장이 있는지 검사
-    clubCtrl.checkOnlyPresident(members)
+    clubCtrl.checkOnlyPresident(parsedMembers)
 
     // 동아리를 생성하는 사용자가 동아리 간부인지 검사
-    clubCtrl.checkExecutive(studentId, members)
+    clubCtrl.checkExecutive(studentId, parsedMembers)
 
     // 동아리를 생성하는 사용자가 유일한 동아리 페이지 관리자인지 검사
-    clubCtrl.checkManager(studentId, members)
-    clubCtrl.checkOnlyManager(members)
+    clubCtrl.checkManager(studentId, parsedMembers)
+    clubCtrl.checkOnlyManager(parsedMembers)
 
     // 새로운 동아리 생성
-    await clubCtrl.createClub(club)
+    await clubCtrl.createClub(club, images)
 
     // 동아리 회원 추가
-    await clubCtrl.addMembers(club.clubId, members)
+    await clubCtrl.addMembers(club.clubId, parsedMembers)
 
     res.status(201).end()
   } catch (e) {

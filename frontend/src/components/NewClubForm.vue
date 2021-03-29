@@ -302,7 +302,8 @@ export default {
           let value
           if (item === 'tags') {
             // 태그 항목일 경우 값을 쉼표 단위로 분리
-            value = this.form[item].split(',')
+            const splited = this.form[item].split(',')
+            value = JSON.stringify(splited)
           } else if (item === 'establishedAt') {
             // 설립일자 항목일 경우 값을 Date 형식으로 변환
             value = new Date(this.form[item])
@@ -321,19 +322,20 @@ export default {
           formData.append('background', this.backgroundFile)
         }
 
+        // 회원 리스트를 formData에 추가
+        const members = [
+          {
+            studentId: this.$store.getters.getUser.studentId,
+            position: '회장',
+            isPresident: true,
+            isExecutive: true,
+            isManager: true,
+          },
+        ]
+        formData.append('members', JSON.stringify(members))
+
         try {
-          await this.axios.post('/api/club', {
-            club: formData,
-            members: [
-              {
-                studentId: this.$store.getters.getUser.studentId,
-                position: '회장',
-                isPresident: true,
-                isExecutive: true,
-                isManager: true,
-              },
-            ],
-          })
+          await this.$axios.post('/api/club', formData)
 
           alert('동아리 생성이 완료되었습니다.')
           this.$router.push('/club')
