@@ -95,7 +95,7 @@ export const checkDuplicatedEmail = async email => {
 export const checkDuplicatedSid = async studentId => {
   const exists = await User.exists({ studentId })
   if (exists) {
-    throw new DuplicateError('duplicated student ID')
+    throw new DuplicateError('duplicated student id')
   }
 }
 

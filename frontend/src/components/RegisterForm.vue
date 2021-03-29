@@ -25,7 +25,7 @@
         </div>
         <div
           v-if="formProp.key === 'thumbnail' && thumbnailFile"
-          ref="thumbnail"
+          :ref="formProp.key"
           class="thumbnail-preview"
         ></div>
       </div>
@@ -192,7 +192,7 @@ export default {
       if (!vf.checkRequired(this.formProps, key, value)) return
     },
     getPhoneNumber({ key, value }) {
-      if (!vf.checkRequired(this.formProps, key, value)) return
+      if (vf.checkOptional(this.formProps, key, value)) return
       vf.checkPhoneNumber(this.formProps, key, value)
     },
   },
@@ -300,7 +300,7 @@ export default {
           let alertMessage
           if (errorMessage === 'duplicated email address') {
             alertMessage = vf.message.duplicatedEmail
-          } else if (errorMessage === 'duplicated student ID') {
+          } else if (errorMessage === 'duplicated student id') {
             alertMessage = vf.message.duplicatedStudentId
           } else {
             alertMessage = vf.message.unknown
