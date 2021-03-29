@@ -39,7 +39,10 @@ const ClubSchema = new Schema(
     background: { type: String },
 
     // 설립일자
-    establishedAt: { type: Date, default: Date.now },
+    establishedAt: {
+      type: Date,
+      default: () => new Date().toLocaleDateString(),
+    },
   },
   {
     timestamps: true,
