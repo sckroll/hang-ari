@@ -5,7 +5,6 @@
  */
 
 import Joi from 'joi'
-import path from 'path'
 import User from '../../models/user'
 import {
   DuplicateError,
@@ -108,7 +107,7 @@ export const register = async (form, profileImage) => {
   } else {
     const num = Math.round(Math.random() * 3) + 1
     const defaultImage = `ha_profile${num}.png`
-    thumbnail = path.join(__dirname, `../../public/images/${defaultImage}`)
+    thumbnail = `/images/${defaultImage}`
   }
 
   // Request body에서 비밀번호 속성 분리
