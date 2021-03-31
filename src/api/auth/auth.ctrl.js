@@ -37,7 +37,6 @@ export const validateRegForm = async form => {
     grade: Joi.number().required(),
     department: Joi.string().required(),
     phoneNumber: Joi.string(),
-    // thumbnail: Joi.string(),
   })
   await schema.validateAsync(form)
 }
@@ -52,7 +51,6 @@ export const validateUpdateForm = async form => {
       grade: Joi.number(),
       department: Joi.string(),
       phoneNumber: Joi.string().allow(''),
-      // thumbnail: Joi.string().allow(''),
     })
     .required()
   await schema.validateAsync(form)

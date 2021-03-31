@@ -33,9 +33,7 @@ export const validateClubForm = async form => {
     homepage: Joi.string(),
     room: Joi.string(),
     professor: Joi.string(),
-    // logo: Joi.string(),
-    // background: Joi.string(),
-    establishedAt: Joi.date().format('YYYY-MM-DD'),
+    establishedAt: Joi.date(),
   })
   await schema.validateAsync(form)
 }
@@ -70,8 +68,6 @@ export const validateClubUpdateForm = async form => {
     homepage: Joi.string().allow(''),
     room: Joi.string().allow(''),
     professor: Joi.string().allow(''),
-    logo: Joi.string().allow(''),
-    background: Joi.string().allow(''),
     establishedAt: Joi.date().format('YYYY-MM-DD'),
   })
   await schema.validateAsync(form)
@@ -270,7 +266,7 @@ export const createClub = async (form, images) => {
 
   // 동아리 로고 이미지가 없으면 기본 이미지로 설정
   if (images.logo) {
-    logo = images.logo[0]
+    logo = images.logo[0].location
   } else {
     const num = Math.round(Math.random() * 3) + 1
     const defaultImage = `ha_club_logo${num}.png`
@@ -279,7 +275,7 @@ export const createClub = async (form, images) => {
 
   // 동아리 배경 사진 이미지가 없으면 기본 이미지(패턴)로 설정
   if (images.background) {
-    background = images.background[0]
+    background = images.background[0].location
   }
 
   const club = { ...form, logo, background }
