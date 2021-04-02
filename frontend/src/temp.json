@@ -3,56 +3,56 @@
     {
       "name": "테스트 1",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/100/250",
-      "to": "test1"
+      "background": "http://picsum.photos/id/100/250",
+      "clubId": "test1"
     },
     {
       "name": "테스트 2",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/200/250",
-      "to": "test2"
+      "background": "http://picsum.photos/id/200/250",
+      "clubId": "test2"
     },
     {
       "name": "테스트 3",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/300/250",
-      "to": "test3"
+      "background": "http://picsum.photos/id/300/250",
+      "clubId": "test3"
     },
     {
       "name": "테스트 4",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/400/250",
-      "to": "test4"
+      "background": "http://picsum.photos/id/400/250",
+      "clubId": "test4"
     },
     {
       "name": "테스트 5",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/500/250",
-      "to": "test5"
+      "background": "http://picsum.photos/id/500/250",
+      "clubId": "test5"
     },
     {
       "name": "테스트 6",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/600/250",
-      "to": "test6"
+      "background": "http://picsum.photos/id/600/250",
+      "clubId": "test6"
     },
     {
       "name": "테스트 7",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/700/250",
-      "to": "test7"
+      "background": "http://picsum.photos/id/700/250",
+      "clubId": "test7"
     },
     {
       "name": "테스트 8",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/800/250",
-      "to": "test8"
+      "background": "http://picsum.photos/id/800/250",
+      "clubId": "test8"
     },
     {
       "name": "테스트 9",
       "description": "뭔가 있어 보이는 동아리입니다.",
-      "thumbnail": "http://picsum.photos/id/900/250",
-      "to": "test9"
+      "background": "http://picsum.photos/id/900/250",
+      "clubId": "test9"
     }
   ]
 }

@@ -26,11 +26,20 @@ export default {
   },
   data() {
     return {
-      clubs: this.$store.getters.getClubs,
+      // clubs: this.$store.getters.getClubs,
+      clubs: [],
       more: {
         name: '동아리 생성',
         to: '/new',
       },
+    }
+  },
+  async mounted() {
+    try {
+      const { data } = await this.$axios.get('/api/club')
+      this.clubs = data
+    } catch (e) {
+      console.error(e)
     }
   },
 }

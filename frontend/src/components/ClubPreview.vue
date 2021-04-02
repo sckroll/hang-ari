@@ -10,9 +10,9 @@
         </div>
       </div>
     </router-link>
-    <router-link v-else :to="`/club/${club.to}`">
+    <router-link v-else :to="`/club/${club.clubId}`">
       <div class="club-thumbnail-container">
-        <img :src="club.thumbnail" :alt="club.name" class="club-thumbnail" />
+        <img :src="club.background" :alt="club.name" class="club-thumbnail" />
         <div class="club-info">
           <h2 class="club-title">{{ club.name }}</h2>
           <p class="club-description">{{ club.description }}</p>
