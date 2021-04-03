@@ -4,19 +4,25 @@
       <div class="header-menu-center">
         <div class="logo-container">
           <router-link to="/">
-            <img src="../assets/ha_logo.png" alt="항아리" class="logo" />
+            <img
+              v-if="isReversed"
+              src="../assets/ha_logo_white.png"
+              alt="항아리"
+              class="logo"
+            />
+            <img v-else src="../assets/ha_logo.png" alt="항아리" class="logo" />
           </router-link>
         </div>
         <div class="main-menu">
           <nav class="nav-menu">
             <ul>
-              <li>
+              <li :class="isReversed ? 'reverse' : ''">
                 <router-link to="/club">Club</router-link>
               </li>
-              <li>
+              <li :class="isReversed ? 'reverse' : ''">
                 <router-link to="/community">Community</router-link>
               </li>
-              <li>
+              <li :class="isReversed ? 'reverse' : ''">
                 <router-link to="/about">About</router-link>
               </li>
             </ul>
@@ -35,10 +41,10 @@
           </span>
           <span v-else class="user-auth">
             <ul>
-              <li>
+              <li :class="isReversed ? 'reverse' : ''">
                 <router-link to="/register">회원가입</router-link>
               </li>
-              <li>
+              <li :class="isReversed ? 'reverse' : ''">
                 <router-link to="/login">로그인</router-link>
               </li>
             </ul>
@@ -81,6 +87,19 @@ export default {
       ],
     }
   },
+  computed: {
+    isReversed() {
+      return this.$store.getters.getHeaderReversed
+    },
+  },
+  watch: {
+    isReversed: {
+      immediate: true,
+      handler(state) {
+        console.log(state)
+      },
+    },
+  },
   methods: {
     updateUser() {},
     async logout() {
@@ -103,9 +122,14 @@ export default {
 
 <style lang="scss" scoped>
 header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
   display: flex;
   justify-content: center;
   width: 100%;
+  height: 400px;
   height: $header-height;
 }
 
@@ -167,6 +191,19 @@ li {
 
   &:hover {
     border-bottom: 3px solid $primary-color-0;
+  }
+
+  &.reverse > a {
+    color: #ffffff;
+    transition: all 0.2s ease;
+
+    &.router-link-active {
+      border-bottom: 3px solid #ffffff;
+    }
+  }
+
+  &.reverse:hover {
+    border-bottom: 3px solid #ffffff;
   }
 }
 

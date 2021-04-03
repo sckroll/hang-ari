@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     clubs,
+    headerReversed: false,
   },
   getters: {
     getUser(state) {
@@ -16,6 +17,9 @@ export default new Vuex.Store({
     getClubs(state) {
       return state.clubs
     },
+    getHeaderReversed(state) {
+      return state.headerReversed
+    },
   },
   mutations: {
     setUser(state, payload) {
@@ -23,6 +27,9 @@ export default new Vuex.Store({
     },
     deleteUser(state) {
       state.user = null
+    },
+    setHeaderReversed(state, payload) {
+      state.headerReversed = payload
     },
   },
   actions: {

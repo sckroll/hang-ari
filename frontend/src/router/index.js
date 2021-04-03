@@ -51,6 +51,7 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () => import('@/views/user/RegisterPage.vue'),
+    meta: { isReversed: true },
   },
   {
     path: '/components',
@@ -73,6 +74,11 @@ router.beforeEach((to, from, next) => {
     return
   }
   next()
+})
+
+router.afterEach((to, from) => {
+  // 헤더 메뉴 색상 반전 여부 확인
+  store.commit('setHeaderReversed', to.meta.isReversed)
 })
 
 export default router
