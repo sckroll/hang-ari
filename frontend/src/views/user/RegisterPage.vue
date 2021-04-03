@@ -1,10 +1,10 @@
 <template>
   <div class="register-container">
+    <div class="register-background"></div>
     <section class="register-intro">
       <div class="intro-message">
         <h1>
-          한기대 동아리를 위한 커뮤니티 서비스,<br />
-          항아리에 오신 것을 환영합니다!
+          한기대 동아리를 위한 커뮤니티 서비스, 항아리에 오신 것을 환영합니다!
         </h1>
         <h2>서비스 이용을 위해 아래의 양식을 작성해주세요.</h2>
       </div>
@@ -37,7 +37,7 @@ export default {
 
 <style lang="scss" scoped>
 h1 {
-  font-size: 28px;
+  font-size: 32px;
 }
 
 h2 {
@@ -53,13 +53,30 @@ h2 {
   align-items: center;
 }
 
+.register-background {
+  position: absolute;
+  bottom: 20%;
+  z-index: -1;
+  width: 100%;
+  height: 90%;
+  background-color: $primary-color-0;
+  transform: skewY(5deg);
+}
+
 .register-intro {
   width: 100%;
-  height: 256px;
+  height: 512px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
+  align-items: center;
   text-align: center;
+
+  & > .intro-message {
+    position: relative;
+    bottom: 64px;
+    width: 512px;
+  }
 }
 
 .register-basic {
