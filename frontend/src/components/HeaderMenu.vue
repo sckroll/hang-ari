@@ -95,9 +95,7 @@ export default {
   watch: {
     isReversed: {
       immediate: true,
-      handler(state) {
-        console.log(state)
-      },
+      handler() {},
     },
   },
   methods: {

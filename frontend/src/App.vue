@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <header-menu :user="$store.getters.getUser" />
+    <header-menu :user="getUser" />
     <main>
-      <router-view :user="$store.getters.getUser" />
+      <router-view :user="getUser" />
     </main>
     <footer-bar />
   </div>
@@ -16,6 +16,17 @@ export default {
   components: {
     HeaderMenu,
     FooterBar,
+  },
+  computed: {
+    getUser() {
+      return this.$store.getters.getUser
+    },
+  },
+  watch: {
+    getUser: {
+      immediate: true,
+      handler() {},
+    },
   },
   async mounted() {
     const errorName = await this.$store.dispatch('initUser', this.$axios)
