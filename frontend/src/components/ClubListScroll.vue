@@ -108,7 +108,6 @@ export default {
       } else {
         this.clubListX -= this.previewWidthSize + 16
       }
-      console.log('clubListX: ' + this.clubListX)
       this.clubListStyles.right = `${this.clubListX}px`
     },
   },

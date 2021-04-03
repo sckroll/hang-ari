@@ -56,7 +56,8 @@ h1 {
 .club-list {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, $preview-width);
+  justify-content: space-between;
   transition: all 0.3s ease;
 
   > div {
