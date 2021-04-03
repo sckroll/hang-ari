@@ -28,7 +28,9 @@
             </ul>
           </nav>
           <span v-if="user" class="user-info">
-            <span class="user-name">{{ user.name }}</span>
+            <span class="user-name" :class="isReversed ? 'reverse' : ''">{{
+              user.name
+            }}</span>
             <ha-avatar
               :thumbnail="user.thumbnail"
               @mouseover="contextMenu = true"
@@ -214,6 +216,10 @@ li {
   margin-right: 32px;
   font-family: 'Poppins', 'Noto Sans KR', sans-serif;
   font-weight: 600;
+
+  &.reverse {
+    color: #ffffff;
+  }
 }
 
 .user-auth {
