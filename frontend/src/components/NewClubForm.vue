@@ -379,6 +379,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #ffffff;
 
   > div {
     width: 512px;

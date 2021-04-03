@@ -1,5 +1,6 @@
 <template>
   <div class="create-club-container">
+    <div class="create-club-background"></div>
     <section class="create-club-intro">
       <div class="intro-message">
         <h1>
@@ -42,13 +43,31 @@ h2 {
   align-items: center;
 }
 
+.create-club-background {
+  position: absolute;
+  bottom: 20%;
+  z-index: -1;
+  width: 100%;
+  height: 90%;
+  background-color: $secondary-color-0;
+  transform: skewY(5deg);
+}
+
 .create-club-intro {
   width: 100%;
-  height: 256px;
+  height: 512px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
+  align-items: center;
   text-align: center;
+
+  & > .intro-message {
+    position: relative;
+    bottom: 64px;
+    width: 512px;
+    color: #ffffff;
+  }
 }
 
 .form-section {

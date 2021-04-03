@@ -24,7 +24,7 @@ const routes = [
     path: '/new',
     name: 'NewClub',
     component: () => import('@/views/club/NewClubPage.vue'),
-    meta: { isAuthRequired: true },
+    meta: { isAuthRequired: true, isReversed: true },
   },
   {
     path: '/community',
