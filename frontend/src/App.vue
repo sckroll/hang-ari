@@ -2,11 +2,7 @@
   <div id="app">
     <header-menu :user="$store.getters.getUser" />
     <main>
-      <div class="main-container">
-        <div class="main-center">
-          <router-view :user="$store.getters.getUser" />
-        </div>
-      </div>
+      <router-view :user="$store.getters.getUser" />
     </main>
     <footer-bar />
   </div>
@@ -61,16 +57,6 @@ main {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100%;
-}
-
-.main-container {
-  width: 1200px;
-  margin: 32px 0;
-}
-
-.main-center {
-  padding: 0 32px;
   height: 100%;
 }
 </style>

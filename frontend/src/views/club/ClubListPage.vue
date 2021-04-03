@@ -1,12 +1,15 @@
 <template>
-  <div>
-    <club-list-scroll
-      v-if="user"
-      :clubs="[]"
-      topic="내가 가입한 동아리"
-      :more="more"
-    />
-    <club-list-grid :clubs="clubs" topic="동아리 목록 - 가나다순" />
+  <div class="main-container">
+    <div class="empty-top"></div>
+    <div class="main-center">
+      <club-list-scroll
+        v-if="user"
+        :clubs="[]"
+        topic="내가 가입한 동아리"
+        :more="more"
+      />
+      <club-list-grid :clubs="clubs" topic="동아리 목록 - 가나다순" />
+    </div>
   </div>
 </template>
 

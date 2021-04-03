@@ -1,6 +1,9 @@
 <template>
-  <div>
-    Community page
+  <div class="main-container">
+    <div class="empty-top"></div>
+    <div class="main-center">
+      Community page
+    </div>
   </div>
 </template>
 

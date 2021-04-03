@@ -1,12 +1,15 @@
 <template>
-  <div>
-    <club-list-scroll v-if="user" :clubs="[]" topic="최근 방문한 동아리" />
-    <club-list-scroll
-      :clubs="shuffle()"
-      topic="지금 뜨고 있는 동아리"
-      :more="moreButton"
-    />
-    <club-list-scroll :clubs="shuffle()" topic="가장 활동이 활발한 동아리" />
+  <div class="main-container">
+    <div class="empty-top"></div>
+    <div class="main-center">
+      <club-list-scroll v-if="user" :clubs="[]" topic="최근 방문한 동아리" />
+      <club-list-scroll
+        :clubs="shuffle()"
+        topic="지금 뜨고 있는 동아리"
+        :more="moreButton"
+      />
+      <club-list-scroll :clubs="shuffle()" topic="가장 활동이 활발한 동아리" />
+    </div>
   </div>
 </template>
 

@@ -1,6 +1,9 @@
 <template>
-  <div>
-    About page
+  <div class="main-container">
+    <div class="empty-top"></div>
+    <div class="main-center">
+      About page
+    </div>
   </div>
 </template>
 

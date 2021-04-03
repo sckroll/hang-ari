@@ -58,3 +58,15 @@ h3, h4, h5, h6 {
 * {
   font-family: 'Noto Sans KR', sans-serif;
 }
+
+.main-center {
+  width: 1200px;
+  height: 100%;
+  margin: 32px 0;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
+.empty-top {
+  height: $header-height;
+}

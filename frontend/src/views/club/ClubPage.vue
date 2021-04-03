@@ -1,6 +1,9 @@
 <template>
-  <div>
-    {{ $router.currentRoute.params.id }}
+  <div class="main-container">
+    <div class="empty-top"></div>
+    <div class="main-center">
+      {{ $router.currentRoute.params.id }}
+    </div>
   </div>
 </template>
 
