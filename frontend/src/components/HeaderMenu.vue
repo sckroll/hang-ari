@@ -17,13 +17,13 @@
           <nav class="nav-menu">
             <ul>
               <li :class="isReversed ? 'reverse' : ''">
-                <router-link to="/club">Club</router-link>
+                <router-link to="/club" exact>Club</router-link>
               </li>
               <li :class="isReversed ? 'reverse' : ''">
-                <router-link to="/community">Community</router-link>
+                <router-link to="/community" exact>Community</router-link>
               </li>
               <li :class="isReversed ? 'reverse' : ''">
-                <router-link to="/about">About</router-link>
+                <router-link to="/about" exact>About</router-link>
               </li>
             </ul>
           </nav>
