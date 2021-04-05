@@ -56,7 +56,6 @@ h1 {
 .club-list {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, $preview-width);
   justify-content: space-between;
   transition: all 0.3s ease;
 
@@ -78,6 +77,32 @@ h1 {
   > span {
     font-size: 20px;
     color: $grey-color-2;
+  }
+}
+
+@include viewpoint-xxl {
+  .club-list {
+    grid-template-columns: repeat(5, $preview-width);
+  }
+}
+@include viewpoint-xl {
+  .club-list {
+    grid-template-columns: repeat(4, $preview-width);
+  }
+}
+@include viewpoint-lg {
+  .club-list {
+    grid-template-columns: repeat(3, $preview-width);
+  }
+}
+@include viewpoint-md {
+  .club-list {
+    grid-template-columns: repeat(2, $preview-width);
+  }
+}
+@include viewpoint-sm {
+  .club-list {
+    grid-template-columns: repeat(1, $preview-width);
   }
 }
 </style>

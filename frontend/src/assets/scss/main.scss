@@ -90,7 +90,6 @@ h3, h4, h5, h6 {
 }
 
 .main-center {
-  width: 1200px;
   height: 100%;
   margin: 32px 0;
   padding: 0 32px;
@@ -99,4 +98,30 @@ h3, h4, h5, h6 {
 
 .empty-top {
   height: $header-height;
+}
+
+@include viewpoint-xxl {
+  .main-center {
+    width: $breakpoint-xxl;
+  }
+}
+@include viewpoint-xl {
+  .main-center {
+    width: $breakpoint-xl;
+  }
+}
+@include viewpoint-lg {
+  .main-center {
+    width: $breakpoint-lg;
+  }
+}
+@include viewpoint-md {
+  .main-center {
+    width: $breakpoint-md;
+  }
+}
+@include viewpoint-sm {
+  .main-center {
+    width: $breakpoint-sm;
+  }
 }

@@ -29,7 +29,14 @@
 </template>
 
 <script>
-import { previewWidth } from '@/assets/scss/variables.scss'
+import {
+  previewWidth,
+  breakpointXxl,
+  breakpointXl,
+  breakpointLg,
+  breakpointMd,
+  breakpointSm,
+} from '@/assets/scss/variables.scss'
 import ClubPreview from '@/components/ClubPreview.vue'
 
 export default {
@@ -72,11 +79,31 @@ export default {
   },
   methods: {
     resizeMargin() {
-      const buttonMargin = (window.innerWidth - 1200) / 2 + 32
+      const vw = window.innerWidth
+      const xxl = parseInt(breakpointXxl.replace('px', ''))
+      const xl = parseInt(breakpointXl.replace('px', ''))
+      const lg = parseInt(breakpointLg.replace('px', ''))
+      const md = parseInt(breakpointMd.replace('px', ''))
+      const sm = parseInt(breakpointSm.replace('px', ''))
+      let breakpointWidth
+
+      if (vw >= xxl) {
+        breakpointWidth = xxl
+      } else if (vw >= xl && vw < xxl) {
+        breakpointWidth = xl
+      } else if (vw >= lg && vw < xl) {
+        breakpointWidth = lg
+      } else if (vw >= md && vw < lg) {
+        breakpointWidth = md
+      } else {
+        breakpointWidth = sm
+      }
+
+      const buttonMargin = (vw - breakpointWidth) / 2 + 32
       this.$refs.leftButton.style.left = `${buttonMargin}px`
       this.$refs.rightButton.style.right = `${buttonMargin}px`
 
-      const spaceMargin = (window.innerWidth - 1200) / 2 + 16
+      const spaceMargin = (vw - breakpointWidth) / 2 + 16
       this.$refs.leftSpace.style.width = `${spaceMargin}px`
       this.$refs.rightSpace.style.width = `${spaceMargin}px`
     },
@@ -191,7 +218,6 @@ h1 {
     z-index: 1;
     position: absolute;
     left: 0;
-    width: 0;
     height: $preview-width + 48px;
     background: linear-gradient(to right, #ffffffff 50%, #ffffff00);
   }
@@ -199,7 +225,6 @@ h1 {
     z-index: 1;
     position: absolute;
     right: 0;
-    width: 0;
     height: $preview-width + 48px;
     background: linear-gradient(to left, #ffffffff 50%, #ffffff00);
   }
