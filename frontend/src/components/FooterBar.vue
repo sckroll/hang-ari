@@ -41,10 +41,6 @@ footer {
   background-color: $primary-color-0;
   color: #ffffff;
 
-  .footer-container {
-    width: 1200px;
-  }
-
   .footer-center {
     padding: 32px;
     display: flex;
@@ -93,6 +89,32 @@ footer {
 
   .info {
     text-align: right;
+  }
+}
+
+@include viewpoint-xxl {
+  .footer-container {
+    width: $breakpoint-xxl;
+  }
+}
+@include viewpoint-xl {
+  .footer-container {
+    width: $breakpoint-xl;
+  }
+}
+@include viewpoint-lg {
+  .footer-container {
+    width: $breakpoint-lg;
+  }
+}
+@include viewpoint-md {
+  .footer-container {
+    width: $breakpoint-md;
+  }
+}
+@include viewpoint-sm {
+  .footer-container {
+    width: $breakpoint-sm;
   }
 }
 </style>

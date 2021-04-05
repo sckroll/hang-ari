@@ -129,14 +129,13 @@ header {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 400px;
+  /* height: 400px; */
   height: $header-height;
 }
 
 .header-menu-container {
   display: flex;
   align-items: flex-end;
-  width: 1200px;
   margin-bottom: 16px;
 }
 
@@ -228,6 +227,32 @@ li {
 
   li:last-child {
     margin-right: 0;
+  }
+}
+
+@include viewpoint-xxl {
+  .header-menu-container {
+    width: $breakpoint-xxl;
+  }
+}
+@include viewpoint-xl {
+  .header-menu-container {
+    width: $breakpoint-xl;
+  }
+}
+@include viewpoint-lg {
+  .header-menu-container {
+    width: $breakpoint-lg;
+  }
+}
+@include viewpoint-md {
+  .header-menu-container {
+    width: $breakpoint-md;
+  }
+}
+@include viewpoint-sm {
+  .header-menu-container {
+    width: $breakpoint-sm;
   }
 }
 </style>

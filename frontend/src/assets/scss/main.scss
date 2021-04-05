@@ -4,7 +4,7 @@
 
 /* Variables import */
 
-@import './variables.scss';
+@import './variables';
 
 /* Global mixins */
 
@@ -39,6 +39,36 @@
     background-color: $disabled-color;
     color: #000000;
     cursor: default;
+  }
+}
+
+@mixin viewpoint-xxl {
+  @media (min-width: #{$breakpoint-xxl}) {
+    @content;
+  }
+}
+
+@mixin viewpoint-xl {
+  @media (min-width: #{$breakpoint-xl}) and (max-width: #{$breakpoint-xxl - 1px}) {
+    @content;
+  }
+}
+
+@mixin viewpoint-lg {
+  @media (min-width: #{$breakpoint-lg}) and (max-width: #{$breakpoint-xl - 1px}) {
+    @content;
+  }
+}
+
+@mixin viewpoint-md {
+  @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin viewpoint-sm {
+  @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1px}) {
+    @content;
   }
 }
 
