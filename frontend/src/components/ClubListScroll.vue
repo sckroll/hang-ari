@@ -59,8 +59,25 @@ export default {
     return {
       clubListStyles: null,
       clubListX: 0,
-      previewWidthSize: parseInt(previewWidth.replace('px', '')),
+      previewWidth: parseInt(previewWidth.replace('px', '')),
+      breakpoints: {
+        xxl: parseInt(breakpointXxl.replace('px', '')),
+        xl: parseInt(breakpointXl.replace('px', '')),
+        lg: parseInt(breakpointLg.replace('px', '')),
+        md: parseInt(breakpointMd.replace('px', '')),
+        sm: parseInt(breakpointSm.replace('px', '')),
+      },
+      currBreakpoint: 1400,
+      maxX: 0,
     }
+  },
+  computed: {
+    offset() {
+      return this.more ? 1 : 0
+    },
+    movingLength() {
+      return this.previewWidth + 16
+    },
   },
   mounted() {
     if (this.clubs.length > 0) {
@@ -80,60 +97,53 @@ export default {
   methods: {
     resizeMargin() {
       const vw = window.innerWidth
-      const xxl = parseInt(breakpointXxl.replace('px', ''))
-      const xl = parseInt(breakpointXl.replace('px', ''))
-      const lg = parseInt(breakpointLg.replace('px', ''))
-      const md = parseInt(breakpointMd.replace('px', ''))
-      const sm = parseInt(breakpointSm.replace('px', ''))
-      let breakpointWidth
 
-      if (vw >= xxl) {
-        breakpointWidth = xxl
-      } else if (vw >= xl && vw < xxl) {
-        breakpointWidth = xl
-      } else if (vw >= lg && vw < xl) {
-        breakpointWidth = lg
-      } else if (vw >= md && vw < lg) {
-        breakpointWidth = md
+      if (vw >= this.breakpoints.xxl) {
+        this.currBreakpoint = this.breakpoints.xxl
+      } else if (vw >= this.breakpoints.xl && vw < this.breakpoints.xxl) {
+        this.currBreakpoint = this.breakpoints.xl
+      } else if (vw >= this.breakpoints.lg && vw < this.breakpoints.xl) {
+        this.currBreakpoint = this.breakpoints.lg
+      } else if (vw >= this.breakpoints.md && vw < this.breakpoints.lg) {
+        this.currBreakpoint = this.breakpoints.md
       } else {
-        breakpointWidth = sm
+        this.currBreakpoint = this.breakpoints.sm
       }
 
-      const buttonMargin = (vw - breakpointWidth) / 2 + 32
+      const buttonMargin = (vw - this.currBreakpoint) / 2 + 32
       this.$refs.leftButton.style.left = `${buttonMargin}px`
       this.$refs.rightButton.style.right = `${buttonMargin}px`
 
-      const spaceMargin = (vw - breakpointWidth) / 2 + 16
+      const spaceMargin = (vw - this.currBreakpoint) / 2 + 16
       this.$refs.leftSpace.style.width = `${spaceMargin}px`
       this.$refs.rightSpace.style.width = `${spaceMargin}px`
+
+      const clubSize = this.clubs.length + this.offset
+      const scrollWidth = this.previewWidth * clubSize + 16 * (clubSize - 1)
+      this.maxX = scrollWidth - this.currBreakpoint + 64
+      if (this.clubListX > this.maxX - this.movingLength) {
+        this.clubListStyles.right = `${this.maxX}px`
+      }
     },
     moveLeft() {
-      const offset = this.more ? 1 : 0
-      if (this.clubs.length <= 4 - offset) return
+      if (this.clubs.length <= 4 - this.offset) return
+      if (this.clubListX === this.maxX) return
 
-      const maxX =
-        (this.previewWidthSize + 16) * (this.clubs.length - 4 + offset) - 64
-      if (this.clubListX === maxX) return
-
-      if (
-        this.clubListX >
-        (this.previewWidthSize + 16) * (this.clubs.length - 6 + offset)
-      ) {
-        this.clubListX = maxX
+      if (this.clubListX > this.maxX - this.movingLength) {
+        this.clubListX = this.maxX
       } else {
-        this.clubListX += this.previewWidthSize + 16
+        this.clubListX += this.movingLength
       }
       this.clubListStyles.right = `${this.clubListX}px`
     },
     moveRight() {
-      const offset = this.more ? 1 : 0
-      if (this.clubs.length <= 4 - offset) return
+      if (this.clubs.length <= 4 - this.offset) return
       if (this.clubListX === 0) return
 
-      if (this.clubListX < this.previewWidthSize) {
+      if (this.clubListX < this.previewWidth) {
         this.clubListX = 0
       } else {
-        this.clubListX -= this.previewWidthSize + 16
+        this.clubListX -= this.previewWidth + 16
       }
       this.clubListStyles.right = `${this.clubListX}px`
     },
