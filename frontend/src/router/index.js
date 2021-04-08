@@ -19,6 +19,7 @@ const routes = [
     path: '/club/:id',
     name: 'Club',
     component: () => import('@/views/club/ClubPage.vue'),
+    meta: { isReversed: true },
   },
   {
     path: '/new',
@@ -76,7 +77,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-router.afterEach((to, from) => {
+router.afterEach(to => {
   // 헤더 메뉴 색상 반전 여부 확인
   store.commit('setHeaderReversed', to.meta.isReversed)
 })
