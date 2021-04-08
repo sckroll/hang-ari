@@ -4,13 +4,15 @@
       <img class="club-bg-image" :src="club.background" :alt="club.name" />
       <div class="club-bg-overlay"></div>
       <div class="club-header">
-        <div class="club-header-center">
-          <div class="club-logo">
-            <img :src="club.logo" :alt="club.name" draggable="false" />
-          </div>
-          <div class="club-title">
-            <div class="club-name">{{ club.name }}</div>
-            <div class="club-category">{{ club.category }}</div>
+        <div>
+          <div class="club-header-center">
+            <div class="club-logo">
+              <img :src="club.logo" :alt="club.name" draggable="false" />
+            </div>
+            <div class="club-title">
+              <div class="club-name">{{ club.name }}</div>
+              <div class="club-category">{{ club.category }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -26,21 +28,29 @@
           </div>
         </div>
         <div class="club-info-sub">
-          <div class="club-est">
+          <div class="club-info-item">
             <div class="club-label">설립일자</div>
-            <div class="club-value">{{ formatDate(club.establishedAt) }}</div>
+            <div class="club-value">
+              {{ club.establishedAt | formatDate }}
+            </div>
           </div>
-          <div class="club-created">
+          <div class="club-info-item">
             <div class="club-label">생성일자</div>
-            <div class="club-value">{{ formatDate(club.createdAt) }}</div>
+            <div class="club-value">
+              {{ club.createdAt | formatDate }}
+            </div>
           </div>
-          <div class="club-room">
+          <div v-if="club.room" class="club-info-item">
             <div class="club-label">위치</div>
             <div class="club-value">{{ club.room }}</div>
           </div>
-          <div class="club-est">
+          <div v-if="club.professor" class="club-info-item">
             <div class="club-label">지도교수</div>
             <div class="club-value">{{ club.professor }}</div>
+          </div>
+          <div v-if="club.homepage" class="club-info-item">
+            <div class="club-label">홈페이지</div>
+            <div class="club-value">{{ club.homepage }}</div>
           </div>
         </div>
       </section>
@@ -63,9 +73,10 @@ export default {
       club: {},
     }
   },
-  computed: {
+  filters: {
     formatDate(dateStr) {
       const date = new Date(dateStr)
+
       const year = date.getFullYear()
       const month = date.getMonth() + 1
       const day = date.getDate()
@@ -128,11 +139,18 @@ export default {
 
 .club-header {
   position: absolute;
-  top: 55%;
+  top: 0;
   left: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
+  height: inherit;
+
+  & > div {
+    position: absolute;
+    bottom: 32px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
   .club-header-center {
     padding: 0 32px;
@@ -180,20 +198,15 @@ export default {
 
 .club-info-main {
   padding: 16px;
-  background-color: $grey-color-3;
-}
-
-.club-description {
-  /* font-size: 20px; */
+  background-color: $primary-color-1;
 }
 
 .club-tags {
-  /* font-size: 20px; */
   font-weight: 700;
 }
 
 .club-tag {
-  margin: 0 8px;
+  margin: 0 4px;
 
   &:first-child {
     margin-left: 0;
@@ -208,16 +221,25 @@ export default {
 
 .club-info-sub {
   padding: 16px;
-  /* display: flex;
-  justify-content: space-between; */
-  background-color: $grey-color-4;
+  background-color: $grey-color-3;
+}
+
+.club-info-item {
+  margin: 16px 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &:only-child {
+    margin: 0;
+  }
 }
 
 .club-label {
   font-weight: 700;
-}
-
-.club-value {
 }
 
 .club-content {
