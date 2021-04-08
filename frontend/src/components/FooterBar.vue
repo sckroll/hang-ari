@@ -38,7 +38,7 @@ footer {
   justify-content: center;
   width: 100vw;
   height: $footer-height;
-  background-color: $primary-color-0;
+  background-color: $grey-color-1;
   color: #ffffff;
 
   .footer-center {
@@ -79,7 +79,7 @@ footer {
       height: 32px;
       border-radius: 16px;
       background-color: #ffffff;
-      color: $primary-color-0;
+      color: $grey-color-1;
 
       &:last-child {
         margin-right: 0;
